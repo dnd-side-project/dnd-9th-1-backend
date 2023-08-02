@@ -1,0 +1,7 @@
+version: '3'
+services:
+  backend:
+    build: ../../IdeaProjects/dnd-9th-1-backend
+    ports:
+      - "8081:80"
+    container_name: spring-blue

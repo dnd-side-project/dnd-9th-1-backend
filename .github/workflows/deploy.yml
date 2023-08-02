@@ -1,0 +1,51 @@
+name: deploy
+on: 
+  push: 
+    branches: ["main", "dev"]
+permissions: 
+  contents: read
+jobs: 
+  build:
+    runs-on: ubuntu-latest
+    steps: 
+    - uses: actions/checkout@v3
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with: 
+        java-version: '11'
+        distribution: 'temurin'
+
+    - name: Gradle Authorization
+      run: chmod +x gradlew
+    - name: Gradle Build Run
+      run: ./gradlew build
+      
+    - name: Create Zip files
+      run: |
+        mkdir deploy
+        cp ./docker/docker-compose.blue.yml ./deploy/
+        cp ./docker/docker-compose.green.yml ./deploy/
+        cp ./appspec.yml ./deploy/
+        cp ./docker/Dockerfile ./deploy/
+        cp ./scripts/*.sh ./deploy/
+        cp ./build/libs/*.jar ./deploy/
+        zip -r -qq -j ./dnd-9th-1-backend.zip ./deploy
+    - name: Connecting to AWS
+      uses: aws-actions/configure-aws-credentials@v1
+      with: 
+        aws-access-key-id: ${{  secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{  secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION  }}
+    - name: Upload File to S3
+      run: | 
+        aws s3 cp \
+        --region ap-northeast-2 \
+        ./dnd-9th-1-backend.zip s3://dnd-9th-1-s3
+    - name: Request to CodeDeploy
+      run: aws deploy create-deployment \
+          --application-name dnd-9th-1-codedeploy
+          --deployment-config-name CodeDeployDefault.OneAtATime 
+          --deployment-group-name dnd-9th-1-deployment-group
+          --s3-location bucket=dnd-9th-1-s3, bundleType=zip,key=dnd-9th-1-backend.zip
+      
+      

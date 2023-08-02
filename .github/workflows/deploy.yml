@@ -27,7 +27,7 @@ jobs:
         cp ./docker/docker-compose.green.yml ./deploy/
         cp ./appspec.yml ./deploy/
         cp ./docker/Dockerfile ./deploy/
-        cp ./scripts/*.sh ./deploy/
+        cp ./*.sh ./deploy/
         cp ./build/libs/*.jar ./deploy/
         zip -r -qq -j ./dnd-9th-1-backend.zip ./deploy
     - name: Connecting to AWS

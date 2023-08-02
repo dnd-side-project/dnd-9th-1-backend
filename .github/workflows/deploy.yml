@@ -42,10 +42,11 @@ jobs:
         --region ap-northeast-2 \
         ./dnd-9th-1-backend.zip s3://dnd-9th-1-s3
     - name: Request to CodeDeploy
-      run: aws deploy create-deployment \
-          --application-name dnd-9th-1-codedeploy
-          --deployment-config-name CodeDeployDefault.OneAtATime 
-          --deployment-group-name dnd-9th-1-deployment-group
-          --s3-location bucket=dnd-9th-1-s3, bundleType=zip,key=dnd-9th-1-backend.zip
+      run: | 
+        aws deploy create-deployment \
+        --application-name dnd-9th-1-codedeploy \
+        --deployment-config-name CodeDeployDefault.OneAtATime \ 
+        --deployment-group-name dnd-9th-1-deployment-group \
+        --s3-location bucket=dnd-9th-1-s3, bundleType=zip,key=dnd-9th-1-backend.zip
       
       

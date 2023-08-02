@@ -15,10 +15,10 @@ jobs: # defining jobs, executed in this workflows
 
     steps:
     - uses: actions/checkout@v3 # clone repository
-    - name: Set up JDK 11
+    - name: Set up JDK 17
       uses: actions/setup-java@v3 # set up the required java version
       with:
-        java-version: '11'
+        java-version: '17'
 
     - name: Gradle Authorization
       run: chmod +x gradlew

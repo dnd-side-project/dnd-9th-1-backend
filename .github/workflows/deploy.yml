@@ -25,7 +25,7 @@ jobs:
         mkdir deploy
         mkdir deploy/scripts
         cp ./appspec.yml ./deploy/
-        cp ./scripts/*.sh ./deploy/scripts/
+        cp ./scripts/*.sh ./deploy/
         cp ./build/libs/*.jar ./deploy/
         zip -r -qq -j ./dnd-9th-1-backend.zip ./deploy
     - name: Connecting to AWS

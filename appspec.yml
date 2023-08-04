@@ -1,7 +1,7 @@
 version: 0.0
 
 # Deploy 대상 서버의 운영체제를 표시
-os: ubuntu
+os: linux
 
 # 코드 파일 전송과 관련된 설정
 files:

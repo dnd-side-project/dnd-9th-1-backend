@@ -23,8 +23,9 @@ jobs:
     - name: Create Zip files
       run: |
         mkdir deploy
+        mkdir deploy/scripts
         cp ./appspec.yml ./deploy/
-        cp ./scripts/*.sh ./deploy/
+        cp ./scripts/*.sh ./deploy/scripts/
         cp ./build/libs/*.jar ./deploy/
         zip -r -qq -j ./dnd-9th-1-backend.zip ./deploy
     - name: Connecting to AWS

@@ -6,12 +6,12 @@ DOCKER_APP_NAME=milestone
 EXIST_BLUE=$(sudo docker-compose -p ${DOCKER_APP_NAME}-blue -f docker-compose.blue.yml ps | grep Up)
 
 #Switching
-if[ -z "$EXIST_BLUE"]; then # Blue isn't working
+if [ -z "$EXIST_BLUE" ]; then
   echo "> blue up"
   docker-compose -p ${DOCKER_APP_NAME}-blue -f docker-compose.blue.yml up -d --build
   BEFORE_COMPOSE_COLOR="green"
   AFTER_COMPOSE_COLOR="blue"
-else # Blue is working
+else
   echo "> green up"
   docdker-compose -p ${DOCKER_APP_NAME}-green -f docker-compose.green.yml up -d --build
   BEFORE_COMPOSE_COLOR="blue"

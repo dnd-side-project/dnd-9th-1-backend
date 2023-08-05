@@ -1,0 +1,10 @@
+version: '3'
+  services:
+    green:
+      build: ./
+      image:
+      container_name: ${DOCKER_APP_NAME}-green
+      environment:
+        - LANG=ko_KR.UTF-8
+      ports:
+        - '8082:80'

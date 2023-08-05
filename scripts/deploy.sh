@@ -1,30 +1,36 @@
 #!/bin/bash
 
-CURRENT_PORT=$(cat /home/ubuntu/service_url.inc | grep -Po '[0-9]+' | tail -1)
-TARGET_PORT=0
+cd /home/ubuntu/app
+DOCKER_APP_NAME=milestone
 
-echo "> ${CURRENT_PORT} port currently proxying by nginx."
+EXIST_BLUE=$(sudo docker-compose -p ${DOCKER_APP_NAME}-blue -f docker-compose.blue.yml ps | grep Up)
 
-if[ ${CURRENT_PORT} -eq 8081]; then
-  TARGET_PORT=8082;
-elif [ ${CURRENT_PORT} -eq 8082]; then
-  TARGET_PORT=8081;
-else
-  echo "> Currently Running WAS does not exist."
+#Switching
+if[ -z "$EXIST_BLUE"]; then # Blue isn't working
+  echo "> blue up"
+  docker-compose -p ${DOCKER_APP_NAME}-blue -f docker-compose.blue.yml up -d --build
+  BEFORE_COMPOSE_COLOR="green"
+  AFTER_COMPOSE_COLOR="blue"
+else # Blue is working
+  echo "> green up"
+  docdker-compose -p ${DOCKER_APP_NAME}-green -f docker-compose.green.yml up -d --build
+  BEFORE_COMPOSE_COLOR="blue"
+  AFTER_COMPOSE_COLOR="green"
 fi
 
-TARGET_PID=$(lsof -Fp -i TCP:${TARGET_PORT} | grep -Po 'p[0-9]+' | grep -Po '[0-9]+')
+sleep 10
 
-if[ ! -z ${TARGET_PID}]; then
-  echo "> Exiting WAS for port ${TARGET_PORT}."
-  sudo kill ${TARGET_PID}
+EXIST_AFTER=$(docker-compose -p ${DOCKER_APP_NAME}-${AFTER_COMPOSE_COLOR} -f docker-compose.${AFTER_COMPOSE_COLOR}.yml ps | grep UP)
+
+if[ -n "$EXIST_AFTER"]; then
+  echo "> nginx reload .. "
+  NGINX_CONT=$(docker ps -q --filter ancestor=nginx)
+  docker exec -it "$NGINX_CONT" bash -c "cp /etc/nginx/nginx.${AFTER_COMPOSE_COLOR}.conf /etc/nginx/nginx.conf;nginx -s reload"
+
+  docker-compose -f docker-compose.${BEFORE_COMPOSE_COLOR}.yml down
+  docker rm $(docker ps -q -a -f "name=${BEFORE_COMPOSE_COLOR}")
+  echo "$BEFORE_COMPOSE_COLOR down"
 fi
 
-source ~/.bash_profile
-
-nohop java -jar \
-  -Dspring.profiles.active=prod \
-  -Dserver.port=${TARGET_PORT} \
-  /home/ubuntu/app/build/libs/*.SNAPSHOT.jar > /home/ubuntu/nohup.out 2>&1 &
-echo "> A new WAS for ${TARGET_PORT} is running."
-exit 0
+echo "Start removing existing image"
+docker rmi $(docker images -f "dangling=true" -q)

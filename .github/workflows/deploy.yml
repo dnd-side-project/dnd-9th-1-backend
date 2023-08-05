@@ -24,6 +24,7 @@ jobs:
       run: |
         mkdir deploy
         mkdir deploy/scripts
+        cp ./docker/* ./deploy/
         cp ./appspec.yml ./deploy/
         cp ./scripts/*.sh ./deploy/
         cp ./build/libs/*.jar ./deploy/

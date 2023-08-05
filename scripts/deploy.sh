@@ -21,7 +21,7 @@ sleep 10
 
 EXIST_AFTER=$(sudo docker-compose -p ${DOCKER_APP_NAME}-${AFTER_COMPOSE_COLOR} -f docker-compose.${AFTER_COMPOSE_COLOR}.yml ps | grep UP)
 
-if[ -n "$EXIST_AFTER" ]; then
+if [ -n "$EXIST_AFTER" ]; then
   echo "> nginx reload .. "
   NGINX_CONT=$(docker ps -q --filter ancestor=nginx)
   sudo docker exec -it "$NGINX_CONT" bash -c "cp /etc/nginx/nginx.${AFTER_COMPOSE_COLOR}.conf /etc/nginx/nginx.conf;nginx -s reload"

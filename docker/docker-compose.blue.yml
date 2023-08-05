@@ -1,11 +1,10 @@
 version: '3'
   services:
-    blue: # service_name
-      build: ./ # Dockerfile path
-      image: ${DOCKER_REGISTRY}/${DOCKER_APP_NAME}:${IMAGE_TAG}
-      container_name: ${DOCKER_APP_NAME}-blue #
+    blue:
+      build: .
+      image: ${DOCKER_REGISTRY}/${DOCKER_APP_NAME}
+      container_name: blue
       environment:
         - LANG=ko_KR.UTF-8
-        -
       ports:
-        - '8081:80'
+        - '8081:8080'

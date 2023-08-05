@@ -32,4 +32,4 @@ if [ -n "$EXIST_AFTER" ]; then
 fi
 
 echo "> Start removing existing image"
-sudo docker rmi $(docker images -f "dangling=true" -q)
+sudo docker image prune -af

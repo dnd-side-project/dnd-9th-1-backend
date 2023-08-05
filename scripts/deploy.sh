@@ -31,5 +31,5 @@ if [ -n "$EXIST_AFTER" ]; then
   echo "$BEFORE_COMPOSE_COLOR down"
 fi
 
-echo "Start removing existing image"
-docker rmi $(docker images -f "dangling=true" -q)
+echo "> Start removing existing image"
+sudo docker rmi $(docker images -f "dangling=true" -q)

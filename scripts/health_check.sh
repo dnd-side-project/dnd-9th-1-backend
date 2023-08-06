@@ -1,5 +1,3 @@
-# health_check.sh
-
 #!/bin/bash
 
 # Crawl current connected port of WAS
@@ -16,14 +14,13 @@ else
     exit 1
 fi
 
-
 echo "> Start health check of WAS at 'http://127.0.0.1:${TARGET_PORT}' ..."
 
+# Check 10 times to see if the current port is available
 for RETRY_COUNT in 1 2 3 4 5 6 7 8 9 10
 do
-    echo "> #${RETRY_COUNT} trying..."
-    RESPONSE_CODE=$(curl -s -o /dev/null -w "%{http_code}"  http://127.0.0.1:${TARGET_PORT}/health)
-
+    echo "> #${RETRY_COUNT} trying ..."
+    RESPONSE_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:${TARGET_PORT}/health)
     if [ ${RESPONSE_CODE} -eq 200 ]; then
         echo "> New WAS successfully running"
         exit 0

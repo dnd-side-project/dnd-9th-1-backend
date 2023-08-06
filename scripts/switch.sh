@@ -1,5 +1,3 @@
-# switch.sh
-
 #!/bin/bash
 
 # Crawl current connected port of WAS
@@ -21,7 +19,7 @@ fi
 # Change proxying port into target port
 echo "set \$service_url http://127.0.0.1:${TARGET_PORT};" | tee /home/ubuntu/service_url.inc
 
-echo "> Now Nginx proxies to ${TARGET_PORT}."
+echo "> Now nginx proxies to ${TARGET_PORT}."
 
 # Reload nginx
 sudo service nginx reload

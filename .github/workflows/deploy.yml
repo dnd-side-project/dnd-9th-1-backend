@@ -22,7 +22,7 @@ jobs:
       run: ./gradlew build
       
     - name: Create Zip files
-      run: zip -r ./$GITHUB_SHA.zip
+      run: zip -r ./$GITHUB_SHA.zip .
 
     - name: Connecting to AWS
       uses: aws-actions/configure-aws-credentials@v1

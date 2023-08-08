@@ -34,7 +34,22 @@ jobs: # defining jobs, executed in this workflows
 
     - name: Gradle Authorization
       run: chmod +x gradlew
+
+    # Gradle run
     - name: Gradle Build Run
       run: ./gradlew build
-    - name: Run tests
-      run: ./gradlew test
+
+      # Gradle test
+    - name: Test with Gradle
+      run: ./gradlew --info test
+      # Publish Unit Test Results
+    - nane: Publish Unit Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v1
+      if: ${{ always() }}
+      with:
+        files: build/test-results/**/*.xml
+    - name: Cleanup Gradle Cache
+      if: ${{ always() }}
+      run: |
+        rm -f ~/.gradle/caches/modules-2/modules-2.lock
+        rm -f ~/.gradle/caches/modules-2/gc.properties

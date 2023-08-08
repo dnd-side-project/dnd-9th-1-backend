@@ -1,2 +1,14 @@
 logging-module:
-  version: 0.0.2
+  version: 0.0.1
+
+springdoc:
+  swagger-ui:
+    groups-order: DESC
+    disable-swagger-default-url: true
+    display-request-duration: true
+    operations-sorter: method
+  api-docs:
+    path: /api-docs
+  show-actuator: true
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8

@@ -20,4 +20,9 @@ public enum PlanStatus {
             throw new IllegalArgumentException();
         }
     }
+
+    public String getDescription()
+    {
+        return description;
+    }
 }

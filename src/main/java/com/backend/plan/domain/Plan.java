@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Table(name = "plan")
 public class Plan {
 
-    private static final int MAX_TITLE_LENGTH = 20;
+    private static final int MAX_TITLE_LENGTH = 15;
     private static final LocalDateTime MIN_DATE_TIME = LocalDateTime.of(1000, 1, 1, 0, 0);
     private static final LocalDateTime MAX_DATE_TIME = LocalDateTime.of(9999, 12, 31, 11, 59, 59, 999999000);
 
@@ -38,7 +38,7 @@ public class Plan {
     @Column(name = "start_date_time", nullable = false)
     private LocalDateTime startDateTime;
 
-    @Column(name = "end_date_time")
+    @Column(name = "end_date_time") // 종료 날짜를 설정하지 않을수도 있으므로 nullable을 true로 설정
     private LocalDateTime endDateTime;
 
     @Column(name = "end_date_time_exists", nullable = false)
@@ -79,7 +79,7 @@ public class Plan {
     private void validateTitleLength(final String title) {
 
         if (title.length() > MAX_TITLE_LENGTH) {
-            throw new IllegalArgumentException(String.format("일정 제목의 길이는 %d을 초과할 수 없습니다.", MAX_TITLE_LENGTH));
+            throw new IllegalArgumentException(String.format("상위 목표 제목의 길이는 %d을 초과할 수 없습니다.", MAX_TITLE_LENGTH));
         }
     }
 
@@ -89,7 +89,7 @@ public class Plan {
         }
         if (isNotValidDateTimeRange(startDateTime) || isNotValidDateTimeRange(endDateTime)) {
             throw new IllegalArgumentException(
-                    String.format("일정은 %s부터 %s까지 등록할 수 있습니다.",
+                    String.format("상위 목표는 %s부터 %s까지 등록할 수 있습니다.",
                             MIN_DATE_TIME.toLocalDate(), MAX_DATE_TIME.toLocalDate())
             );
         }

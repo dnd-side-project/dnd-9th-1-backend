@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Table(name = "plan")
 public class Plan {
 
-    private static final int MAX_TITLE_LENGTH = 50;
+    private static final int MAX_TITLE_LENGTH = 20;
     private static final LocalDateTime MIN_DATE_TIME = LocalDateTime.of(1000, 1, 1, 0, 0);
     private static final LocalDateTime MAX_DATE_TIME = LocalDateTime.of(9999, 12, 31, 11, 59, 59, 999999000);
 

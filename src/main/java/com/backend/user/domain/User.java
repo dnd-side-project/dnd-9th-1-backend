@@ -1,12 +1,15 @@
 package com.backend.user.domain;
 
 
+import com.backend.auth.application.dto.OAuthUserInfo;
 import com.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.Locale;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -49,4 +52,12 @@ public class User extends BaseEntity {
         this.userStatus = userStatus;
     }
 
+    public static User from(OAuthUserInfo userInfo, String provider) {
+        return User.builder()
+                .nickname(userInfo.nickname())
+                .socialType(SocialType.valueOf(provider.toUpperCase(Locale.ROOT)))
+                .socialId(userInfo.socialId())
+                .userStatus(UserStatus.ACTIVE)
+                .build();
+    }
 }

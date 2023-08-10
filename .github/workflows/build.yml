@@ -23,7 +23,7 @@ jobs: # defining jobs, executed in this workflows
         path: |
           ~/.gradle/caches
           ~/.gradle/wrapper
-        key: ${{  runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties')
+        key: ${{  runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
         restore-keys: |
           ${{ runner.os }}-gradle-
 

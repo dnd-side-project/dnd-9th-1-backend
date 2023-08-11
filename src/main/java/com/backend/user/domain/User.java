@@ -1,6 +1,5 @@
 package com.backend.user.domain;
 
-
 import com.backend.auth.application.dto.OAuthUserInfo;
 import com.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;

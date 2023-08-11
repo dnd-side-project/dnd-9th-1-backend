@@ -1,7 +1,9 @@
 package com.backend.auth.application.client;
 
 import com.backend.user.domain.SocialType;
+import org.springframework.stereotype.Component;
 
+@Component
 public class OAuthClientFactory {
     public static OAuthClient create(String provider){
         if(provider.equalsIgnoreCase(SocialType.KAKAO.toString())){

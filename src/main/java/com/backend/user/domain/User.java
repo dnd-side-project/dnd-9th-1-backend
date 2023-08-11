@@ -55,8 +55,14 @@ public class User extends BaseEntity {
         return User.builder()
                 .nickname(userInfo.nickname())
                 .socialType(SocialType.valueOf(provider.toUpperCase(Locale.ROOT)))
-                .socialId(userInfo.socialId())
+                .socialId(userInfo.id())
                 .userStatus(UserStatus.ACTIVE)
                 .build();
+    }
+
+    @PrePersist
+    private void setting(){
+        this.enabledPush = false;
+        this.userStatus = UserStatus.ACTIVE;
     }
 }

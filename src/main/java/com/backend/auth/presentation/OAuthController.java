@@ -25,7 +25,7 @@ public class OAuthController {
             @ApiResponse(responseCode = "401", description = "접근 권한 없음")
     })
     @PostMapping("/auth")
-    public ResponseEntity<LoginResponse> generateAccessToken(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginResponse> generateAccessToken(@RequestBody LoginRequest loginRequest) throws Exception {
         return ResponseEntity.ok(oauthService.login(loginRequest));
     }
 

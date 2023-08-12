@@ -9,11 +9,11 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 public class KakaoClient implements OAuthClient {
-    private static final String KAKAO_API_URL = "https://kapi.kakao.com/v2/user/me";
-
+    private static final String KAKAO_BASE_URL = "https://kapi.kakao.com";
+    private static final String KAKAO_URI = "/v2/user/me";
     private final WebClient kakaoOauthLoginClient;
 
-    public KakaoClient(final WebClient webClient){
+    public KakaoClient(WebClient webClient){
         this.kakaoOauthLoginClient = kakaoOauthLoginClient(webClient);
     }
 
@@ -25,7 +25,7 @@ public class KakaoClient implements OAuthClient {
     @Override
     public OAuthUserInfo getUserInfo(String accessToken) {
         return kakaoOauthLoginClient.get()
-                .uri(KAKAO_API_URL)
+                .uri(KAKAO_URI)
                 .headers(h -> h.setBearerAuth(accessToken))
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, response -> Mono.error(new Exception("Kakao Login: 잘못된 토큰 정보입니다.")))
@@ -36,7 +36,7 @@ public class KakaoClient implements OAuthClient {
 
     private WebClient kakaoOauthLoginClient(WebClient webClient) {
         return webClient.mutate()
-                .baseUrl(KAKAO_API_URL)
+                .baseUrl(KAKAO_BASE_URL)
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .build();
     }

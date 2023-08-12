@@ -43,11 +43,11 @@ jobs: # defining jobs, executed in this workflows
 
     # Gradle run
     - name: Gradle Build Run
-      run: ./gradlew build
+      run: ./gradlew build -PactiveProfile=dev
 
       # Gradle test
     - name: Test with Gradle
-      run: ./gradlew --info test
+      run: ./gradlew --info test -PactiveProfile=dev
       # Publish Unit Test Results
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action@v1

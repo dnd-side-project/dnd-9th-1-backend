@@ -47,7 +47,7 @@ jobs: # defining jobs, executed in this workflows
 
       # Gradle test
     - name: Test with Gradle
-      run: ./gradlew -Dspring.profiles.active=dev build --info test
+      run: ./gradlew -Dspring.profiles.active=dev --info test
       # Publish Unit Test Results
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action@v1

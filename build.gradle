@@ -50,6 +50,10 @@ task copyPrivate(type: Copy) {
 	}
 }
 
+tasks.withType(Test) {
+	systemProperties = System.getProperties()
+}
+
 bootRun {
 	String activeProfile = System.properties['spring.profiles.active']
 	systemProperty "spring.profiles.active", activeProfile

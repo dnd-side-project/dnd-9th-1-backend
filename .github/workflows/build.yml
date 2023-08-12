@@ -8,6 +8,7 @@ on: # when the workflows should be triggered ?
 
 permissions:
   contents: read
+  checks: write
 
 jobs: # defining jobs, executed in this workflows
   build:
@@ -23,7 +24,7 @@ jobs: # defining jobs, executed in this workflows
         path: |
           ~/.gradle/caches
           ~/.gradle/wrapper
-        key: ${{  runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties')
+        key: ${{  runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
         restore-keys: |
           ${{ runner.os }}-gradle-
 
@@ -31,6 +32,7 @@ jobs: # defining jobs, executed in this workflows
       uses: actions/setup-java@v3 # set up the required java version
       with:
         java-version: '17'
+        distribution: 'temurin'
 
     - name: Gradle Authorization
       run: chmod +x gradlew
@@ -43,7 +45,7 @@ jobs: # defining jobs, executed in this workflows
     - name: Test with Gradle
       run: ./gradlew --info test
       # Publish Unit Test Results
-    - nane: Publish Unit Test Results
+    - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action@v1
       if: ${{ always() }}
       with:

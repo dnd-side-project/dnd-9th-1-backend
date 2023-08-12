@@ -1,4 +1,4 @@
-package com.backend.auth.application.dto;
+package com.backend.auth.application.dto.response;
 
 public record OAuthUserInfo(
         String id,

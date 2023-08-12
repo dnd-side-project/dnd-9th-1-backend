@@ -1,17 +1,15 @@
 package com.backend.auth.application;
 
 import com.backend.auth.application.client.OAuthHandler;
-import com.backend.auth.application.dto.OAuthUserInfo;
-import com.backend.auth.presentation.dto.LoginRequest;
-import com.backend.auth.presentation.dto.LoginResponse;
+import com.backend.auth.application.dto.response.OAuthUserInfo;
+import com.backend.auth.presentation.dto.request.LoginRequest;
+import com.backend.auth.presentation.dto.response.LoginResponse;
 import com.backend.global.util.JwtUtil;
 import com.backend.user.application.UserService;
 import com.backend.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Service

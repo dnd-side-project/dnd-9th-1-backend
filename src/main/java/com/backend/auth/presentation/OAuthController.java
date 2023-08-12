@@ -1,8 +1,8 @@
 package com.backend.auth.presentation;
 
 import com.backend.auth.application.OAuthService;
-import com.backend.auth.presentation.dto.LoginRequest;
-import com.backend.auth.presentation.dto.LoginResponse;
+import com.backend.auth.presentation.dto.request.LoginRequest;
+import com.backend.auth.presentation.dto.response.LoginResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

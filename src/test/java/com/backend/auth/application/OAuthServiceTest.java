@@ -1,12 +1,9 @@
 package com.backend.auth.application;
 
-import com.backend.auth.application.client.AppleClient;
-import com.backend.auth.application.client.KakaoClient;
-import com.backend.auth.application.client.OAuthClient;
 import com.backend.auth.application.client.OAuthHandler;
-import com.backend.auth.application.dto.OAuthUserInfo;
-import com.backend.auth.presentation.dto.LoginRequest;
-import com.backend.auth.presentation.dto.LoginResponse;
+import com.backend.auth.application.dto.response.OAuthUserInfo;
+import com.backend.auth.presentation.dto.request.LoginRequest;
+import com.backend.auth.presentation.dto.response.LoginResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

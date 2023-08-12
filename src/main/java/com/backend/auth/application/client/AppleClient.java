@@ -1,6 +1,6 @@
 package com.backend.auth.application.client;
 
-import com.backend.auth.application.dto.OAuthUserInfo;
+import com.backend.auth.application.dto.response.OAuthUserInfo;
 import com.backend.user.domain.SocialType;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;

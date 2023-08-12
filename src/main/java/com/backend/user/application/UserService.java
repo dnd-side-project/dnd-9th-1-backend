@@ -14,10 +14,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     public User findUserOrRegister(User uncheckedUser) {
-        Optional<User> user =  userRepository.findBySocialIdAndSocialType(
-                uncheckedUser.getSocialId(),
-                uncheckedUser.getSocialType()
-        );
+        Optional<User> user =  userRepository.findBySocialId(uncheckedUser.getSocialId());
         return user.orElseGet(() -> userRepository.save(uncheckedUser));
     }
 }

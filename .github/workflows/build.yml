@@ -16,6 +16,9 @@ jobs: # defining jobs, executed in this workflows
 
     steps:
     - uses: actions/checkout@v3 # clone repository
+      with:
+        token: ${{  secrets.ACTION_TOKEN  }}
+        submodules: true
 
       # Caching Gradle
     - name: Cache Gradle

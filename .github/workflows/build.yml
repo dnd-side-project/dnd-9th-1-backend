@@ -50,10 +50,10 @@ jobs: # defining jobs, executed in this workflows
       run: ./gradlew -Dspring.profiles.active=dev --info test
       # Publish Unit Test Results
     - name: Publish Unit Test Results
-      uses: EnricoMi/publish-unit-test-result-action@v2
-      if: always()
+      uses: EnricoMi/publish-unit-test-result-action@v1
+      if: ${{ always() }}
       with:
-        junit_files: "build/test-results/**/*.xml"
+        files: "../../build/test-results/**/*.xml"
     - name: Cleanup Gradle Cache
       if: ${{ always() }}
       run: |

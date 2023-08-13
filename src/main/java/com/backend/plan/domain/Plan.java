@@ -22,8 +22,8 @@ public class Plan {
     @Column(name = "plan_id")
     private Long id;
 
-    @Column(name = "user_id")
-    private Long userId; // 상위 목표를 작성한 사용자의 ID
+    @Column(name = "member_id")
+    private Long memberId; // 상위 목표를 작성한 사용자의 ID
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -63,12 +63,12 @@ public class Plan {
         planStatus = PlanStatus.PROCESS;
     }
 
-    public Plan(final Long userId, final String title, final LocalDate startDate, final LocalDate endDate,
+    public Plan(final Long memberId, final String title, final LocalDate startDate, final LocalDate endDate,
                 final Boolean endDateExists, final Boolean reminderEnabled)
     {
         validateTitleLength(title);
         validatePeriod(startDate, endDate);
-        this.userId = userId;
+        this.memberId = memberId;
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;

@@ -1,9 +1,9 @@
 package com.backend.auth.application.client;
 
-import com.backend.auth.application.dto.response.OAuthUserInfo;
-import com.backend.user.domain.SocialType;
+import com.backend.auth.application.dto.response.OAuthMemberInfo;
+import com.backend.member.domain.SocialType;
 
 public interface OAuthClient {
     boolean supports(SocialType provider);
-    OAuthUserInfo getUserInfo(String accessToken);
+    OAuthMemberInfo getMemberInfo(String accessToken);
 }

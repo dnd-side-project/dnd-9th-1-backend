@@ -9,13 +9,18 @@ on: # when the workflows should be triggered ?
 permissions:
   contents: read
   checks: write
+  issues: write
 
 jobs: # defining jobs, executed in this workflows
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3 # clone repository
+    - name: Checkout repository
+      uses: actions/checkout@v3 # clone repository
+      with:
+        token: ${{  secrets.ACTION_TOKEN  }}
+        submodules: true
 
       # Caching Gradle
     - name: Cache Gradle
@@ -39,17 +44,17 @@ jobs: # defining jobs, executed in this workflows
 
     # Gradle run
     - name: Gradle Build Run
-      run: ./gradlew build
+      run: ./gradlew -Dspring.profiles.active=dev build
 
       # Gradle test
     - name: Test with Gradle
-      run: ./gradlew --info test
+      run: ./gradlew -Dspring.profiles.active=test --info test
       # Publish Unit Test Results
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action@v1
       if: ${{ always() }}
       with:
-        files: build/test-results/**/*.xml
+        files: "build/test-results/**/*.xml"
     - name: Cleanup Gradle Cache
       if: ${{ always() }}
       run: |

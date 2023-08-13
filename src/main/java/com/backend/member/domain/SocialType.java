@@ -1,4 +1,4 @@
-package com.backend.user.domain;
+package com.backend.member.domain;
 
 public enum SocialType {
     KAKAO,

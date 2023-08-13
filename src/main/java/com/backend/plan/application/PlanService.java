@@ -23,4 +23,11 @@ public class PlanService {
         Long dDay = plan.calculateDday(LocalDate.now());
         return PlanResponse.from(plan, dDay);
     }
+
+    @Transactional
+    public void removePlan(Long planId)
+    {
+        Plan plan = planRepository.getById(planId);
+        plan.remove();
+    }
 }

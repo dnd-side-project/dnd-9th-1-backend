@@ -54,6 +54,7 @@ jobs: # defining jobs, executed in this workflows
       if: ${{ always() }}
       with:
         files: "../../build/test-results/**/*.xml"
+        token: ${{  secrets.ACTION_TOKEN  }}
     - name: Cleanup Gradle Cache
       if: ${{ always() }}
       run: |

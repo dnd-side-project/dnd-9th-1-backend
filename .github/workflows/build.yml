@@ -18,9 +18,6 @@ jobs: # defining jobs, executed in this workflows
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3 # clone repository
-      with:
-        token: ${{  secrets.ACTION_TOKEN  }}
-        submodules: true
 
       # Caching Gradle
     - name: Cache Gradle
@@ -44,7 +41,7 @@ jobs: # defining jobs, executed in this workflows
 
     # Gradle run
     - name: Gradle Build Run
-      run: ./gradlew -Dspring.profiles.active=dev build
+      run: ./gradlew -Dspring.profiles.active=test build
 
       # Gradle test
     - name: Test with Gradle

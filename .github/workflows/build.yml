@@ -1,7 +1,7 @@
 name: build/test
 
 on: # when the workflows should be triggered ?
-  pull_request: # Starting Build when pull request is created.
+  pull_request_target: # Starting Build when pull request is created.
     branches: [ "main", "dev"]
   push: 
     branches: ["dev"]

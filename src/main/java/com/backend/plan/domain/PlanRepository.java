@@ -6,6 +6,6 @@ public interface PlanRepository extends JpaRepository<Plan, Long> {
 
     default Plan getById(Long id){
 
-        return findById(id).orElseThrow(() -> new IllegalArgumentException());
+        return findById(id).orElseThrow(IllegalArgumentException::new);
     }
 }

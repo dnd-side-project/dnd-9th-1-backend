@@ -1,6 +1,5 @@
 package com.backend.plan.presentation.dto;
 
-import com.backend.plan.domain.Plan;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
@@ -8,7 +7,10 @@ import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
-public record PlanSaveRequest(
+public record PlanUpdateRequest(
+
+        @NotNull(message = "상위 목표 ID가 빈값일 수 없습니다")
+        Long planId,
 
         @Size(message = "상위 목표 제목은 15자를 초과할 수 없습니다")
         String title,
@@ -22,12 +24,7 @@ public record PlanSaveRequest(
         LocalDate endDate,
 
         @NotNull(message = "리마인드 알림 여부를 필수적으로 선택해야 합니다")
-        Boolean reminderEnabled)
-{
+        Boolean reminderEnabled
 
-        public Plan toEntity(Long memberId)
-        {
-                return new Plan(memberId,title,startDate,endDate,reminderEnabled);
-        }
-
+) {
 }

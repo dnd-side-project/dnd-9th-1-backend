@@ -66,6 +66,14 @@ public class Plan extends BaseEntity {
         planStatus = PlanStatus.PROCESS;
     }
 
+    public void update(final String title, final LocalDate startDate, final LocalDate endDate, final Boolean reminderEnabled)
+    {
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.reminderEnabled = reminderEnabled;
+    }
+
     public Plan(final Long memberId, final String title, final LocalDate startDate, final LocalDate endDate, final Boolean reminderEnabled)
     {
         validateTitleLength(title);

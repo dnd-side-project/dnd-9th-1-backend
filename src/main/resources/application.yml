@@ -13,3 +13,15 @@ springdoc:
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
 
+jwt:
+  secret: secret
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: ${datasource}
+    username: ${username}
+    password: ${password}

@@ -1,11 +1,10 @@
 package com.backend.plan.domain;
 
+import com.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -13,7 +12,7 @@ import java.time.temporal.ChronoUnit;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "plan")
-public class Plan {
+public class Plan extends BaseEntity {
 
     private static final int MAX_TITLE_LENGTH = 15;
     private static final LocalDate MIN_DATE = LocalDate.of(1000, 1, 1);
@@ -24,8 +23,8 @@ public class Plan {
     @Column(name = "plan_id")
     private Long id;
 
-    @Column(name = "user_id")
-    private Long userId; // 상위 목표를 작성한 사용자의 ID
+    @Column(name = "member_id")
+    private Long memberId; // 상위 목표를 작성한 사용자의 ID
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -67,11 +66,11 @@ public class Plan {
         planStatus = PlanStatus.PROCESS;
     }
 
-    public Plan(final Long userId, final String title, final LocalDate startDate, final LocalDate endDate, final Boolean reminderEnabled)
+    public Plan(final Long memberId, final String title, final LocalDate startDate, final LocalDate endDate, final Boolean reminderEnabled)
     {
         validateTitleLength(title);
         validatePeriod(startDate, endDate);
-        this.userId = userId;
+        this.memberId = memberId;
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;

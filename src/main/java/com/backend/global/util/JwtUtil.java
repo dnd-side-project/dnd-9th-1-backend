@@ -1,6 +1,6 @@
 package com.backend.global.util;
 
-import com.backend.user.domain.User;
+import com.backend.member.domain.Member;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -11,9 +11,9 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtUtil {
 
-    public static String generateToken(User user, String key, Long expireTime) {
+    public static String generateToken(Member member, String key, Long expireTime) {
         Claims claims = Jwts.claims();
-        claims.put("userId", user.getId());
+        claims.put("memberId", member.getId());
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))

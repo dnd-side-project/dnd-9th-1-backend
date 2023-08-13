@@ -1,7 +1,7 @@
 package com.backend.auth.application.client;
 
-import com.backend.auth.application.dto.response.OAuthUserInfo;
-import com.backend.user.domain.SocialType;
+import com.backend.auth.application.dto.response.OAuthMemberInfo;
+import com.backend.member.domain.SocialType;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -23,14 +23,14 @@ public class KakaoClient implements OAuthClient {
     }
 
     @Override
-    public OAuthUserInfo getUserInfo(String accessToken) {
+    public OAuthMemberInfo getMemberInfo(String accessToken) {
         return kakaoOauthLoginClient.get()
                 .uri(KAKAO_URI)
                 .headers(h -> h.setBearerAuth(accessToken))
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, response -> Mono.error(new Exception("Kakao Login: 잘못된 토큰 정보입니다.")))
                 .onStatus(HttpStatusCode::is5xxServerError, response -> Mono.error(new Exception("Kakao Login: 내부 서버 오류")))
-                .bodyToMono(OAuthUserInfo.class)
+                .bodyToMono(OAuthMemberInfo.class)
                 .block();
     }
 

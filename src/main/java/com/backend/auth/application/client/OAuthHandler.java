@@ -1,7 +1,7 @@
 package com.backend.auth.application.client;
 
-import com.backend.auth.application.dto.response.OAuthUserInfo;
-import com.backend.user.domain.SocialType;
+import com.backend.auth.application.dto.response.OAuthMemberInfo;
+import com.backend.member.domain.SocialType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -16,9 +16,9 @@ public class OAuthHandler {
         this.oAuthClientList = oAuthClientsList;
     }
 
-    public OAuthUserInfo getUserInfo(String accessToken, String provider) throws Exception {
+    public OAuthMemberInfo getMemberInfo(String accessToken, String provider) throws Exception {
         OAuthClient oAuthClient = getClient(provider);
-        return oAuthClient.getUserInfo(accessToken);
+        return oAuthClient.getMemberInfo(accessToken);
     }
 
     private OAuthClient getClient(String provider) throws Exception {

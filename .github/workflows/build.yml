@@ -7,8 +7,9 @@ on: # when the workflows should be triggered ?
     branches: ["dev"]
 
 permissions:
-  contents: write
+  contents: read
   checks: write
+  issues: write
 
 jobs: # defining jobs, executed in this workflows
   build:

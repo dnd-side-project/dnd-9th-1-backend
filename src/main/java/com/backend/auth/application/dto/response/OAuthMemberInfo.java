@@ -1,6 +1,6 @@
 package com.backend.auth.application.dto.response;
 
-public record OAuthUserInfo(
+public record OAuthMemberInfo(
         String id,
         String nickname
 ){ }

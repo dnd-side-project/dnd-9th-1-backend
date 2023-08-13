@@ -1,7 +1,7 @@
 package com.backend.auth.application;
 
 import com.backend.auth.application.client.OAuthHandler;
-import com.backend.auth.application.dto.response.OAuthUserInfo;
+import com.backend.auth.application.dto.response.OAuthMemberInfo;
 import com.backend.auth.presentation.dto.request.LoginRequest;
 import com.backend.auth.presentation.dto.response.LoginResponse;
 import org.junit.jupiter.api.DisplayName;
@@ -33,8 +33,8 @@ public class OAuthServiceTest {
         String mockToken = "mock_access_token_for_kakao";
         LoginRequest loginRequest = new LoginRequest(mockToken, "KAKAO");
 
-        OAuthUserInfo mockUserInfo = new OAuthUserInfo("id", "nickname");
-        given(oAuthHandler.getUserInfo(anyString(), anyString())).willReturn(mockUserInfo);
+        OAuthMemberInfo mockMemberInfo = new OAuthMemberInfo("id", "nickname");
+        given(oAuthHandler.getMemberInfo(anyString(), anyString())).willReturn(mockMemberInfo);
 
         // when
         LoginResponse loginResponse = oAuthService.login(loginRequest);

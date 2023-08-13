@@ -1,12 +1,12 @@
 package com.backend.auth.application;
 
 import com.backend.auth.application.client.OAuthHandler;
-import com.backend.auth.application.dto.response.OAuthUserInfo;
+import com.backend.auth.application.dto.response.OAuthMemberInfo;
 import com.backend.auth.presentation.dto.request.LoginRequest;
 import com.backend.auth.presentation.dto.response.LoginResponse;
 import com.backend.global.util.JwtUtil;
-import com.backend.user.application.UserService;
-import com.backend.user.domain.User;
+import com.backend.member.application.MemberService;
+import com.backend.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,15 +20,15 @@ public class OAuthService {
 
     private Long expireTime = 1000 * 60 * 60L;
 
-    private final UserService userService;
+    private final MemberService memberService;
     private final OAuthHandler oAuthHandler;
 
     public LoginResponse login(LoginRequest loginRequest) throws Exception {
-        OAuthUserInfo userInfo = oAuthHandler.getUserInfo(loginRequest.accessToken(), loginRequest.provider());
+        OAuthMemberInfo memberInfo= oAuthHandler.getMemberInfo(loginRequest.accessToken(), loginRequest.provider());
 
-        User uncheckedUser = User.from(userInfo, loginRequest.provider());
-        User user = userService.findUserOrRegister(uncheckedUser);
+        Member uncheckedMember = Member.from(memberInfo, loginRequest.provider());
+        Member member = memberService.findMemberOrRegister(uncheckedMember);
 
-        return new LoginResponse(JwtUtil.generateToken(user, key, expireTime), user.getNickname());
+        return new LoginResponse(JwtUtil.generateToken(member, key, expireTime), member.getNickname());
     }
 }

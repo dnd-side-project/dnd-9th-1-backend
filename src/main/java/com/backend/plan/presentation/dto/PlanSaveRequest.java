@@ -1,5 +1,6 @@
 package com.backend.plan.presentation.dto;
 
+import com.backend.plan.domain.Plan;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
@@ -23,5 +24,6 @@ public record PlanSaveRequest(
         @NotNull(message = "리마인드 알림 여부를 필수적으로 선택해야 합니다")
         Boolean reminderEnabled)
 {
+
 
 }

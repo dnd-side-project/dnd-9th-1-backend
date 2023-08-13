@@ -1,6 +1,6 @@
-package com.backend.user.domain;
+package com.backend.member.domain;
 
-import com.backend.auth.application.dto.response.OAuthUserInfo;
+import com.backend.auth.application.dto.response.OAuthMemberInfo;
 import com.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -13,10 +13,11 @@ import java.util.Locale;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-public class User extends BaseEntity {
+@Table(name="member")
+public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "member_id")
     private Long id;
 
     @Column(nullable = false, length = 15)
@@ -34,35 +35,35 @@ public class User extends BaseEntity {
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
-    private UserStatus userStatus;
+    private MemberStatus memberStatus;
 
     @Builder
-    private User (
+    private Member(
             final String nickname,
             final Boolean enabledPush,
             final SocialType socialType,
             final String socialId,
-            final UserStatus userStatus
+            final MemberStatus memberStatus
     ) {
         this.nickname = nickname;
         this.enabledPush = enabledPush;
         this.socialType  = socialType;
         this.socialId = socialId;
-        this.userStatus = userStatus;
+        this.memberStatus = memberStatus;
     }
 
-    public static User from(OAuthUserInfo userInfo, String provider) {
-        return User.builder()
-                .nickname(userInfo.nickname())
+    public static Member from(OAuthMemberInfo memberInfo, String provider) {
+        return Member.builder()
+                .nickname(memberInfo.nickname())
                 .socialType(SocialType.valueOf(provider.toUpperCase(Locale.ROOT)))
-                .socialId(userInfo.id())
-                .userStatus(UserStatus.ACTIVE)
+                .socialId(memberInfo.id())
+                .memberStatus(MemberStatus.ACTIVE)
                 .build();
     }
 
     @PrePersist
     private void setting(){
         this.enabledPush = false;
-        this.userStatus = UserStatus.ACTIVE;
+        this.memberStatus = MemberStatus.ACTIVE;
     }
 }

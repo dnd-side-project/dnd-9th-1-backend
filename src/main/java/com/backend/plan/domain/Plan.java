@@ -1,11 +1,10 @@
 package com.backend.plan.domain;
 
+import com.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -13,7 +12,7 @@ import java.time.temporal.ChronoUnit;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "plan")
-public class Plan {
+public class Plan extends BaseEntity {
 
     private static final int MAX_TITLE_LENGTH = 15;
     private static final LocalDate MIN_DATE = LocalDate.of(1000, 1, 1);

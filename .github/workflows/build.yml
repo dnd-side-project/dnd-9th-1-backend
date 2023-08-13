@@ -53,7 +53,7 @@ jobs: # defining jobs, executed in this workflows
       uses: EnricoMi/publish-unit-test-result-action@v1
       if: ${{ always() }}
       with:
-        files: "../../build/test-results/**/*.xml"
+        files: "build/test-results/**/*.xml"
         token: ${{  secrets.ACTION_TOKEN  }}
     - name: Cleanup Gradle Cache
       if: ${{ always() }}

@@ -7,7 +7,7 @@ on: # when the workflows should be triggered ?
     branches: ["dev"]
 
 permissions:
-  contents: read
+  contents: write
   checks: write
 
 jobs: # defining jobs, executed in this workflows
@@ -54,7 +54,6 @@ jobs: # defining jobs, executed in this workflows
       if: ${{ always() }}
       with:
         files: "build/test-results/**/*.xml"
-        token: ${{  secrets.ACTION_TOKEN  }}
     - name: Cleanup Gradle Cache
       if: ${{ always() }}
       run: |

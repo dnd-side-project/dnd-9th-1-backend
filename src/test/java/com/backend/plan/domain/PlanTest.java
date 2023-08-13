@@ -20,7 +20,7 @@ public class PlanTest {
 
         // when & then
         assertThatThrownBy(() -> {
-            new Plan(1L, "테스트 제목", startDate, endDate, true, true);
+            new Plan(1L, "테스트 제목", startDate, endDate, true);
         }).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -34,7 +34,7 @@ public class PlanTest {
 
         // when & then
         assertThatThrownBy(() -> {
-            new Plan(1L, "테스트 제목", startDate, endDate, true, true);
+            new Plan(1L, "테스트 제목", startDate, endDate, true);
         }).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -48,7 +48,7 @@ public class PlanTest {
 
         // when & then
         assertThatThrownBy(() -> {
-            new Plan(1L, "테스트 제목", startDate, endDate, true, true);
+            new Plan(1L, "테스트 제목", startDate, endDate, true);
         }).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -63,7 +63,54 @@ public class PlanTest {
 
         // when & then
         assertThatThrownBy(() -> {
-            new Plan(1L, title, startDate, endDate, true, true);
+            new Plan(1L, title, startDate, endDate, true);
         }).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("상위 목표 종료 날짜까지의 디데이를 구한다.")
+    @Test
+    void 상위목표의_종료날짜까지의_디데이를_구한다()
+    {
+        // given
+        LocalDate startDate = LocalDate.of(2023,7,1);
+        LocalDate endDate = LocalDate.of(2023,8,10);
+        Plan plan = new Plan(1L, "테스트 제목", startDate, endDate, true);
+
+        // when
+        Long dDay = plan.calculateDday(LocalDate.of(2023, 7, 1));
+
+        // then
+        assertThat(dDay).isEqualTo(40L);
+    }
+
+    @DisplayName("현재 날짜가 상위 목표 날짜보다 뒤라면 디데이 구할때 예외가 발생한다.")
+    @Test
+    void 현재날짜가_상위목표날짜보다_뒤라면_디데이_연산시_예외가_발생한다()
+    {
+        // given
+        LocalDate startDate = LocalDate.of(2023,7,1);
+        LocalDate endDate = LocalDate.of(2023,8,10);
+        Plan plan = new Plan(1L, "테스트 제목", startDate, endDate, true);
+
+        // when & then
+        assertThatThrownBy(() -> {
+            plan.calculateDday(LocalDate.of(2023, 8, 12));
+        }).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("현재 날짜와 종료 날짜가 같을때 디데이 0을 반환한다.")
+    @Test
+    void 현재날짜와_종료날짜가_같을때_디데이_0을_반환한다()
+    {
+        // given
+        LocalDate startDate = LocalDate.of(2023,7,1);
+        LocalDate endDate = LocalDate.of(2023,8,10);
+        Plan plan = new Plan(1L, "테스트 제목", startDate, endDate, true);
+
+        // when
+        Long dDay = plan.calculateDday(LocalDate.of(2023, 8, 10));
+
+        // then
+        assertThat(dDay).isEqualTo(0L);
     }
 }

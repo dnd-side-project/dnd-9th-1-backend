@@ -1,14 +1,14 @@
 package com.backend.goal.application;
 
 import com.backend.goal.application.dto.response.GoalCountResponse;
-import com.backend.goal.domain.Goal;
-import com.backend.goal.domain.GoalCountDto;
-import com.backend.goal.domain.GoalRepository;
+import com.backend.goal.application.dto.response.GoalListResponse;
+import com.backend.goal.domain.*;
 import com.backend.goal.application.dto.response.GoalResponse;
-import com.backend.goal.domain.GoalStatus;
 import com.backend.goal.presentation.dto.GoalSaveRequest;
 import com.backend.goal.presentation.dto.GoalUpdateRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
@@ -23,6 +23,14 @@ public class GoalService {
 
     private final GoalRepository goalRepository;
 
+    private final GoalQueryRepository goalQueryRepository;
+
+
+    public Slice<GoalListResponse> getGoalList(Long goalId, Pageable pageable, GoalStatus goalStatus)
+    {
+        Slice<GoalListResponseDto> goalList = goalQueryRepository.getGoalList(goalId, pageable, goalStatus);
+        return goalList.map(GoalListResponse::from);
+    }
 
     public List<GoalCountResponse> getGoalCount()
     {
@@ -34,6 +42,7 @@ public class GoalService {
                 ).map(goal -> new GoalCountResponse(goal.goalStatus(),goal.count()))
                 .collect(Collectors.toList());
     }
+
 
     @Transactional
     public Long saveGoal(final Long memberId, final GoalSaveRequest goalSaveRequest)

@@ -23,16 +23,11 @@ public class GoalService {
 
     private final GoalRepository goalRepository;
 
-    public GoalResponse getGoal(Long goalId)
-    {
-        Goal goal = goalRepository.getById(goalId);
-        Long dDay = goal.calculateDday(LocalDate.now());
-        return GoalResponse.from(goal, dDay);
-    }
 
     public List<GoalCountResponse> getGoalCount()
     {
         List<GoalCountDto> goalCount = goalRepository.countGoalByGoalStatus();
+
         return goalCount.stream()
                 .filter(goal -> goal.goalStatus().equals(GoalStatus.PROCESS) ||
                         goal.goalStatus().equals(GoalStatus.COMPLETE)
@@ -48,10 +43,11 @@ public class GoalService {
     }
 
     @Transactional
-    public void updateGoal(final GoalUpdateRequest goalSaveRequest) {
+    public GoalResponse updateGoal(final GoalUpdateRequest goalSaveRequest) {
 
         Goal goal = goalRepository.getById(goalSaveRequest.goalId());
         goal.update(goalSaveRequest.title(),goalSaveRequest.startDate(),goalSaveRequest.endDate(),goalSaveRequest.reminderEnabled());
+        return GoalResponse.from(goal, goal.calculateDday(LocalDate.now()));
     }
 
     @Transactional

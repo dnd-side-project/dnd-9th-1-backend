@@ -33,8 +33,13 @@ public class Goal extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private GoalStatus goalStatus;
 
-    @Column(name = "detail_goal_count", nullable = false)
-    private Integer detailGoalCount;
+    @Column(name = "entire_detail_goal_cnt", nullable = false)
+    private Integer entireDetailGoalCnt;
+
+    @Column(name = "completed_detail_goal_cnt", nullable = false)
+    private Integer completedDetailGoalCnt;
+
+
 
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
@@ -62,7 +67,8 @@ public class Goal extends BaseEntity {
     {
         deleted = Boolean.FALSE;
         hasRetrospect = Boolean.FALSE;
-        detailGoalCount = 0;
+        entireDetailGoalCnt = 0;
+        completedDetailGoalCnt = 0;
         goalStatus = GoalStatus.PROCESS;
     }
 
@@ -113,6 +119,46 @@ public class Goal extends BaseEntity {
         }
 
         return ChronoUnit.DAYS.between(now, endDate);
+    }
+
+    public void increaseEntireDetailGoalCnt()
+    {
+        this.entireDetailGoalCnt += 1;
+    }
+
+    public void decreaseEntireDetailGoalCnt()
+    {
+        validateEntireGoalCnt();
+        this.entireDetailGoalCnt -= 1;
+    }
+
+    private void validateEntireGoalCnt() {
+
+        if(this.entireDetailGoalCnt < 1)
+        {
+            throw new IllegalArgumentException("세부 목표 개수는 0개 이하일 수 없습니다");
+        }
+
+    }
+
+
+    public void increaseCompletedDetailGoalCnt()
+    {
+        this.completedDetailGoalCnt += 1;
+    }
+
+    public void decreaseCompletedDetailGoalCnt()
+    {
+        validateCompletedGoalCnt();
+        this.completedDetailGoalCnt -= 1;
+    }
+
+    private void validateCompletedGoalCnt() {
+
+        if(this.completedDetailGoalCnt < 1)
+        {
+            throw new IllegalArgumentException("세부 목표 개수는 0개 이하일 수 없습니다");
+        }
     }
 
     private boolean isNotValidDateTimeRange(final LocalDate date) {

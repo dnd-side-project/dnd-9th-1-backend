@@ -1,18 +1,27 @@
 package com.backend.auth.jwt;
 
+import com.backend.auth.application.OAuthService;
 import com.backend.member.domain.Member;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
+@ActiveProfiles("test")
 class TokenProviderTest {
 
     private final static String TEST_SECRET_KEY = "test_secret_key";
 
     @Autowired
     TokenProvider tokenProvider;
+
+    @MockBean
+    OAuthService oAuthService;
 
     Member mockMember;
 
@@ -40,7 +49,7 @@ class TokenProviderTest {
     @Test
     void getPayload() {
         // given
-        String accessToken = "mock_access_token";
+        String accessToken = tokenProvider.generateAccessToken(mockMember);
         // when
         String extractedSocialId = tokenProvider.getPayload(accessToken);
         // then
@@ -50,7 +59,7 @@ class TokenProviderTest {
     @Test
     void validateToken() {
         // given
-        String accessToken = "mock_access_token";
+        String accessToken = tokenProvider.generateAccessToken(mockMember);
         // when
         boolean isValidToken = tokenProvider.validateToken(accessToken);
         // then

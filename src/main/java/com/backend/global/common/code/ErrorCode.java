@@ -47,12 +47,14 @@ public enum ErrorCode {
     NOT_VALID_ERROR(NOT_FOUND.value(), "COMMON-013", "handle Validation Exception"),
 
     // @RequestBody 및 @RequestParam, @PathVariable 값이 유효하지 않음
-    NOT_VALID_HEADER_ERROR(NOT_FOUND.value(), "COMMON-014", "Header에 데이터가 존재하지 않는 경우 ");
+    NOT_VALID_HEADER_ERROR(NOT_FOUND.value(), "COMMON-014", "Header에 데이터가 존재하지 않는 경우 "),
 
     /*
     Business Error
      */
 
+    /* Plan */
+    PLAN_NOT_FOUND(NOT_FOUND.value(), "PLAN-001", "상위 목표가 존재하지 않습니다.");
 
 
 

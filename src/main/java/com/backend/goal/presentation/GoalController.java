@@ -2,7 +2,6 @@ package com.backend.goal.presentation;
 
 import com.backend.global.common.response.CustomeResponse;
 import com.backend.goal.application.GoalService;
-import com.backend.goal.domain.GoalStatus;
 import com.backend.goal.presentation.dto.GoalSaveRequest;
 import com.backend.goal.presentation.dto.GoalUpdateRequest;
 import io.swagger.v3.oas.annotations.Parameter;

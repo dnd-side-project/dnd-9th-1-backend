@@ -35,7 +35,6 @@ public class Member extends BaseEntity {
 
     @Builder
     private Member(
-            final String nickname,
             final Boolean enabledPush,
             final SocialType socialType,
             final String socialId,

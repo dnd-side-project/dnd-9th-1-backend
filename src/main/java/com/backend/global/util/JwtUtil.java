@@ -13,7 +13,7 @@ public class JwtUtil {
 
     public static String generateToken(Member member, String key, Long expireTime) {
         Claims claims = Jwts.claims();
-        claims.put("memberId", member.getId());
+        claims.put("userId", member.getSocialId());
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))

@@ -13,8 +13,8 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public Member findMemberOrRegister(Member uncheckedMember) {
-        Optional<Member> member =  memberRepository.findBySocialId(uncheckedMember.getSocialId());
-        return member.orElseGet(() -> memberRepository.save(uncheckedMember));
+    public Member findMemberOrRegister(String provider, String socialId) {
+        Optional<Member> member =  memberRepository.findBySocialId(socialId);
+        return member.orElseGet(() -> memberRepository.save(Member.from(provider, socialId)));
     }
 }

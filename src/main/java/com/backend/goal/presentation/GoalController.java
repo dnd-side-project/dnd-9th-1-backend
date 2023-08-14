@@ -23,7 +23,10 @@ public class GoalController {
 
     private final GoalService goalService;
 
-
+    @Tag(name = "상위 목표 리스트 조회", description = "상위 목표 리스트를 조회하는 API 입니다")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "상위 목표 리스트 조회 성공"),
+    })
     @GetMapping("/goals")
     public ResponseEntity<CustomeResponse> getGoalList(@PageableDefault(size = 10) Pageable pageable,
                                                        @RequestParam(required = false) Long lastId,
@@ -32,11 +35,6 @@ public class GoalController {
         return CustomeResponse.success(SELECT_SUCCESS,goalService.getGoalList(lastId,pageable,goalStatus));
     }
 
-    @GetMapping("/goals/count")
-    public ResponseEntity<CustomeResponse> getGoalCount()
-    {
-        return CustomeResponse.success(SELECT_SUCCESS, goalService.getGoalCount());
-    }
 
     @Tag(name = "상위 목표 삭제", description = "상위 목표를 삭제하는 API 입니다")
     @ApiResponses({

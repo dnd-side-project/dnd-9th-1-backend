@@ -8,14 +8,12 @@ import com.backend.goal.domain.GoalStatus;
 import com.backend.goal.presentation.dto.GoalSaveRequest;
 import com.backend.goal.presentation.dto.GoalUpdateRequest;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.test.context.ActiveProfiles;
 import java.time.LocalDate;
 
@@ -65,12 +63,12 @@ public class GoalServiceTest {
         }
 
         // when
-        Slice<GoalListResponse> goalList = goalService.getGoalList(null, Pageable.ofSize(5), GoalStatus.PROCESS);
+        GoalListResponse goalList = goalService.getGoalList(null, Pageable.ofSize(5), GoalStatus.PROCESS);
 
         // then
-        Assertions.assertThat(goalList.getContent()).hasSize(5);
-        Assertions.assertThat(goalList.getContent().get(0).goalId()).isEqualTo(10L);
-        Assertions.assertThat(goalList.hasNext()).isTrue();
+        Assertions.assertThat(goalList.contents()).hasSize(5);
+        Assertions.assertThat(goalList.contents().get(0).goalId()).isEqualTo(10L);
+        Assertions.assertThat(goalList.next()).isTrue();
     }
 
     @DisplayName("상위 목표 리스트를 조회할때 커서 값이 있다면 이후 값부터 조회한다.")
@@ -85,12 +83,12 @@ public class GoalServiceTest {
         }
 
         // when
-        Slice<GoalListResponse> goalList = goalService.getGoalList(7L, Pageable.ofSize(5), GoalStatus.PROCESS);
+        GoalListResponse goalList = goalService.getGoalList(7L, Pageable.ofSize(5), GoalStatus.PROCESS);
 
         // then
-        Assertions.assertThat(goalList.getContent()).hasSize(5);
-        Assertions.assertThat(goalList.getContent().get(0).goalId()).isEqualTo(6L);
-        Assertions.assertThat(goalList.hasNext()).isTrue();
+        Assertions.assertThat(goalList.contents()).hasSize(5);
+        Assertions.assertThat(goalList.contents().get(0).goalId()).isEqualTo(6L);
+        Assertions.assertThat(goalList.next()).isTrue();
     }
 
     @DisplayName("상위 목표 리스트를 조회할때 페이지 크기만큼 조회했지만 다음 데이터가 없다면 hasNext가 false를 반환한다")
@@ -105,12 +103,12 @@ public class GoalServiceTest {
         }
 
         // when
-        Slice<GoalListResponse> goalList = goalService.getGoalList(3L, Pageable.ofSize(5), GoalStatus.PROCESS);
+        GoalListResponse goalList = goalService.getGoalList(3L, Pageable.ofSize(5), GoalStatus.PROCESS);
 
         // then
-        Assertions.assertThat(goalList.getContent()).hasSize(2);
-        Assertions.assertThat(goalList.getContent().get(0).goalId()).isEqualTo(2L);
-        Assertions.assertThat(goalList.hasNext()).isFalse();
+        Assertions.assertThat(goalList.contents()).hasSize(2);
+        Assertions.assertThat(goalList.contents().get(0).goalId()).isEqualTo(2L);
+        Assertions.assertThat(goalList.next()).isFalse();
     }
 
     @DisplayName("상위 목표 리스트를 조회할때 페이지 크기 보다 적은 데이터가 남았다면 hasNext가 false를 반환한다")
@@ -125,12 +123,12 @@ public class GoalServiceTest {
         }
 
         // when
-        Slice<GoalListResponse> goalList = goalService.getGoalList(6L, Pageable.ofSize(5), GoalStatus.PROCESS);
+        GoalListResponse goalList = goalService.getGoalList(6L, Pageable.ofSize(5), GoalStatus.PROCESS);
 
         // then
-        Assertions.assertThat(goalList.getContent()).hasSize(5);
-        Assertions.assertThat(goalList.getContent().get(0).goalId()).isEqualTo(5L);
-        Assertions.assertThat(goalList.hasNext()).isFalse();
+        Assertions.assertThat(goalList.contents()).hasSize(5);
+        Assertions.assertThat(goalList.contents().get(0).goalId()).isEqualTo(5L);
+        Assertions.assertThat(goalList.next()).isFalse();
     }
 
     @DisplayName("상위 목표를 수정할 수 있다.")

@@ -1,5 +1,6 @@
 package com.backend.goal.domain;
 
+import com.querydsl.core.types.Projections;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -12,14 +13,16 @@ public interface GoalRepository extends JpaRepository<Goal, Long> {
         return findById(id).orElseThrow(IllegalArgumentException::new);
     }
 
-    @Query(value =
-            "SELECT "+
-                    " new com.backend.goal.domain.GoalCountDto(pl.goalStatus, COUNT(pl.id))" +
-                    "FROM Goal pl " +
-                    "WHERE pl.deleted = false " +
-                    "GROUP BY pl.goalStatus"
-    )
-    List<GoalCountDto> countGoalByGoalStatus();
+//    @Query(value =
+//            "SELECT "+
+//                    " new com.backend.goal.domain.GoalCountDto(pl.goalStatus, COUNT(pl.id))" +
+//                    "FROM Goal pl " +
+//                    "WHERE pl.deleted = false " +
+//                    "GROUP BY pl.goalStatus"
+//    )
+//    List<GoalCountDto> countGoalByGoalStatus();
+
+      int countByGoalStatus(GoalStatus goalStatus);
 
 
 }

@@ -1,26 +1,24 @@
 package com.backend.auth.application;
 
+import com.backend.auth.jwt.TokenProvider;
 import com.backend.auth.presentation.dto.response.LoginResponse;
-import com.backend.global.util.JwtUtil;
 import com.backend.member.application.MemberService;
 import com.backend.member.domain.Member;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class OAuthService {
-
-    @Value("${jwt.secret}")
-    private String key;
-
-    private Long expireTime = 1000 * 60 * 60L;
 
     private final MemberService memberService;
 
+    private final TokenProvider tokenProvider;
+
     public LoginResponse login(String provider, String socialId) {
         Member member = memberService.findMemberOrRegister(provider, socialId);
-        return new LoginResponse(JwtUtil.generateToken(member, key, expireTime));
+        String accessToken = tokenProvider.generateAccessToken(member);
+        String refreshToken = tokenProvider.generateRefreshToken(member);
+        return new LoginResponse(accessToken, refreshToken);
     }
 }

@@ -1,4 +1,4 @@
-package com.backend.plan.domain;
+package com.backend.goal.domain;
 
 
 import org.junit.jupiter.api.DisplayName;
@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.*;
 
-public class PlanTest {
+public class GoalTest {
 
     @DisplayName("상위 목표 종료 날짜가 시작날짜보다 빠르면 예외가 발생한다.")
     @Test
@@ -20,7 +20,7 @@ public class PlanTest {
 
         // when & then
         assertThatThrownBy(() -> {
-            new Plan(1L, "테스트 제목", startDate, endDate, true);
+            new Goal(1L, "테스트 제목", startDate, endDate, true);
         }).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -34,7 +34,7 @@ public class PlanTest {
 
         // when & then
         assertThatThrownBy(() -> {
-            new Plan(1L, "테스트 제목", startDate, endDate, true);
+            new Goal(1L, "테스트 제목", startDate, endDate, true);
         }).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -48,7 +48,7 @@ public class PlanTest {
 
         // when & then
         assertThatThrownBy(() -> {
-            new Plan(1L, "테스트 제목", startDate, endDate, true);
+            new Goal(1L, "테스트 제목", startDate, endDate, true);
         }).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -63,7 +63,7 @@ public class PlanTest {
 
         // when & then
         assertThatThrownBy(() -> {
-            new Plan(1L, title, startDate, endDate, true);
+            new Goal(1L, title, startDate, endDate, true);
         }).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -74,10 +74,10 @@ public class PlanTest {
         // given
         LocalDate startDate = LocalDate.of(2023,7,1);
         LocalDate endDate = LocalDate.of(2023,8,10);
-        Plan plan = new Plan(1L, "테스트 제목", startDate, endDate, true);
+        Goal goal = new Goal(1L, "테스트 제목", startDate, endDate, true);
 
         // when
-        Long dDay = plan.calculateDday(LocalDate.of(2023, 7, 1));
+        Long dDay = goal.calculateDday(LocalDate.of(2023, 7, 1));
 
         // then
         assertThat(dDay).isEqualTo(40L);
@@ -90,11 +90,11 @@ public class PlanTest {
         // given
         LocalDate startDate = LocalDate.of(2023,7,1);
         LocalDate endDate = LocalDate.of(2023,8,10);
-        Plan plan = new Plan(1L, "테스트 제목", startDate, endDate, true);
+        Goal goal = new Goal(1L, "테스트 제목", startDate, endDate, true);
 
         // when & then
         assertThatThrownBy(() -> {
-            plan.calculateDday(LocalDate.of(2023, 8, 12));
+            goal.calculateDday(LocalDate.of(2023, 8, 12));
         }).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -105,10 +105,10 @@ public class PlanTest {
         // given
         LocalDate startDate = LocalDate.of(2023,7,1);
         LocalDate endDate = LocalDate.of(2023,8,10);
-        Plan plan = new Plan(1L, "테스트 제목", startDate, endDate, true);
+        Goal goal = new Goal(1L, "테스트 제목", startDate, endDate, true);
 
         // when
-        Long dDay = plan.calculateDday(LocalDate.of(2023, 8, 10));
+        Long dDay = goal.calculateDday(LocalDate.of(2023, 8, 10));
 
         // then
         assertThat(dDay).isEqualTo(0L);

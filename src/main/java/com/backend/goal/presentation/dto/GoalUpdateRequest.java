@@ -1,4 +1,4 @@
-package com.backend.plan.presentation.dto;
+package com.backend.goal.presentation.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.FutureOrPresent;
@@ -7,10 +7,10 @@ import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
-public record PlanUpdateRequest(
+public record GoalUpdateRequest(
 
         @NotNull(message = "상위 목표 ID가 빈값일 수 없습니다")
-        Long planId,
+        Long goalId,
 
         @Size(message = "상위 목표 제목은 15자를 초과할 수 없습니다")
         String title,

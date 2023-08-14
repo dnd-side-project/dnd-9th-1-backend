@@ -1,4 +1,4 @@
-package com.backend.plan.domain;
+package com.backend.goal.domain;
 
 import com.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -11,8 +11,8 @@ import java.time.temporal.ChronoUnit;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "plan")
-public class Plan extends BaseEntity {
+@Table(name = "goal")
+public class Goal extends BaseEntity {
 
     private static final int MAX_TITLE_LENGTH = 15;
     private static final LocalDate MIN_DATE = LocalDate.of(1000, 1, 1);
@@ -20,7 +20,7 @@ public class Plan extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "plan_id")
+    @Column(name = "goal_id")
     private Long id;
 
     @Column(name = "member_id")
@@ -29,12 +29,12 @@ public class Plan extends BaseEntity {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "plan_status", nullable = false)
+    @Column(name = "goal_status", nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private PlanStatus planStatus;
+    private GoalStatus goalStatus;
 
-    @Column(name = "detail_plan_count", nullable = false)
-    private Integer detailPlanCount;
+    @Column(name = "detail_goal_count", nullable = false)
+    private Integer detailGoalCount;
 
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
@@ -62,8 +62,8 @@ public class Plan extends BaseEntity {
     {
         deleted = Boolean.FALSE;
         hasRetrospect = Boolean.FALSE;
-        detailPlanCount = 0;
-        planStatus = PlanStatus.PROCESS;
+        detailGoalCount = 0;
+        goalStatus = GoalStatus.PROCESS;
     }
 
     public void update(final String title, final LocalDate startDate, final LocalDate endDate, final Boolean reminderEnabled)
@@ -74,7 +74,7 @@ public class Plan extends BaseEntity {
         this.reminderEnabled = reminderEnabled;
     }
 
-    public Plan(final Long memberId, final String title, final LocalDate startDate, final LocalDate endDate, final Boolean reminderEnabled)
+    public Goal(final Long memberId, final String title, final LocalDate startDate, final LocalDate endDate, final Boolean reminderEnabled)
     {
         validateTitleLength(title);
         validatePeriod(startDate, endDate);

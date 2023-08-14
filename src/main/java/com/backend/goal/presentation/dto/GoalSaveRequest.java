@@ -1,6 +1,6 @@
-package com.backend.plan.presentation.dto;
+package com.backend.goal.presentation.dto;
 
-import com.backend.plan.domain.Plan;
+import com.backend.goal.domain.Goal;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
-public record PlanSaveRequest(
+public record GoalSaveRequest(
 
         @Size(message = "상위 목표 제목은 15자를 초과할 수 없습니다")
         String title,
@@ -25,9 +25,9 @@ public record PlanSaveRequest(
         Boolean reminderEnabled)
 {
 
-        public Plan toEntity(Long memberId)
+        public Goal toEntity(Long memberId)
         {
-                return new Plan(memberId,title,startDate,endDate,reminderEnabled);
+                return new Goal(memberId,title,startDate,endDate,reminderEnabled);
         }
 
 }

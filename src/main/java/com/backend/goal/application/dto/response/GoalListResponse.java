@@ -3,12 +3,10 @@ package com.backend.goal.application.dto.response;
 import com.backend.goal.domain.GoalListResponseDto;
 
 import java.time.LocalDate;
+import java.util.List;
 
-public record GoalListResponse(Long goalId, String title, LocalDate startDate, LocalDate endDate, Integer entireDetailGoalCnt, Integer completedDetailGoalCnt) {
+public record GoalListResponse(List<GoalListResponseDto> contents, Boolean next) {
 
-   public static GoalListResponse from(GoalListResponseDto goalListResponseDto)
-   {
-       return new GoalListResponse(goalListResponseDto.goalId(),goalListResponseDto.title(),goalListResponseDto.startDate(),goalListResponseDto.endDate(),goalListResponseDto.entireDetailGoalCnt(),goalListResponseDto.completedDetailGoalCnt());
-   }
+
 
 }

@@ -2,6 +2,7 @@ package com.backend.goal.presentation;
 
 import com.backend.global.common.response.CustomeResponse;
 import com.backend.goal.application.GoalService;
+import com.backend.goal.domain.GoalStatus;
 import com.backend.goal.presentation.dto.GoalSaveRequest;
 import com.backend.goal.presentation.dto.GoalUpdateRequest;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -9,6 +10,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +23,14 @@ public class GoalController {
 
     private final GoalService goalService;
 
+
+    @GetMapping("/goals")
+    public ResponseEntity<CustomeResponse> getGoalList(@PageableDefault(size = 10) Pageable pageable,
+                                                       @RequestParam(required = false) Long lastId,
+                                                       @RequestParam GoalStatus goalStatus)
+    {
+        return CustomeResponse.success(SELECT_SUCCESS,goalService.getGoalList(lastId,pageable,goalStatus));
+    }
 
     @GetMapping("/goals/count")
     public ResponseEntity<CustomeResponse> getGoalCount()

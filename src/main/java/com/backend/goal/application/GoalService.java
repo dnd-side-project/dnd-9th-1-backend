@@ -26,10 +26,12 @@ public class GoalService {
     private final GoalQueryRepository goalQueryRepository;
 
 
-    public Slice<GoalListResponse> getGoalList(Long goalId, Pageable pageable, GoalStatus goalStatus)
+    public GoalListResponse getGoalList(Long goalId, Pageable pageable, GoalStatus goalStatus)
     {
         Slice<GoalListResponseDto> goalList = goalQueryRepository.getGoalList(goalId, pageable, goalStatus);
-        return goalList.map(GoalListResponse::from);
+        List<GoalListResponseDto> content = goalList.getContent();
+        Boolean next = goalList.hasNext();
+        return new GoalListResponse(content, next);
     }
 
     public List<GoalCountResponse> getGoalCount()

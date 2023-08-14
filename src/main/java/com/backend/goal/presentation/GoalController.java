@@ -20,7 +20,7 @@ public class GoalController {
 
     private final GoalService goalService;
 
-    
+
     @GetMapping("/goals/count")
     public ResponseEntity<CustomeResponse> getGoalCount()
     {

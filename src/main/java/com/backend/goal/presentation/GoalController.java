@@ -28,11 +28,21 @@ public class GoalController {
             @ApiResponse(responseCode = "200", description = "상위 목표 리스트 조회 성공"),
     })
     @GetMapping("/goals")
-    public ResponseEntity<CustomeResponse> getGoalList(@PageableDefault(size = 10) Pageable pageable,
+    public ResponseEntity<CustomeResponse> getGoalList(@PageableDefault(size = 7) Pageable pageable,
                                                        @RequestParam(required = false) Long lastId,
                                                        @RequestParam GoalStatus goalStatus)
     {
         return CustomeResponse.success(SELECT_SUCCESS,goalService.getGoalList(lastId,pageable,goalStatus));
+    }
+
+    @Tag(name = "상위 목표 상태별 개수 조회", description = "상위 목표 상태별 개수를 조회하는 API 입니다")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "상위 목표 상태별 개수 조회 성공"),
+    })
+    @GetMapping("/goals/count")
+    public ResponseEntity<CustomeResponse> getGoalCounts()
+    {
+        return CustomeResponse.success(SELECT_SUCCESS,goalService.getGoalCounts());
     }
 
 

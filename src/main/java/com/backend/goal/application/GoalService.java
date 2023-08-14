@@ -1,5 +1,6 @@
 package com.backend.goal.application;
 
+import com.backend.goal.application.dto.response.GoalCountResponse;
 import com.backend.goal.application.dto.response.GoalListResponse;
 import com.backend.goal.domain.*;
 import com.backend.goal.application.dto.response.GoalResponse;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -30,6 +32,12 @@ public class GoalService {
         List<GoalListResponseDto> content = goalList.getContent();
         Boolean next = goalList.hasNext();
         return new GoalListResponse(content, next);
+    }
+
+    public GoalCountResponse getGoalCounts()
+    {
+        Map<GoalStatus, Long> statusCounts = goalQueryRepository.getStatusCounts();
+        return new GoalCountResponse(statusCounts);
     }
 
 

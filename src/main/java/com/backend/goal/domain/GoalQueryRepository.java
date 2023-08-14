@@ -10,7 +10,10 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.backend.goal.domain.QGoal.*;
 
@@ -50,7 +53,40 @@ public class GoalQueryRepository {
         return new SliceImpl<>(goalList, pageable, hasNext);
     }
 
-    private BooleanExpression ltGoalId(Long goalId) {
+    public Map<GoalStatus, Long> getStatusCounts() {
+
+
+        List<Tuple> counts = query
+                .select(
+                        goal.goalStatus,
+                        goal.goalStatus.count()
+                )
+                .from(goal)
+                .groupBy(goal.goalStatus)
+                .fetch();
+
+        Map<GoalStatus, Long> statusCounts = new HashMap<>();
+        for (Tuple tuple : counts) {
+
+            statusCounts.put(tuple.get(goal.goalStatus), tuple.get(goal.goalStatus.count()));
+        }
+
+        // 진행상태별로 데이터가 없는 경우 0을 추가
+        for (GoalStatus status : Arrays.asList(GoalStatus.PROCESS, GoalStatus.COMPLETE, GoalStatus.STORE)) {
+            statusCounts.putIfAbsent(status, 0L);
+        }
+
+        return statusCounts;
+    }
+
+
+
+
+
+
+
+
+private BooleanExpression ltGoalId(Long goalId) {
 
         if (goalId == null) {
             return null;

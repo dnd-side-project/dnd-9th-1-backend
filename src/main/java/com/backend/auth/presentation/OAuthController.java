@@ -1,7 +1,6 @@
 package com.backend.auth.presentation;
 
 import com.backend.auth.application.OAuthService;
-import com.backend.auth.presentation.dto.request.LoginRequest;
 import com.backend.auth.presentation.dto.response.LoginResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,9 +23,9 @@ public class OAuthController {
             @ApiResponse(responseCode = "400", description = "잘못된 요청으로 인한 실패"),
             @ApiResponse(responseCode = "401", description = "접근 권한 없음")
     })
-    @PostMapping("/auth")
-    public ResponseEntity<LoginResponse> generateAccessToken(@RequestBody LoginRequest loginRequest) throws Exception {
-        return ResponseEntity.ok(oauthService.login(loginRequest));
+    @PostMapping("/auth/{provider}")
+    public ResponseEntity<LoginResponse> generateAccessToken(@PathVariable String provider, @RequestParam String userId) {
+        return ResponseEntity.ok(oauthService.login(provider, userId));
     }
 
 }

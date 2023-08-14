@@ -12,7 +12,7 @@ public record GoalUpdateRequest(
         @NotNull(message = "상위 목표 ID가 빈값일 수 없습니다")
         Long goalId,
 
-        @Size(message = "상위 목표 제목은 15자를 초과할 수 없습니다")
+        @Size(max = 15, message = "상위 목표 제목은 15자를 초과할 수 없습니다")
         String title,
 
         @FutureOrPresent(message = "상위 목표 시작 일자는 과거 시점일 수 없습니다")

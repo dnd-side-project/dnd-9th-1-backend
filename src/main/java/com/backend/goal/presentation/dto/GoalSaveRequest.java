@@ -2,6 +2,8 @@ package com.backend.goal.presentation.dto;
 
 import com.backend.goal.domain.Goal;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -10,7 +12,7 @@ import java.time.LocalDate;
 
 public record GoalSaveRequest(
 
-        @Size(message = "상위 목표 제목은 15자를 초과할 수 없습니다")
+        @Size(max = 15, message = "상위 목표 제목은 15자를 초과할 수 없습니다")
         String title,
 
         @FutureOrPresent(message = "상위 목표 시작 일자는 과거 시점일 수 없습니다")
@@ -27,7 +29,7 @@ public record GoalSaveRequest(
 
         public Goal toEntity(Long memberId)
         {
-                return new Goal(memberId,title,startDate,endDate,reminderEnabled);
+                return new Goal(memberId, title,startDate,endDate,reminderEnabled);
         }
 
 }

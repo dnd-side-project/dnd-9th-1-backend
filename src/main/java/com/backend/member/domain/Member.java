@@ -1,6 +1,5 @@
 package com.backend.member.domain;
 
-import com.backend.auth.application.dto.response.OAuthMemberInfo;
 import com.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -20,9 +19,6 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Long id;
 
-    @Column(nullable = false, length = 15)
-    private String nickname;
-
     @Column(nullable = false)
     private Boolean enabledPush;
 
@@ -39,28 +35,24 @@ public class Member extends BaseEntity {
 
     @Builder
     private Member(
-            final String nickname,
             final Boolean enabledPush,
             final SocialType socialType,
             final String socialId,
             final MemberStatus memberStatus
     ) {
-        this.nickname = nickname;
         this.enabledPush = enabledPush;
         this.socialType  = socialType;
         this.socialId = socialId;
         this.memberStatus = memberStatus;
     }
 
-    public static Member from(OAuthMemberInfo memberInfo, String provider) {
+    public static Member from(String provider, String socialId){
         return Member.builder()
-                .nickname(memberInfo.nickname())
                 .socialType(SocialType.valueOf(provider.toUpperCase(Locale.ROOT)))
-                .socialId(memberInfo.id())
+                .socialId(socialId)
                 .memberStatus(MemberStatus.ACTIVE)
                 .build();
     }
-
     @PrePersist
     private void setting(){
         this.enabledPush = false;

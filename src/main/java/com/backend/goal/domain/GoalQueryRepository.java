@@ -23,15 +23,9 @@ public class GoalQueryRepository {
 
     private final JPAQueryFactory query;
 
-    public Slice<GoalListResponseDto> getGoalList(Long goalId, Pageable pageable, GoalStatus goalStatus)
+    public Slice<Goal> getGoalList(Long goalId, Pageable pageable, GoalStatus goalStatus)
     {
-        List<GoalListResponseDto> goalList = query.select(Projections.constructor(GoalListResponseDto.class,
-                        goal.id,
-                        goal.title,
-                        goal.startDate,
-                        goal.endDate,
-                        goal.entireDetailGoalCnt,
-                        goal.completedDetailGoalCnt))
+        List<Goal> goalList = query.select(goal)
                 .from(goal)
                 .where(
                         goal.deleted.isFalse(), // 삭제 되지 않은 것들만 조회

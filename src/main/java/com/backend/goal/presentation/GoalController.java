@@ -5,6 +5,7 @@ import com.backend.goal.application.GoalService;
 import com.backend.goal.domain.GoalStatus;
 import com.backend.goal.presentation.dto.GoalSaveRequest;
 import com.backend.goal.presentation.dto.GoalUpdateRequest;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,9 +29,10 @@ public class GoalController {
             @ApiResponse(responseCode = "200", description = "상위 목표 리스트 조회 성공"),
     })
     @GetMapping("/goals")
-    public ResponseEntity<CustomeResponse> getGoalList(@PageableDefault(size = 7) Pageable pageable,
+    public ResponseEntity<CustomeResponse> getGoalList(
+                                                       @Parameter(hidden = true) @PageableDefault(size = 10) Pageable pageable,
                                                        @RequestParam(required = false) Long lastId,
-                                                       @RequestParam GoalStatus goalStatus)
+                                                       @RequestParam String goalStatus)
     {
         return CustomeResponse.success(SELECT_SUCCESS,goalService.getGoalList(lastId,pageable,goalStatus));
     }

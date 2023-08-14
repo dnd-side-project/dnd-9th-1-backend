@@ -121,6 +121,7 @@ public class Goal extends BaseEntity {
         return ChronoUnit.DAYS.between(now, endDate);
     }
 
+    // 세부 목표 들어갈때 Validation 모두 추가 예정
     public void increaseEntireDetailGoalCnt()
     {
         this.entireDetailGoalCnt += 1;
@@ -128,17 +129,7 @@ public class Goal extends BaseEntity {
 
     public void decreaseEntireDetailGoalCnt()
     {
-        validateEntireGoalCnt();
         this.entireDetailGoalCnt -= 1;
-    }
-
-    private void validateEntireGoalCnt() {
-
-        if(this.entireDetailGoalCnt < 1)
-        {
-            throw new IllegalArgumentException("세부 목표 개수는 0개 이하일 수 없습니다");
-        }
-
     }
 
 
@@ -149,17 +140,10 @@ public class Goal extends BaseEntity {
 
     public void decreaseCompletedDetailGoalCnt()
     {
-        validateCompletedGoalCnt();
         this.completedDetailGoalCnt -= 1;
     }
 
-    private void validateCompletedGoalCnt() {
 
-        if(this.completedDetailGoalCnt < 1)
-        {
-            throw new IllegalArgumentException("세부 목표 개수는 0개 이하일 수 없습니다");
-        }
-    }
 
     private boolean isNotValidDateTimeRange(final LocalDate date) {
         return date.isBefore(MIN_DATE) || date.isAfter(MAX_DATE);

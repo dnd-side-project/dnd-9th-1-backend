@@ -11,9 +11,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+
 
 
 @Service
@@ -26,12 +28,14 @@ public class GoalService {
     private final GoalQueryRepository goalQueryRepository;
 
 
-    public GoalListResponse getGoalList(Long goalId, Pageable pageable, GoalStatus goalStatus)
+    public GoalListResponse getGoalList(Long goalId, Pageable pageable, String goalStatus)
     {
-        Slice<GoalListResponseDto> goalList = goalQueryRepository.getGoalList(goalId, pageable, goalStatus);
-        List<GoalListResponseDto> content = goalList.getContent();
+        Slice<Goal> goalList = goalQueryRepository.getGoalList(goalId, pageable, GoalStatus.from(goalStatus));
+        Slice<GoalListResponseDto> result = goalList.map(GoalListResponseDto::from);
+        List<GoalListResponseDto> contents = result.getContent();
+
         Boolean next = goalList.hasNext();
-        return new GoalListResponse(content, next);
+        return new GoalListResponse(contents, next);
     }
 
     public GoalCountResponse getGoalCounts()

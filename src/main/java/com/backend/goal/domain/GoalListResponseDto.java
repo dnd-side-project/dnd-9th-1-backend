@@ -11,7 +11,13 @@ public record GoalListResponseDto(
         LocalDate startDate,
         LocalDate endDate,
         Integer entireDetailGoalCnt,
-        Integer completedDetailGoalCnt
+        Integer completedDetailGoalCnt,
+        Long dDay
 ) {
+
+    public static GoalListResponseDto from(Goal goal)
+    {
+        return new GoalListResponseDto(goal.getId(),goal.getTitle(),goal.getStartDate(),goal.getEndDate(), goal.getEntireDetailGoalCnt(), goal.getCompletedDetailGoalCnt(), goal.calculateDday(LocalDate.now()));
+    }
 }
 

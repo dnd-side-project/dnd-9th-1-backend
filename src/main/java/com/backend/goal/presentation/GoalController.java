@@ -24,9 +24,6 @@ public class GoalController {
     private final GoalService goalService;
 
     @Tag(name = "상위 목표 리스트 조회", description = "상위 목표 리스트를 조회하는 API 입니다")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "상위 목표 리스트 조회 성공"),
-    })
     @GetMapping("/goals")
     public ResponseEntity<CustomResponse> getGoalList(
                                                        @Parameter(hidden = true) @PageableDefault(size = 10) Pageable pageable,
@@ -37,9 +34,6 @@ public class GoalController {
     }
 
     @Tag(name = "상위 목표 상태별 개수 조회", description = "상위 목표 상태별 개수를 조회하는 API 입니다")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "상위 목표 상태별 개수 조회 성공"),
-    })
     @GetMapping("/goals/count")
     public ResponseEntity<CustomResponse> getGoalCounts()
     {
@@ -48,9 +42,6 @@ public class GoalController {
 
 
     @Tag(name = "상위 목표 삭제", description = "상위 목표를 삭제하는 API 입니다")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "상위 목표 삭제 성공"),
-    })
     @DeleteMapping("/goals/{id}")
     public ResponseEntity<CustomResponse> removeGoal(@PathVariable Long id)
     {
@@ -59,9 +50,6 @@ public class GoalController {
     }
 
     @Tag(name = "상위 목표 수정", description = "상위 목표를 수정하는 API 입니다")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "상위 목표 수정 성공"),
-    })
     @PatchMapping("/goals/{id}")
     public ResponseEntity<CustomResponse> updateGoal(@RequestBody @Valid GoalUpdateRequest goalSaveRequest)
     {
@@ -69,9 +57,6 @@ public class GoalController {
     }
 
     @Tag(name = "상위 목표 생성", description = "상위 목표를 생성하는 API 입니다")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "상위 목표 생성 성공"),
-    })
     @PostMapping("/goals")
     public ResponseEntity<CustomResponse> saveGoal(@RequestBody @Valid GoalSaveRequest goalSaveRequest)
     {

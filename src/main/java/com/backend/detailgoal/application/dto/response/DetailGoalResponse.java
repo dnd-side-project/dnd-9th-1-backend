@@ -5,7 +5,7 @@ import com.backend.detailgoal.domain.DetailGoal;
 import java.time.LocalTime;
 import java.util.List;
 
-public record DetailGoalResponse(Long detailGoalId, String title, LocalTime localTime, List<String> days)
+public record DetailGoalResponse(Long detailGoalId, String title, LocalTime localTime, List<String> days, Boolean isCompleted)
 {
     public static DetailGoalResponse from(DetailGoal detailGoal)
     {
@@ -13,7 +13,8 @@ public record DetailGoalResponse(Long detailGoalId, String title, LocalTime loca
                 detailGoal.getId(),
                 detailGoal.getTitle(),
                 detailGoal.getAlarmTime(),
-                detailGoal.extractDayName()
+                detailGoal.extractDayName(),
+                detailGoal.getIsCompleted()
         );
     }
 }

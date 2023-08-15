@@ -19,7 +19,7 @@ public class DetailGoalService {
 
     private final DetailGoalRepository detailGoalRepository;
 
-    List<DetailGoalResponse> getDetailGoalList(Long goalId)
+    public List<DetailGoalResponse> getDetailGoalList(Long goalId)
     {
         List<DetailGoal> detailGoalList = detailGoalRepository.findDetailGoalsByGoalIdOrderByIdAsc(goalId);
         return detailGoalList.stream().map(DetailGoalResponse::from).collect(Collectors.toList());

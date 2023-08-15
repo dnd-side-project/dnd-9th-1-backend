@@ -73,13 +73,6 @@ public class GoalQueryRepository {
         return statusCounts;
     }
 
-
-
-
-
-
-
-
 private BooleanExpression ltGoalId(Long goalId) {
 
         if (goalId == null) {

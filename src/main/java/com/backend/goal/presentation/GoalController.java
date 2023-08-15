@@ -5,8 +5,6 @@ import com.backend.goal.application.GoalService;
 import com.backend.goal.presentation.dto.GoalSaveRequest;
 import com.backend.goal.presentation.dto.GoalUpdateRequest;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

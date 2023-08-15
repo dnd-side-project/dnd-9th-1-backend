@@ -17,7 +17,13 @@ public record GoalListResponseDto(
 
     public static GoalListResponseDto from(Goal goal)
     {
-        return new GoalListResponseDto(goal.getId(),goal.getTitle(),goal.getStartDate(),goal.getEndDate(), goal.getEntireDetailGoalCnt(), goal.getCompletedDetailGoalCnt(), goal.calculateDday(LocalDate.now()));
+        return new GoalListResponseDto(goal.getId(),
+                goal.getTitle(),
+                goal.getStartDate(),
+                goal.getEndDate(),
+                goal.getEntireDetailGoalCnt(),
+                goal.getCompletedDetailGoalCnt(),
+                goal.calculateDday(LocalDate.now()));
     }
 }
 

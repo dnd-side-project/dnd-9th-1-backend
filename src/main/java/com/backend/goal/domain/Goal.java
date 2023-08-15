@@ -53,19 +53,19 @@ public class Goal extends BaseEntity {
     @Column(name = "has_retrospect", nullable = false)
     private Boolean hasRetrospect;
 
-    @Column(name = "deleted", nullable = false)
-    private Boolean deleted;
+    @Column(name = "is_deleted", nullable = false)
+    private Boolean isDeleted;
 
     public void remove()
     {
-        this.deleted = Boolean.TRUE;
+        this.isDeleted = Boolean.TRUE;
     }
 
 
     @PrePersist
     private void init()
     {
-        deleted = Boolean.FALSE;
+        isDeleted = Boolean.FALSE;
         hasRetrospect = Boolean.FALSE;
         entireDetailGoalCnt = 0;
         completedDetailGoalCnt = 0;

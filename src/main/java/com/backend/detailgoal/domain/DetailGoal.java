@@ -6,6 +6,10 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalTime;
+import java.util.HashSet;
+import java.util.Set;
+
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -18,8 +22,8 @@ public class DetailGoal extends BaseEntity {
     @Column(name = "detail_goal_id")
     private Long id;
 
-    @Column(name = "plan_id")
-    private Long planId;
+    @Column(name = "goal_id")
+    private Long goalId;
 
     @Column(name = "title")
     private String title;
@@ -29,4 +33,23 @@ public class DetailGoal extends BaseEntity {
 
     @Column(name = "alarm_enabled")
     private Boolean alarmEnabled;
+
+    @ElementCollection
+    @CollectionTable(name = "detail_goals_alarm_days", joinColumns = @JoinColumn(name = "detail_goal_id"))
+    @Column(name = "alarm_days")
+    @Enumerated(EnumType.STRING)
+    private Set<DayOfWeek> alarmDays = new HashSet<>();
+
+    @Column(name = "alarm_time")
+    private LocalTime alarmTime;
+
+    public void complete()
+    {
+        this.isCompleted = Boolean.TRUE;
+    }
+
+    public void inComplete()
+    {
+        this.isCompleted = Boolean.FALSE;
+    }
 }

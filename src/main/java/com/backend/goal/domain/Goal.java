@@ -33,13 +33,8 @@ public class Goal extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private GoalStatus goalStatus;
 
-    @Column(name = "entire_detail_goal_cnt", nullable = false)
-    private Integer entireDetailGoalCnt;
-
-    @Column(name = "completed_detail_goal_cnt", nullable = false)
-    private Integer completedDetailGoalCnt;
-
-
+    @Column(name = "detail_goal_cnt", nullable = false)
+    private Integer detailGoalCnt;
 
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
@@ -67,8 +62,7 @@ public class Goal extends BaseEntity {
     {
         isDeleted = Boolean.FALSE;
         hasRetrospect = Boolean.FALSE;
-        entireDetailGoalCnt = 0;
-        completedDetailGoalCnt = 0;
+        detailGoalCnt = 0;
         goalStatus = GoalStatus.PROCESS;
     }
 
@@ -119,30 +113,6 @@ public class Goal extends BaseEntity {
 
         return ChronoUnit.DAYS.between(now, endDate);
     }
-
-    // 세부 목표 들어갈때 Validation 모두 추가 예정
-    public void increaseEntireDetailGoalCnt()
-    {
-        this.entireDetailGoalCnt += 1;
-    }
-
-    public void decreaseEntireDetailGoalCnt()
-    {
-        this.entireDetailGoalCnt -= 1;
-    }
-
-
-    public void increaseCompletedDetailGoalCnt()
-    {
-        this.completedDetailGoalCnt += 1;
-    }
-
-    public void decreaseCompletedDetailGoalCnt()
-    {
-        this.completedDetailGoalCnt -= 1;
-    }
-
-
 
     private boolean isNotValidDateTimeRange(final LocalDate date) {
         return date.isBefore(MIN_DATE) || date.isAfter(MAX_DATE);

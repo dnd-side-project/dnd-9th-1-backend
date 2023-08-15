@@ -33,14 +33,7 @@ public class GlobalExceptionHandler {
         ErrorCode errorCode = ErrorCode.INVALID_INPUT_VALUE;
         BindingResult bindingResult = e.getBindingResult();
 
-        StringBuilder stringBuilder = new StringBuilder();
-        for (FieldError fieldError : bindingResult.getFieldErrors()) {
-            stringBuilder.append(fieldError.getField()).append(":");
-            stringBuilder.append(fieldError.getDefaultMessage());
-            stringBuilder.append(", ");
-        }
-
-        final ErrorResponse response = ErrorResponse.of(errorCode, e.getBindingResult());
+        final ErrorResponse response = ErrorResponse.of(errorCode, bindingResult);
         return new ResponseEntity<>(response, HTTP_STATUS_OK);
     }
 

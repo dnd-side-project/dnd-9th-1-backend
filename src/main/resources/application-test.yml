@@ -1,0 +1,37 @@
+logging-module:
+  version: 0.0.1
+
+springdoc:
+  swagger-ui:
+    groups-order: DESC
+    disable-swagger-default-url: true
+    display-request-duration: true
+    operations-sorter: method
+  api-docs:
+    path: /api-docs
+  show-actuator: true
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+
+jwt:
+  secret: dGhpcyBpcyBhIHNhbXBsZSAyNTYtYml0IEJhc2U2dGhpcyBpcyBhIHNhbXBsZSAyNTYtYml0IEJhc2U2
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:test
+    username: sa
+    password:

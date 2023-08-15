@@ -1,6 +1,6 @@
 package com.backend.auth.application;
 
-import com.backend.auth.presentation.dto.response.LoginResponse;
+import com.backend.auth.presentation.dto.response.TokenResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +27,7 @@ public class OAuthServiceTest {
         String userId = "abc123";
 
         //  when
-        LoginResponse response = oAuthService.login(provider, userId);
+        TokenResponse response = oAuthService.login(provider, userId);
 
         // then
         assertThat(response.accessToken()).isNotNull();

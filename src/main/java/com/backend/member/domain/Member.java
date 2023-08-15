@@ -18,14 +18,14 @@ public class Member extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
-    private Boolean enabledPush;
+    private String uid;
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false, length = 15)
-    private SocialType socialType;
+    private Provider provider;
 
     @Column(nullable = false)
-    private String socialId;
+    private Boolean enabledPush;
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
@@ -33,21 +33,21 @@ public class Member extends BaseEntity {
 
     @Builder
     private Member (
+            final String uid,
+            final Provider provider,
             final Boolean enabledPush,
-            final SocialType socialType,
-            final String socialId,
             final MemberStatus memberStatus
     ) {
         this.enabledPush = enabledPush;
-        this.socialType  = socialType;
-        this.socialId = socialId;
+        this.provider = provider;
+        this.uid = uid;
         this.memberStatus = memberStatus;
     }
 
-    public static Member from(String provider, String socialId){
+    public static Member from(String provider, String uid){
         return Member.builder()
-                .socialType(SocialType.from(provider))
-                .socialId(socialId)
+                .uid(uid)
+                .provider(Provider.from(provider))
                 .memberStatus(MemberStatus.ACTIVE)
                 .build();
     }

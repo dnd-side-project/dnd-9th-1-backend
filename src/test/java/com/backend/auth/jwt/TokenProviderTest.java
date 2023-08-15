@@ -2,6 +2,7 @@ package com.backend.auth.jwt;
 
 import com.backend.auth.application.OAuthService;
 import com.backend.member.domain.Member;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,18 +52,17 @@ class TokenProviderTest {
         // given
         String accessToken = tokenProvider.generateAccessToken(mockMember);
         // when
-        String extractedSocialId = tokenProvider.getPayload(accessToken);
+        String extractedUid = tokenProvider.getPayload(accessToken);
         // then
-        assertEquals(mockMember.getSocialId(), extractedSocialId);
+        assertEquals(mockMember.getUid(), extractedUid);
     }
 
     @Test
     void validateToken() {
         // given
         String accessToken = tokenProvider.generateAccessToken(mockMember);
-        // when
-        boolean isValidToken = tokenProvider.validateToken(accessToken);
-        // then
-        assertTrue(isValidToken);
+        // when & then
+        Assertions.assertThatCode(() -> tokenProvider.validateToken(accessToken))
+                        .doesNotThrowAnyException();
     }
 }

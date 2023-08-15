@@ -1,6 +1,6 @@
-package com.backend.plan.domain;
+package com.backend.goal.domain;
 
-public enum PlanStatus {
+public enum GoalStatus {
 
     STORE("보관함"),
     PROCESS("채움함"),
@@ -8,14 +8,14 @@ public enum PlanStatus {
 
     private String description;
 
-    PlanStatus(String description)
+    GoalStatus(String description)
     {
         this.description = description;
     }
 
-    public static PlanStatus from(final String value) {
+    public static GoalStatus from(final String value) {
         try {
-            return PlanStatus.valueOf(value.toUpperCase());
+            return GoalStatus.valueOf(value.toUpperCase());
         } catch (final IllegalArgumentException e) {
             throw new IllegalArgumentException();
         }

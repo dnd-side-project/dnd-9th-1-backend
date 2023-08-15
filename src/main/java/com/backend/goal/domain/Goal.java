@@ -1,4 +1,4 @@
-package com.backend.plan.domain;
+package com.backend.goal.domain;
 
 import com.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -11,8 +11,8 @@ import java.time.temporal.ChronoUnit;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "plan")
-public class Plan extends BaseEntity {
+@Table(name = "goal")
+public class Goal extends BaseEntity {
 
     private static final int MAX_TITLE_LENGTH = 15;
     private static final LocalDate MIN_DATE = LocalDate.of(1000, 1, 1);
@@ -20,7 +20,7 @@ public class Plan extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "plan_id")
+    @Column(name = "goal_id")
     private Long id;
 
     @Column(name = "member_id")
@@ -29,12 +29,17 @@ public class Plan extends BaseEntity {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "plan_status", nullable = false)
+    @Column(name = "goal_status", nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private PlanStatus planStatus;
+    private GoalStatus goalStatus;
 
-    @Column(name = "detail_plan_count", nullable = false)
-    private Integer detailPlanCount;
+    @Column(name = "entire_detail_goal_cnt", nullable = false)
+    private Integer entireDetailGoalCnt;
+
+    @Column(name = "completed_detail_goal_cnt", nullable = false)
+    private Integer completedDetailGoalCnt;
+
+
 
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
@@ -62,12 +67,20 @@ public class Plan extends BaseEntity {
     {
         deleted = Boolean.FALSE;
         hasRetrospect = Boolean.FALSE;
-        detailPlanCount = 0;
-        planStatus = PlanStatus.PROCESS;
+        entireDetailGoalCnt = 0;
+        completedDetailGoalCnt = 0;
+        goalStatus = GoalStatus.PROCESS;
     }
 
+    public void update(final String title, final LocalDate startDate, final LocalDate endDate, final Boolean reminderEnabled)
+    {
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.reminderEnabled = reminderEnabled;
+    }
 
-    public Plan(final Long memberId, final String title, final LocalDate startDate, final LocalDate endDate, final Boolean reminderEnabled)
+    public Goal(final Long memberId, final String title, final LocalDate startDate, final LocalDate endDate, final Boolean reminderEnabled)
     {
         validateTitleLength(title);
         validatePeriod(startDate, endDate);
@@ -91,9 +104,7 @@ public class Plan extends BaseEntity {
         }
 
         if (isNotValidDateTimeRange(startDate) || isNotValidDateTimeRange(endDate)) {
-            throw new IllegalArgumentException(
-                    String.format("상위 목표는 %s부터 %s까지 등록할 수 있습니다.",
-                            MIN_DATE, MAX_DATE)
+            throw new IllegalArgumentException(String.format("상위 목표는 %s부터 %s까지 등록할 수 있습니다.", MIN_DATE, MAX_DATE)
             );
         }
     }
@@ -107,6 +118,30 @@ public class Plan extends BaseEntity {
 
         return ChronoUnit.DAYS.between(now, endDate);
     }
+
+    // 세부 목표 들어갈때 Validation 모두 추가 예정
+    public void increaseEntireDetailGoalCnt()
+    {
+        this.entireDetailGoalCnt += 1;
+    }
+
+    public void decreaseEntireDetailGoalCnt()
+    {
+        this.entireDetailGoalCnt -= 1;
+    }
+
+
+    public void increaseCompletedDetailGoalCnt()
+    {
+        this.completedDetailGoalCnt += 1;
+    }
+
+    public void decreaseCompletedDetailGoalCnt()
+    {
+        this.completedDetailGoalCnt -= 1;
+    }
+
+
 
     private boolean isNotValidDateTimeRange(final LocalDate date) {
         return date.isBefore(MIN_DATE) || date.isAfter(MAX_DATE);

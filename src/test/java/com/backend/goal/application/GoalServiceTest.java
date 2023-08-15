@@ -1,10 +1,10 @@
 package com.backend.goal.application;
 
 import com.backend.global.DatabaseCleaner;
+import com.backend.goal.application.dto.response.GoalCountResponse;
 import com.backend.goal.application.dto.response.GoalListResponse;
 import com.backend.goal.domain.Goal;
 import com.backend.goal.domain.GoalRepository;
-import com.backend.goal.domain.GoalStatus;
 import com.backend.goal.presentation.dto.GoalSaveRequest;
 import com.backend.goal.presentation.dto.GoalUpdateRequest;
 import org.assertj.core.api.Assertions;
@@ -63,7 +63,7 @@ public class GoalServiceTest {
         }
 
         // when
-        GoalListResponse goalList = goalService.getGoalList(null, Pageable.ofSize(5), GoalStatus.PROCESS);
+        GoalListResponse goalList = goalService.getGoalList(null, Pageable.ofSize(5), "process");
 
         // then
         Assertions.assertThat(goalList.contents()).hasSize(5);
@@ -83,7 +83,7 @@ public class GoalServiceTest {
         }
 
         // when
-        GoalListResponse goalList = goalService.getGoalList(7L, Pageable.ofSize(5), GoalStatus.PROCESS);
+        GoalListResponse goalList = goalService.getGoalList(7L, Pageable.ofSize(5), "process");
 
         // then
         Assertions.assertThat(goalList.contents()).hasSize(5);
@@ -103,7 +103,7 @@ public class GoalServiceTest {
         }
 
         // when
-        GoalListResponse goalList = goalService.getGoalList(3L, Pageable.ofSize(5), GoalStatus.PROCESS);
+        GoalListResponse goalList = goalService.getGoalList(3L, Pageable.ofSize(5), "process");
 
         // then
         Assertions.assertThat(goalList.contents()).hasSize(2);
@@ -123,7 +123,7 @@ public class GoalServiceTest {
         }
 
         // when
-        GoalListResponse goalList = goalService.getGoalList(6L, Pageable.ofSize(5), GoalStatus.PROCESS);
+        GoalListResponse goalList = goalService.getGoalList(6L, Pageable.ofSize(5), "process");
 
         // then
         Assertions.assertThat(goalList.contents()).hasSize(5);
@@ -163,5 +163,20 @@ public class GoalServiceTest {
         // then
         Goal removedGoal = goalRepository.getById(savedGoal.getId());
         Assertions.assertThat(removedGoal.getDeleted()).isTrue();
+    }
+
+    @DisplayName("상위 목표 상태에 따라 통계를 제공한다.")
+    @Test
+    void 상위목표_상태에_따라_통계를_제공한다()
+    {
+        // given
+        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 1), true);
+        Goal savedGoal = goalRepository.save(goal);
+
+        // when
+        GoalCountResponse goalCounts = goalService.getGoalCounts();
+
+        // then
+        Assertions.assertThat(goalCounts.counts().keySet()).hasSize(3);
     }
 }

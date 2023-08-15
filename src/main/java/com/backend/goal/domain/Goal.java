@@ -104,9 +104,7 @@ public class Goal extends BaseEntity {
         }
 
         if (isNotValidDateTimeRange(startDate) || isNotValidDateTimeRange(endDate)) {
-            throw new IllegalArgumentException(
-                    String.format("상위 목표는 %s부터 %s까지 등록할 수 있습니다.",
-                            MIN_DATE, MAX_DATE)
+            throw new IllegalArgumentException(String.format("상위 목표는 %s부터 %s까지 등록할 수 있습니다.", MIN_DATE, MAX_DATE)
             );
         }
     }

@@ -4,6 +4,7 @@ import com.backend.global.common.response.CustomResponse;
 import com.backend.goal.application.GoalService;
 import com.backend.goal.presentation.dto.GoalSaveRequest;
 import com.backend.goal.presentation.dto.GoalUpdateRequest;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -17,11 +18,12 @@ import static com.backend.global.common.code.SuccessCode.*;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "goal", description = "상위 목표 API")
 public class GoalController {
 
     private final GoalService goalService;
 
-    @Tag(name = "상위 목표 리스트 조회", description = "상위 목표 리스트를 조회하는 API 입니다")
+    @Operation(summary = "상위 목표 리스트 조회", description = "상위 목표 리스트를 조회하는 API 입니다.")
     @GetMapping("/goals")
     public ResponseEntity<CustomResponse> getGoalList(
                                                        @Parameter(hidden = true) @PageableDefault(size = 10) Pageable pageable,
@@ -31,7 +33,7 @@ public class GoalController {
         return CustomResponse.success(SELECT_SUCCESS,goalService.getGoalList(lastId,pageable,goalStatus));
     }
 
-    @Tag(name = "상위 목표 상태별 개수 조회", description = "상위 목표 상태별 개수를 조회하는 API 입니다")
+    @Operation(summary = "상위 목표 상태별 개수 조회", description = "상위 목표 상태별 개수를 조회하는 API 입니다.")
     @GetMapping("/goals/count")
     public ResponseEntity<CustomResponse> getGoalCounts()
     {
@@ -39,7 +41,7 @@ public class GoalController {
     }
 
 
-    @Tag(name = "상위 목표 삭제", description = "상위 목표를 삭제하는 API 입니다")
+    @Operation(summary = "상위 목표 삭제", description = "상위 목표를 삭제하는 API 입니다.")
     @DeleteMapping("/goals/{id}")
     public ResponseEntity<CustomResponse> removeGoal(@PathVariable Long id)
     {
@@ -47,14 +49,16 @@ public class GoalController {
         return CustomResponse.success(DELETE_SUCCESS);
     }
 
-    @Tag(name = "상위 목표 수정", description = "상위 목표를 수정하는 API 입니다")
+
+    @Operation(summary = "상위 목표 수정", description = "상위 목표를 수정하는 API 입니다.")
     @PatchMapping("/goals/{id}")
     public ResponseEntity<CustomResponse> updateGoal(@RequestBody @Valid GoalUpdateRequest goalSaveRequest)
     {
         return CustomResponse.success(UPDATE_SUCCESS, goalService.updateGoal(goalSaveRequest));
     }
 
-    @Tag(name = "상위 목표 생성", description = "상위 목표를 생성하는 API 입니다")
+
+    @Operation(summary = "상위 목표 생성", description = "상위 목표를 생성하는 API 입니다.")
     @PostMapping("/goals")
     public ResponseEntity<CustomResponse> saveGoal(@RequestBody @Valid GoalSaveRequest goalSaveRequest)
     {

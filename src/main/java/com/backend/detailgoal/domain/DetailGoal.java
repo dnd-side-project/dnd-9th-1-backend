@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Getter
@@ -25,13 +27,13 @@ public class DetailGoal extends BaseEntity {
     @Column(name = "goal_id")
     private Long goalId;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "is_completed")
+    @Column(name = "is_completed", nullable = false)
     private Boolean isCompleted;
 
-    @Column(name = "alarm_enabled")
+    @Column(name = "alarm_enabled", nullable = false)
     private Boolean alarmEnabled;
 
     @ElementCollection
@@ -42,6 +44,11 @@ public class DetailGoal extends BaseEntity {
 
     @Column(name = "alarm_time")
     private LocalTime alarmTime;
+
+    public List<String> extractDayName()
+    {
+        return alarmDays.stream().map(DayOfWeek::getDescription).collect(Collectors.toList());
+    }
 
     public void complete()
     {

@@ -9,25 +9,25 @@ import org.springframework.http.ResponseEntity;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomeResponse<T> {
+public class CustomResponse<T> {
 
     private int code;
     private String message;
     private T data;
 
 
-    public CustomeResponse(final int code, final String message) {
+    public CustomResponse(final int code, final String message) {
         this.code = code;
         this.message = message;
     }
 
-    public static <T> ResponseEntity<CustomeResponse> success(final SuccessCode successCode, final T data) {
+    public static <T> ResponseEntity<CustomResponse> success(final SuccessCode successCode, final T data) {
         return ResponseEntity.status(successCode.getStatus())
-                .body(new CustomeResponse<>(successCode.getStatus(), successCode.getMessage(), data));
+                .body(new CustomResponse<>(successCode.getStatus(), successCode.getMessage(), data));
     }
 
-    public static <T> ResponseEntity<CustomeResponse> success(final SuccessCode successCode) {
+    public static <T> ResponseEntity<CustomResponse> success(final SuccessCode successCode) {
         return ResponseEntity.status(successCode.getStatus())
-                .body(new CustomeResponse<>(successCode.getStatus(), successCode.getMessage(), null));
+                .body(new CustomResponse<>(successCode.getStatus(), successCode.getMessage(), null));
     }
 }

@@ -14,7 +14,7 @@ springdoc:
   default-produces-media-type: application/json;charset=UTF-8
 
 jwt:
-  secret: secret
+  secret: dGhpcyBpcyBhIHNhbXBsZSAyNTYtYml0IEJhc2U2dGhpcyBpcyBhIHNhbXBsZSAyNTYtYml0IEJhc2U2
 
 spring:
   jpa:

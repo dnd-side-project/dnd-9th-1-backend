@@ -1,10 +1,11 @@
 package com.backend.member.domain;
 
-public enum SocialType {
-    KAKAO,
-    APPLE;
+import java.util.Locale;
 
-    public boolean isSameAs(SocialType socialType){
-        return this.equals(socialType);
+public enum SocialType {
+    KAKAO, APPLE;
+
+    public static SocialType from(String provider){
+        return SocialType.valueOf(provider.toUpperCase(Locale.ROOT));
     }
 }

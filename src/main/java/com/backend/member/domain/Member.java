@@ -44,10 +44,10 @@ public class Member extends BaseEntity {
         this.memberStatus = memberStatus;
     }
 
-    public static Member from(String provider, String uid){
+    public static Member from(Provider provider, String uid){
         return Member.builder()
                 .uid(uid)
-                .provider(Provider.from(provider))
+                .provider(provider)
                 .memberStatus(MemberStatus.ACTIVE)
                 .build();
     }

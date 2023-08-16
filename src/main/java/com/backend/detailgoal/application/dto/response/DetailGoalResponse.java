@@ -11,13 +11,16 @@ import java.util.List;
 import java.util.Set;
 
 public record DetailGoalResponse(
+
         Long detailGoalId,
 
         String title,
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul")
         LocalTime alarmTime,
+
         List<DayOfWeek> alarmDays,
+
         Boolean alarmEnabled
 )
 

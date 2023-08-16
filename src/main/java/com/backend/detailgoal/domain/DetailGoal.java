@@ -1,6 +1,7 @@
 package com.backend.detailgoal.domain;
 
 import com.backend.global.entity.BaseEntity;
+import com.backend.global.exception.BusinessException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Getter
@@ -52,6 +54,20 @@ public class DetailGoal extends BaseEntity {
         this.goalId = goalId;
     }
 
+    public void remove()
+    {
+        this.isDeleted = Boolean.TRUE;
+    }
+
+
+    public void update(String title, Boolean alarmEnabled, LocalTime alarmTime, List<String> alarmDays)
+    {
+         this.title = title;
+         this.alarmEnabled = alarmEnabled;
+         this.alarmTime = alarmTime;
+         updateAlarmDays(alarmDays);
+    }
+
     @Builder
     public DetailGoal(Long goalId, String title, Boolean isCompleted, Boolean alarmEnabled, List<DayOfWeek> alarmDays, LocalTime alarmTime) {
         this.goalId = goalId;
@@ -77,5 +93,10 @@ public class DetailGoal extends BaseEntity {
     public void inComplete()
     {
         this.isCompleted = Boolean.FALSE;
+    }
+
+    private void updateAlarmDays(List<String> alarmDays)
+    {
+        this.alarmDays = alarmDays.stream().map(DayOfWeek::valueOf).collect(Collectors.toList());
     }
 }

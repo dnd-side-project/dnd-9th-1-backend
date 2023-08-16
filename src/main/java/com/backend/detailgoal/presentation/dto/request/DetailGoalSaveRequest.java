@@ -11,10 +11,12 @@ import java.util.stream.Collectors;
 public record DetailGoalSaveRequest(
 
         String title,
+
         Boolean alarmEnabled,
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul")
         LocalTime alarmTime,
+
         List<String> alarmDays
 ) {
 

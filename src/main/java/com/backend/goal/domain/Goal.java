@@ -71,6 +71,11 @@ public class Goal extends BaseEntity {
         this.detailGoalCnt +=1;
     }
 
+    public void decreaseDetailGoalCnt()
+    {
+        this.detailGoalCnt -=1;
+    }
+
 
     public void update(final String title, final LocalDate startDate, final LocalDate endDate, final Boolean reminderEnabled)
     {

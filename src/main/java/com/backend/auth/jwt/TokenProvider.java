@@ -2,10 +2,9 @@ package com.backend.auth.jwt;
 
 import com.backend.auth.application.RefreshTokenService;
 import com.backend.auth.domain.RefreshToken;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.UnsupportedJwtException;
+import com.backend.global.common.code.ErrorCode;
+import com.backend.global.exception.BusinessException;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -70,11 +69,13 @@ public class TokenProvider {
                     .build()
                     .parseClaimsJws(token);
         } catch (ExpiredJwtException e){
-            throw e;
+            throw new BusinessException(ErrorCode.TOKEN_EXPIRED);
         } catch (UnsupportedJwtException e){
-            throw e;
+            throw new BusinessException(ErrorCode.INVALID_TOKEN);
+        } catch (MalformedJwtException e) {
+            throw new BusinessException(ErrorCode.MALFORMED_TOKEN);
         } catch (IllegalArgumentException e){
-            throw e;
+            throw new BusinessException(ErrorCode.TOKEN_ERROR);
         }
     }
 }

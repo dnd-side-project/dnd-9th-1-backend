@@ -34,7 +34,9 @@ public class TokenProvider {
     }
 
     public String generateRefreshToken(String uid){
-        return generateToken(uid, REFRESH_TOKEN_EXPIRE_TIME);
+        String refreshToken = generateToken(uid, REFRESH_TOKEN_EXPIRE_TIME);
+        refreshTokenService.saveRefreshToken(refreshToken, uid);
+        return refreshToken;
     }
 
     public String generateToken(String uid, Long expireTime){

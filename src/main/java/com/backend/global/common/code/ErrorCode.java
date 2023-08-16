@@ -59,6 +59,7 @@ public enum ErrorCode {
     /* Detail Goal */
     DETAIL_GOAL_NOT_FOUND(NOT_FOUND.value(), "DETAIL-GOAL-001", "하위 목표가 존재하지 않습니다.");
 
+
     private final int status;
 
     private final String code;

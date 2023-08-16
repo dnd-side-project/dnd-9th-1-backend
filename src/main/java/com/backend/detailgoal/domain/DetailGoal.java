@@ -1,7 +1,6 @@
 package com.backend.detailgoal.domain;
 
 import com.backend.global.entity.BaseEntity;
-import com.backend.global.exception.BusinessException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -19,6 +18,8 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "detail_goal")
 public class DetailGoal extends BaseEntity {
+
+    private static final int MAX_TITLE_LENGTH = 15;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,16 +63,24 @@ public class DetailGoal extends BaseEntity {
 
     public void update(String title, Boolean alarmEnabled, LocalTime alarmTime, List<String> alarmDays)
     {
-         this.title = title;
+         validateTitleLength(title);
          this.alarmEnabled = alarmEnabled;
          this.alarmTime = alarmTime;
          updateAlarmDays(alarmDays);
     }
 
+    private void validateTitleLength(final String title) {
+
+        if (title.length() > MAX_TITLE_LENGTH) {
+            throw new IllegalArgumentException(String.format("상위 목표 제목의 길이는 %d을 초과할 수 없습니다.", MAX_TITLE_LENGTH));
+        }
+    }
+
     @Builder
     public DetailGoal(Long goalId, String title, Boolean isCompleted, Boolean alarmEnabled, List<DayOfWeek> alarmDays, LocalTime alarmTime) {
+
         this.goalId = goalId;
-        this.title = title;
+        validateTitleLength(title);
         this.isCompleted = isCompleted;
         this.alarmEnabled = alarmEnabled;
         this.alarmDays = alarmDays;

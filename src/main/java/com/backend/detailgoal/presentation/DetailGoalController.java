@@ -43,7 +43,7 @@ public class DetailGoalController {
     }
 
     @Operation(summary = "하위 목표 수정", description = "하위 목표를 수정하는 API 입니다.")
-    @PostMapping("/detail-goals/{id}")
+    @PatchMapping("/detail-goals/{id}")
     public ResponseEntity<CustomResponse> updateDetailGoal(@PathVariable Long id, @RequestBody @Valid DetailGoalUpdateRequest detailGoalUpdateRequest)
     {
         detailGoalService.updateDetailGoal(id, detailGoalUpdateRequest);
@@ -51,10 +51,27 @@ public class DetailGoalController {
     }
 
     @Operation(summary = "하위 목표 삭제", description = "하위 목표를 삭제하는 API 입니다.")
-    @PostMapping("/detail-goals/{id}")
+    @DeleteMapping("/detail-goals/{id}")
     public ResponseEntity<CustomResponse> removeDetailGoal(@PathVariable Long id)
     {
         detailGoalService.removeDetailGoal(id);
         return CustomResponse.success(DELETE_SUCCESS);
     }
+
+    @Operation(summary = "하위 목표 달성", description = "하위 목표를 달성하는 API 입니다.")
+    @PatchMapping("/detail-goals/{id}/complete")
+    public ResponseEntity<CustomResponse> completeDetailGoal(@PathVariable Long id)
+    {
+        detailGoalService.completeDetailGoal(id);
+        return CustomResponse.success(UPDATE_SUCCESS);
+    }
+
+    @Operation(summary = "하위 목표 달성 취소", description = "하위 목표 달성을 취소하는 API 입니다.")
+    @PatchMapping("/detail-goals/{id}/incomplete")
+    public ResponseEntity<CustomResponse> incompleteDetailGoal(@PathVariable Long id)
+    {
+        detailGoalService.inCompleteDetailGoal(id);
+        return CustomResponse.success(UPDATE_SUCCESS);
+    }
+
 }

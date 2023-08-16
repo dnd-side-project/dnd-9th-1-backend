@@ -11,7 +11,7 @@ public interface GoalRepository extends JpaRepository<Goal, Long> {
 
     default Goal getById(Long id){
 
-        return findById(id).orElseThrow(() -> {throw new BusinessException(ErrorCode.PLAN_NOT_FOUND);
+        return findById(id).orElseThrow(() -> {throw new BusinessException(ErrorCode.GOAL_NOT_FOUND);
         });
     }
 

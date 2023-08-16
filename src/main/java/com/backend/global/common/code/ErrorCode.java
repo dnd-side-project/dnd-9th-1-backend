@@ -53,10 +53,11 @@ public enum ErrorCode {
     Business Error
      */
 
-    /* Plan */
-    PLAN_NOT_FOUND(NOT_FOUND.value(), "PLAN-001", "상위 목표가 존재하지 않습니다.");
+    /* Goal */
+    GOAL_NOT_FOUND(NOT_FOUND.value(), "GOAL-001", "상위 목표가 존재하지 않습니다."),
 
-
+    /* Detail Goal */
+    DETAIL_GOAL_NOT_FOUND(NOT_FOUND.value(), "DETAIL-GOAL-001", "하위 목표가 존재하지 않습니다.");
 
     private final int status;
 

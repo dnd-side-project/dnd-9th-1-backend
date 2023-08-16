@@ -4,22 +4,17 @@ import com.backend.auth.jwt.TokenProvider;
 import com.backend.auth.presentation.dto.response.AccessTokenResponse;
 import com.backend.auth.presentation.dto.response.TokenResponse;
 import com.backend.global.exception.BusinessException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
@@ -72,7 +67,7 @@ public class OAuthServiceTest {
 
     @DisplayName("access token이 만료되어 refresh token을 통해 재발급한다.")
     @Test
-    public void reissueRefreshToken() {
+    public void reissueRefreshToken() throws Exception {
         // when
         AccessTokenResponse accessTokenResponse = oAuthService.reissue(refreshToken);
 
@@ -86,6 +81,6 @@ public class OAuthServiceTest {
         // given
         String invalidRefreshToken = "mock_refresh_token";
         // when & then
-        assertThrows(BusinessException.class, () -> oAuthService.reissue(invalidRefreshToken));
+        assertThrows(Exception.class, () -> oAuthService.reissue(invalidRefreshToken));
     }
 }

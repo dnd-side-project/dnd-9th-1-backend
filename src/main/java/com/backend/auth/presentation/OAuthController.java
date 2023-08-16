@@ -6,6 +6,8 @@ import com.backend.auth.presentation.dto.response.AccessTokenResponse;
 import com.backend.auth.presentation.dto.response.TokenResponse;
 import com.backend.global.common.code.SuccessCode;
 import com.backend.global.common.response.CustomResponse;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -36,7 +38,8 @@ public class OAuthController {
     @Operation(summary = "토큰 재발급",
                 description = "access token 만료 시 refresh token을 통해 access token을 재발급합니다.")
     @PostMapping("/reissue")
-    public ResponseEntity<CustomResponse> reissue(@Valid @RequestBody TokenReissueRequest reissueRequest){
+    @ExceptionHandler({UnsupportedJwtException.class, MalformedJwtException.class, IllegalArgumentException.class})
+    public ResponseEntity<CustomResponse> reissue(@Valid @RequestBody TokenReissueRequest reissueRequest) throws Exception {
         return CustomResponse.success(LOGIN_SUCCESS, oauthService.reissue(reissueRequest.refreshToken()));
     }
 }

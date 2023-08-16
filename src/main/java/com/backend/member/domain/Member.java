@@ -21,7 +21,7 @@ public class Member extends BaseEntity {
     private String uid;
 
     @Enumerated(value = EnumType.STRING)
-    @Column(nullable = false, length = 15)
+    @Column(nullable = false)
     private Provider provider;
 
     @Column(nullable = false)

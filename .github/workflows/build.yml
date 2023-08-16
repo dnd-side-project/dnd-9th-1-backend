@@ -15,13 +15,6 @@ jobs: # defining jobs, executed in this workflows
   build:
     runs-on: ubuntu-latest
 
-    services:
-      redis:
-        image: redis:6
-        options: --database 1
-        ports:
-          - "6379:6379"
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3 # clone repository

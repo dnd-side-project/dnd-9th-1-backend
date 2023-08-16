@@ -62,7 +62,7 @@ public class TokenProvider {
                 .getSubject();
     }
 
-    public void validateToken(String token){
+    public void validateToken(String token) throws Exception {
         try{
             Jwts.parserBuilder()
                     .setSigningKey(key)
@@ -70,12 +70,8 @@ public class TokenProvider {
                     .parseClaimsJws(token);
         } catch (ExpiredJwtException e){
             throw new BusinessException(ErrorCode.TOKEN_EXPIRED);
-        } catch (UnsupportedJwtException e){
-            throw new BusinessException(ErrorCode.INVALID_TOKEN);
-        } catch (MalformedJwtException e) {
-            throw new BusinessException(ErrorCode.MALFORMED_TOKEN);
-        } catch (IllegalArgumentException e){
-            throw new BusinessException(ErrorCode.TOKEN_ERROR);
+        } catch (UnsupportedJwtException | MalformedJwtException | IllegalArgumentException e){
+            throw new Exception("잘못된 형식의 토큰입니다.");
         }
     }
 }

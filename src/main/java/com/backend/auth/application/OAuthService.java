@@ -26,7 +26,7 @@ public class OAuthService {
         return new TokenResponse(accessToken, refreshToken);
     }
 
-    public AccessTokenResponse reissue(String refreshToken) {
+    public AccessTokenResponse reissue(String refreshToken) throws Exception {
         tokenProvider.validateToken(refreshToken);
         String accessToken = tokenProvider.reissueAccessToken(refreshToken);
         return new AccessTokenResponse(accessToken);

@@ -59,13 +59,7 @@ public enum ErrorCode {
     PLAN_NOT_FOUND(NOT_FOUND.value(), "PLAN-001", "상위 목표가 존재하지 않습니다."),
 
     /* Auth */
-    TOKEN_EXPIRED(UNAUTHORIZED.value(), "AUTH-001", "토큰의 유효기간이 만료되었습니다."),
-
-    INVALID_TOKEN(BAD_REQUEST.value(), "AUTH-002", "잘못된 형식의 토큰이 입력되었습니다."),
-
-    MALFORMED_TOKEN(BAD_REQUEST.value(), "AUTH-003", "잘못된 구조의 토큰이 입력되었습니다."),
-
-    TOKEN_ERROR(BAD_REQUEST.value(), "AUTH-004" ,"토큰 검증 시 알 수 없는 오류가 발생했습니다." );
+    TOKEN_EXPIRED(UNAUTHORIZED.value(), "AUTH-001", "토큰의 유효기간이 만료되었습니다.");
 
     private final int status;
 

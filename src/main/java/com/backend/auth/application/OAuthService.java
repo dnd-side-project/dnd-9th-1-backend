@@ -1,7 +1,8 @@
 package com.backend.auth.application;
 
 import com.backend.auth.jwt.TokenProvider;
-import com.backend.auth.presentation.dto.response.LoginResponse;
+import com.backend.auth.presentation.dto.response.AccessTokenResponse;
+import com.backend.auth.presentation.dto.response.TokenResponse;
 import com.backend.member.application.MemberService;
 import com.backend.member.domain.Member;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +16,16 @@ public class OAuthService {
 
     private final TokenProvider tokenProvider;
 
-    public LoginResponse login(String provider, String socialId) {
-        Member member = memberService.findMemberOrRegister(provider, socialId);
-        String accessToken = tokenProvider.generateAccessToken(member);
-        String refreshToken = tokenProvider.generateRefreshToken(member);
-        return new LoginResponse(accessToken, refreshToken);
+    public TokenResponse login(String provider, String uid) {
+        memberService.findMemberOrRegister(provider, uid);
+        String accessToken = tokenProvider.generateAccessToken(uid);
+        String refreshToken = tokenProvider.generateRefreshToken(uid);
+        return new TokenResponse(accessToken, refreshToken);
+    }
+
+    public AccessTokenResponse reissue(String refreshToken) {
+        tokenProvider.validateToken(refreshToken);
+        String accessToken = tokenProvider.reissueAccessToken(refreshToken);
+        return new AccessTokenResponse(accessToken);
     }
 }

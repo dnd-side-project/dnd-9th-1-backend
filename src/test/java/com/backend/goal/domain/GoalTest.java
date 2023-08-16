@@ -114,5 +114,4 @@ public class GoalTest {
         // then
         assertThat(dDay).isEqualTo(0L);
     }
-
 }

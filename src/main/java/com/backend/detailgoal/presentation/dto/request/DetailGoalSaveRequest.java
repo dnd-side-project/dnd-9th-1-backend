@@ -15,13 +15,12 @@ public record DetailGoalSaveRequest(
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul")
         LocalTime alarmTime,
-        List<Integer> alarmDays
+        List<String> alarmDays
 ) {
 
     public DetailGoal toEntity()
     {
-        List<DayOfWeek> days = alarmDays.stream().map(DayOfWeek::of).collect(Collectors.toList());
-
+        List<DayOfWeek> days = alarmDays.stream().map(DayOfWeek::valueOf).collect(Collectors.toList());
         return DetailGoal.builder()
                 .title(title)
                 .alarmEnabled(alarmEnabled)

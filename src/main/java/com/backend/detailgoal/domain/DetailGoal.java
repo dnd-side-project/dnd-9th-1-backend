@@ -3,14 +3,14 @@ package com.backend.detailgoal.domain;
 import com.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 
 @Getter
@@ -36,6 +36,9 @@ public class DetailGoal extends BaseEntity {
     @Column(name = "alarm_enabled", nullable = false)
     private Boolean alarmEnabled;
 
+    @Column(name = "is_deleted", nullable = false)
+    private Boolean isDeleted;
+
     @ElementCollection
     @CollectionTable(name = "detail_goals_alarm_days", joinColumns = @JoinColumn(name = "detail_goal_id"))
     @Column(name = "alarm_days")
@@ -45,9 +48,26 @@ public class DetailGoal extends BaseEntity {
     @Column(name = "alarm_time")
     private LocalTime alarmTime;
 
-    public List<String> extractDayName()
+    public void setGoalId(Long goalId)
     {
-        return alarmDays.stream().map(DayOfWeek::getDescription).collect(Collectors.toList());
+        this.goalId = goalId;
+    }
+
+    @Builder
+    public DetailGoal(Long goalId, String title, Boolean isCompleted, Boolean alarmEnabled, Set<DayOfWeek> alarmDays, LocalTime alarmTime) {
+        this.goalId = goalId;
+        this.title = title;
+        this.isCompleted = isCompleted;
+        this.alarmEnabled = alarmEnabled;
+        this.alarmDays = alarmDays;
+        this.alarmTime = alarmTime;
+    }
+
+    @PrePersist
+    public void init()
+    {
+        this.isDeleted = Boolean.FALSE;
+        this.isCompleted = Boolean.FALSE;
     }
 
     public void complete()

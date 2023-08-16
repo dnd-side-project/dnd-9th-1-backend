@@ -4,6 +4,7 @@ package com.backend.goal.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.*;
@@ -113,4 +114,5 @@ public class GoalTest {
         // then
         assertThat(dDay).isEqualTo(0L);
     }
+
 }

@@ -1,7 +1,5 @@
 package com.backend.goal.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.criteria.CriteriaBuilder;
 
 import java.time.LocalDate;
 
@@ -10,9 +8,9 @@ public record GoalListResponseDto(
         String title,
         LocalDate startDate,
         LocalDate endDate,
-        Integer entireDetailGoalCnt,
-        Integer completedDetailGoalCnt,
-        Long dDay
+        Integer detailGoalCnt,
+        Long dDay,
+        Boolean hasRetrospect
 ) {
 
     public static GoalListResponseDto from(Goal goal)
@@ -21,9 +19,11 @@ public record GoalListResponseDto(
                 goal.getTitle(),
                 goal.getStartDate(),
                 goal.getEndDate(),
-                goal.getEntireDetailGoalCnt(),
-                goal.getCompletedDetailGoalCnt(),
-                goal.calculateDday(LocalDate.now()));
+                goal.getDetailGoalCnt(),
+                goal.calculateDday(LocalDate.now()),
+                goal.getHasRetrospect()
+        )
+                ;
     }
 }
 

@@ -5,6 +5,8 @@ import com.backend.detailgoal.application.dto.response.DetailGoalResponse;
 import com.backend.detailgoal.domain.DetailGoal;
 import com.backend.detailgoal.domain.DetailGoalRepository;
 import com.backend.detailgoal.presentation.dto.request.DetailGoalSaveRequest;
+import com.backend.goal.domain.Goal;
+import com.backend.goal.domain.GoalRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 public class DetailGoalService {
 
     private final DetailGoalRepository detailGoalRepository;
+    private final GoalRepository goalRepository;
 
     public List<DetailGoalListResponse> getDetailGoalList(Long goalId)
     {
@@ -36,5 +39,8 @@ public class DetailGoalService {
         DetailGoal detailGoal = detailGoalSaveRequest.toEntity();
         detailGoal.setGoalId(goalId);
         detailGoalRepository.save(detailGoal);
+        
+        Goal goal = goalRepository.getById(goalId);
+        goal.increaseDetailGoalCnt();
     }
 }

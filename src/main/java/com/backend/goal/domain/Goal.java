@@ -66,6 +66,11 @@ public class Goal extends BaseEntity {
         goalStatus = GoalStatus.PROCESS;
     }
 
+    public void increaseDetailGoalCnt()
+    {
+        this.detailGoalCnt +=1;
+    }
+
 
     public void update(final String title, final LocalDate startDate, final LocalDate endDate, final Boolean reminderEnabled)
     {

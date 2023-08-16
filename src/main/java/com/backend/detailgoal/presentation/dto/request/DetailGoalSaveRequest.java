@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public record DetailGoalSaveRequest(
@@ -21,7 +20,7 @@ public record DetailGoalSaveRequest(
 
     public DetailGoal toEntity()
     {
-        Set<DayOfWeek> days = alarmDays.stream().map(DayOfWeek::of).collect(Collectors.toSet());
+        List<DayOfWeek> days = alarmDays.stream().map(DayOfWeek::of).collect(Collectors.toList());
 
         return DetailGoal.builder()
                 .title(title)

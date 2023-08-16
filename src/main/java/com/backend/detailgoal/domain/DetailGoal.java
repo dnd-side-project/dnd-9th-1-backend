@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 
 @Getter
@@ -43,7 +42,7 @@ public class DetailGoal extends BaseEntity {
     @CollectionTable(name = "detail_goals_alarm_days", joinColumns = @JoinColumn(name = "detail_goal_id"))
     @Column(name = "alarm_days")
     @Enumerated(EnumType.STRING)
-    private Set<DayOfWeek> alarmDays = new HashSet<>();
+    private List<DayOfWeek> alarmDays;
 
     @Column(name = "alarm_time")
     private LocalTime alarmTime;
@@ -54,7 +53,7 @@ public class DetailGoal extends BaseEntity {
     }
 
     @Builder
-    public DetailGoal(Long goalId, String title, Boolean isCompleted, Boolean alarmEnabled, Set<DayOfWeek> alarmDays, LocalTime alarmTime) {
+    public DetailGoal(Long goalId, String title, Boolean isCompleted, Boolean alarmEnabled, List<DayOfWeek> alarmDays, LocalTime alarmTime) {
         this.goalId = goalId;
         this.title = title;
         this.isCompleted = isCompleted;

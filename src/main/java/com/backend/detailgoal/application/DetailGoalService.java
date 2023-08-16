@@ -1,6 +1,7 @@
 package com.backend.detailgoal.application;
 
 import com.backend.detailgoal.application.dto.response.DetailGoalListResponse;
+import com.backend.detailgoal.application.dto.response.DetailGoalResponse;
 import com.backend.detailgoal.domain.DetailGoal;
 import com.backend.detailgoal.domain.DetailGoalRepository;
 import com.backend.detailgoal.presentation.dto.request.DetailGoalSaveRequest;
@@ -21,6 +22,12 @@ public class DetailGoalService {
     {
         List<DetailGoal> detailGoalList = detailGoalRepository.findDetailGoalsByGoalIdOrderByIdAsc(goalId);
         return detailGoalList.stream().map(DetailGoalListResponse::from).collect(Collectors.toList());
+    }
+
+    public DetailGoalResponse getDetailGoal(Long detailGoalId)
+    {
+        DetailGoal detailGoal = detailGoalRepository.getById(detailGoalId);
+        return DetailGoalResponse.from(detailGoal);
     }
 
     @Transactional

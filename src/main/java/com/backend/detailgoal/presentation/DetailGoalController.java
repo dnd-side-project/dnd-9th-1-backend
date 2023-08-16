@@ -27,6 +27,13 @@ public class DetailGoalController {
         return CustomResponse.success(SELECT_SUCCESS, detailGoalService.getDetailGoalList(id));
     }
 
+    @Operation(summary = "하위 목표 상세 조회", description = "하위 목표를 상세 조회하는 API 입니다.")
+    @GetMapping("/detail-goals/{id}")
+    public ResponseEntity<CustomResponse> getDetailGoal(@PathVariable Long id)
+    {
+        return CustomResponse.success(SELECT_SUCCESS, detailGoalService.getDetailGoal(id));
+    }
+
     @Operation(summary = "하위 목표 리스트 생성", description = "하위 목표를 생성하는 API 입니다.")
     @PostMapping("/goals/{id}/detail-goals")
     public ResponseEntity<CustomResponse> saveDetailGoal(@PathVariable Long id, @RequestBody @Valid DetailGoalSaveRequest detailGoalSaveRequest)

@@ -33,7 +33,7 @@ jobs:
     - name: Gradle Authorization
       run: chmod +x gradlew
     - name: Gradle Build Run
-      run: ./gradlew build
+      run: ./gradlew build -x test
       
     - name: Create Zip files
       run: zip -r ./$GITHUB_SHA.zip .

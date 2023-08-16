@@ -37,6 +37,6 @@ public class OAuthController {
                 description = "access token 만료 시 refresh token을 통해 access token을 재발급합니다.")
     @PostMapping("/reissue")
     public ResponseEntity<CustomResponse> reissue(@Valid @RequestBody TokenReissueRequest reissueRequest){
-        return CustomResponse.success(SELECT_SUCCESS, oauthService.reissue(reissueRequest.refreshToken()));
+        return CustomResponse.success(LOGIN_SUCCESS, oauthService.reissue(reissueRequest.refreshToken()));
     }
 }

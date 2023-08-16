@@ -49,8 +49,8 @@ public class TokenProvider {
     }
 
     public String reissueAccessToken(String refreshToken) {
-        RefreshToken result =  refreshTokenService.findUidByRefreshToken(refreshToken);
-        return generateAccessToken(result.getUid());
+        String uid =  refreshTokenService.findUidByRefreshToken(refreshToken);
+        return generateAccessToken(uid);
     }
 
     public String getPayload(String token){

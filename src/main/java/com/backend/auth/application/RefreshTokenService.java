@@ -16,8 +16,9 @@ public class RefreshTokenService {
     public  void saveRefreshToken(String refreshToken, String uid){
         refreshTokenRepository.save(new RefreshToken(refreshToken, uid)); 
     }
-    public RefreshToken findUidByRefreshToken(String refreshToken){
-        return refreshTokenRepository.findById(refreshToken)
+    public String findUidByRefreshToken(String refreshToken){
+        RefreshToken result = refreshTokenRepository.findById(refreshToken)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ERROR));
+        return result.getUid();
     }
 }

@@ -17,7 +17,7 @@ jobs: # defining jobs, executed in this workflows
 
     services:
       redis:
-        image: redis
+        image: redis:6
         options: --database 1
         ports:
           - "6379:6379"

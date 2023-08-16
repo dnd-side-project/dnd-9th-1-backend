@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,7 @@ public class OAuthController {
     @Operation(summary = "토큰 재발급",
                 description = "access token 만료 시 refresh token을 통해 access token을 재발급합니다.")
     @PostMapping("/reissue")
-    public ResponseEntity<CustomResponse> reissue(@RequestBody TokenReissueRequest reissueRequest){
+    public ResponseEntity<CustomResponse> reissue(@Valid @RequestBody TokenReissueRequest reissueRequest){
         return CustomResponse.success(SELECT_SUCCESS, oauthService.reissue(reissueRequest.refreshToken()));
     }
 }

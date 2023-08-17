@@ -64,7 +64,7 @@ public class DetailGoalServiceTest {
 
         // then
         assertThat(detailGoalList).hasSize(1);
-        assertThat(findGoal.getDetailGoalCnt()).isEqualTo(1);
+        assertThat(findGoal.getEntireDetailGoalCnt()).isEqualTo(1);
     }
 
 
@@ -105,7 +105,7 @@ public class DetailGoalServiceTest {
         Goal findGoal = goalRepository.getByIdAndIsDeletedFalse(savedGoal.getId());
 
         // then
-        assertThat(findGoal.getDetailGoalCnt()).isEqualTo(1);
+        assertThat(findGoal.getEntireDetailGoalCnt()).isEqualTo(1);
     }
 
 
@@ -151,7 +151,10 @@ public class DetailGoalServiceTest {
     void 하위목표를_체크하면_완료상태로_변한다()
     {
         // given
-        DetailGoal detailGoal = new DetailGoal(1L, "테스트 제목", false, true, List.of(DayOfWeek.MONDAY), LocalTime.of(10, 0));
+        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 20), LocalDate.of(2023, 8, 24), true);
+        Goal savedGoal = goalRepository.save(goal);
+
+        DetailGoal detailGoal = new DetailGoal(savedGoal.getId(), "테스트 제목", false, true, List.of(DayOfWeek.MONDAY), LocalTime.of(10, 0));
         DetailGoal savedDetailGoal = detailGoalRepository.save(detailGoal);
 
         // when
@@ -167,10 +170,14 @@ public class DetailGoalServiceTest {
     void 하위목표를_체크해제_하면_미완료_상태로_변한다()
     {
         // given
-        DetailGoal detailGoal = new DetailGoal(1L, "테스트 제목", true, true, List.of(DayOfWeek.MONDAY), LocalTime.of(10, 0));
+        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 20), LocalDate.of(2023, 8, 24), true);
+        Goal savedGoal = goalRepository.save(goal);
+
+        DetailGoal detailGoal = new DetailGoal(savedGoal.getId(), "테스트 제목", true, true, List.of(DayOfWeek.MONDAY), LocalTime.of(10, 0));
         DetailGoal savedDetailGoal = detailGoalRepository.save(detailGoal);
 
         // when
+        detailGoalService.completeDetailGoal(savedDetailGoal.getId());
         detailGoalService.inCompleteDetailGoal(savedDetailGoal.getId());
 
         // then
@@ -183,15 +190,18 @@ public class DetailGoalServiceTest {
     void 완료_하위목표_개수와_전체_하위목표_개수가_같아지면_상위목표가_성공한다()
     {
         // given
-        DetailGoal detailGoal = new DetailGoal(1L, "테스트 제목", false, true, List.of(DayOfWeek.MONDAY), LocalTime.of(10, 0));
-        DetailGoal savedDetailGoal = detailGoalRepository.save(detailGoal);
+        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 20), LocalDate.of(2023, 8, 24), true);
+        Goal savedGoal = goalRepository.save(goal);
 
-        DetailGoal detailGoal2 = new DetailGoal(1L, "테스트 제목", false, true, List.of(DayOfWeek.MONDAY), LocalTime.of(10, 0));
-        DetailGoal savedDetailGoal2 = detailGoalRepository.save(detailGoal2);
+        DetailGoalSaveRequest detailGoalSaveRequest = new DetailGoalSaveRequest("테스트 제목", true, LocalTime.of(10, 0), List.of("MONDAY", "TUESDAY"));
+        DetailGoal detailGoal = detailGoalService.saveDetailGoal(savedGoal.getId(), detailGoalSaveRequest);
+
+        DetailGoalSaveRequest detailGoalSaveRequest2 = new DetailGoalSaveRequest("테스트 제목", true, LocalTime.of(10, 0), List.of("MONDAY", "TUESDAY"));
+        DetailGoal detailGoal1 = detailGoalService.saveDetailGoal(savedGoal.getId(), detailGoalSaveRequest2);
 
         // when
-        detailGoalService.completeDetailGoal(savedDetailGoal.getId());
-        GoalCompletedResponse goalCompletedResponse = detailGoalService.completeDetailGoal(savedDetailGoal2.getId());
+        detailGoalService.completeDetailGoal(detailGoal.getId());
+        GoalCompletedResponse goalCompletedResponse = detailGoalService.completeDetailGoal(detailGoal1.getId());
 
         // then
         assertThat(goalCompletedResponse.isGoalCompleted()).isTrue();
@@ -205,15 +215,15 @@ public class DetailGoalServiceTest {
         Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 20), LocalDate.of(2023, 8, 24), true);
         Goal savedGoal = goalRepository.save(goal);
 
-        DetailGoal detailGoal = new DetailGoal(savedGoal.getId(), "테스트 제목", false, true, List.of(DayOfWeek.MONDAY), LocalTime.of(10, 0));
-        DetailGoal savedDetailGoal = detailGoalRepository.save(detailGoal);
+        DetailGoalSaveRequest detailGoalSaveRequest = new DetailGoalSaveRequest("테스트 제목", true, LocalTime.of(10, 0), List.of("MONDAY", "TUESDAY"));
+        DetailGoal detailGoal = detailGoalService.saveDetailGoal(savedGoal.getId(), detailGoalSaveRequest);
 
-        DetailGoal detailGoal2 = new DetailGoal(savedGoal.getId(), "테스트 제목", false, true, List.of(DayOfWeek.MONDAY), LocalTime.of(10, 0));
-        DetailGoal savedDetailGoal2 = detailGoalRepository.save(detailGoal2);
+        DetailGoalSaveRequest detailGoalSaveRequest2 = new DetailGoalSaveRequest("테스트 제목", true, LocalTime.of(10, 0), List.of("MONDAY", "TUESDAY"));
+        DetailGoal detailGoal1 = detailGoalService.saveDetailGoal(savedGoal.getId(), detailGoalSaveRequest2);
 
         // when
-        GoalCompletedResponse beforeRemoveResponse = detailGoalService.completeDetailGoal(savedDetailGoal.getId());
-        GoalCompletedResponse afterRemovedResponse = detailGoalService.removeDetailGoal(savedDetailGoal2.getId());
+        GoalCompletedResponse beforeRemoveResponse = detailGoalService.completeDetailGoal(detailGoal.getId());
+        GoalCompletedResponse afterRemovedResponse = detailGoalService.removeDetailGoal(detailGoal1.getId());
 
         // then
         assertThat(beforeRemoveResponse.isGoalCompleted()).isFalse();

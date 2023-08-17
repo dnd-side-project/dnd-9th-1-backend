@@ -23,6 +23,7 @@ public class DetailGoalService {
     private final DetailGoalRepository detailGoalRepository;
     private final GoalRepository goalRepository;
 
+
     public List<DetailGoalListResponse> getDetailGoalList(Long goalId)
     {
         List<DetailGoal> detailGoalList = detailGoalRepository.findDetailGoalsByGoalIdAndIsDeletedFalse(goalId);
@@ -36,14 +37,15 @@ public class DetailGoalService {
     }
 
     @Transactional
-    public void saveDetailGoal(Long goalId, DetailGoalSaveRequest detailGoalSaveRequest)
+    public DetailGoal saveDetailGoal(Long goalId, DetailGoalSaveRequest detailGoalSaveRequest)
     {
         DetailGoal detailGoal = detailGoalSaveRequest.toEntity();
         detailGoal.setGoalId(goalId);
         detailGoalRepository.save(detailGoal);
 
         Goal goal = goalRepository.getByIdAndIsDeletedFalse(goalId);
-        goal.increaseDetailGoalCnt();
+        goal.increaseEntireDetailGoalCnt();
+        return detailGoal;
     }
 
     @Transactional
@@ -53,19 +55,20 @@ public class DetailGoalService {
         detailGoal.remove();
 
         Goal goal = goalRepository.getByIdAndIsDeletedFalse(detailGoal.getGoalId());
-        goal.decreaseDetailGoalCnt();
+        goal.decreaseEntireDetailGoalCnt();
 
-        return new GoalCompletedResponse(checkEntireDetailGoalCompleted(detailGoal));
+        return new GoalCompletedResponse(goal.checkGoalCompleted());
     }
 
     @Transactional
-    public void updateDetailGoal(Long detailGoalId, DetailGoalUpdateRequest detailGoalUpdateRequest)
+    public DetailGoal updateDetailGoal(Long detailGoalId, DetailGoalUpdateRequest detailGoalUpdateRequest)
     {
         DetailGoal detailGoal = detailGoalRepository.getByIdAndIsDeletedFalse(detailGoalId);
         detailGoal.update(detailGoalUpdateRequest.title(),
                           detailGoalUpdateRequest.alarmEnabled(),
                           detailGoalUpdateRequest.alarmTime(),
                           detailGoalUpdateRequest.alarmDays());
+        return detailGoal;
     }
 
     @Transactional
@@ -73,8 +76,9 @@ public class DetailGoalService {
     {
         DetailGoal detailGoal = detailGoalRepository.getByIdAndIsDeletedFalse(detailGoalId);
         detailGoal.complete();
-
-        return new GoalCompletedResponse(checkEntireDetailGoalCompleted(detailGoal));
+        Goal goal = goalRepository.getByIdAndIsDeletedFalse(detailGoal.getGoalId());
+        goal.increaseCompletedDetailGoalCnt();
+        return new GoalCompletedResponse(goal.checkGoalCompleted());
     }
 
 
@@ -84,14 +88,7 @@ public class DetailGoalService {
     {
         DetailGoal detailGoal = detailGoalRepository.getByIdAndIsDeletedFalse(detailGoalId);
         detailGoal.inComplete();
+        Goal goal = goalRepository.getByIdAndIsDeletedFalse(detailGoal.getGoalId());
+        goal.decreaseCompletedDetailGoalCnt();
     }
-
-    private boolean checkEntireDetailGoalCompleted(DetailGoal detailGoal) {
-
-        List<DetailGoal> detailGoalList = detailGoalRepository.findDetailGoalsByGoalIdAndIsDeletedFalse(detailGoal.getGoalId());
-        int size = detailGoalList.size();
-        long count = detailGoalList.stream().filter(DetailGoal::getIsCompleted).count();
-        return size == (int) count;
-    }
-
 }

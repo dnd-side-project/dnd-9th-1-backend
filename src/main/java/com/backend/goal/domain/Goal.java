@@ -1,12 +1,15 @@
 package com.backend.goal.domain;
 
+import com.backend.global.common.code.ErrorCode;
 import com.backend.global.entity.BaseEntity;
+import com.backend.global.exception.BusinessException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -33,8 +36,11 @@ public class Goal extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private GoalStatus goalStatus;
 
-    @Column(name = "detail_goal_cnt", nullable = false)
-    private Integer detailGoalCnt;
+    @Column(name = "entire_detail_goal_cnt", nullable = false)
+    private Integer entireDetailGoalCnt;
+
+    @Column(name = "completed_detail_goal_cnt", nullable = false)
+    private Integer completedDetailGoalCnt;
 
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
@@ -62,18 +68,45 @@ public class Goal extends BaseEntity {
     {
         isDeleted = Boolean.FALSE;
         hasRetrospect = Boolean.FALSE;
-        detailGoalCnt = 0;
+        entireDetailGoalCnt = 0;
+        completedDetailGoalCnt = 0;
         goalStatus = GoalStatus.PROCESS;
     }
 
-    public void increaseDetailGoalCnt()
+    public void increaseEntireDetailGoalCnt()
     {
-        this.detailGoalCnt +=1;
+        this.entireDetailGoalCnt +=1;
     }
 
-    public void decreaseDetailGoalCnt()
+    public void decreaseEntireDetailGoalCnt()
     {
-        this.detailGoalCnt -=1;
+        if(entireDetailGoalCnt < 1)
+        {
+            throw new BusinessException(ErrorCode.ENTIRE_DETAIL_GOAL_CNT_INVALID);
+        }
+
+        this.entireDetailGoalCnt -=1;
+    }
+
+
+    public void increaseCompletedDetailGoalCnt()
+    {
+        this.completedDetailGoalCnt +=1;
+    }
+
+    public void decreaseCompletedDetailGoalCnt()
+    {
+        if(completedDetailGoalCnt < 1)
+        {
+            throw new BusinessException(ErrorCode.COMPLETED_DETAIL_GOAL_CNT_INVALID);
+        }
+
+        this.completedDetailGoalCnt -=1;
+    }
+
+    public boolean checkGoalCompleted()
+    {
+        return completedDetailGoalCnt == entireDetailGoalCnt;
     }
 
 

@@ -1,7 +1,6 @@
 package com.backend.goal.domain;
 
 import com.querydsl.core.Tuple;
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +27,7 @@ public class GoalQueryRepository {
         List<Goal> goalList = query.select(goal)
                 .from(goal)
                 .where(
-                        goal.deleted.isFalse(), // 삭제 되지 않은 것들만 조회
+                        goal.isDeleted.isFalse(), // 삭제 되지 않은 것들만 조회
                         ltGoalId(goalId),
                         goal.goalStatus.eq(goalStatus)
                 )

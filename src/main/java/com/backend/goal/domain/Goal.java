@@ -1,12 +1,15 @@
 package com.backend.goal.domain;
 
+import com.backend.global.common.code.ErrorCode;
 import com.backend.global.entity.BaseEntity;
+import com.backend.global.exception.BusinessException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -39,8 +42,6 @@ public class Goal extends BaseEntity {
     @Column(name = "completed_detail_goal_cnt", nullable = false)
     private Integer completedDetailGoalCnt;
 
-
-
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
@@ -53,25 +54,62 @@ public class Goal extends BaseEntity {
     @Column(name = "has_retrospect", nullable = false)
     private Boolean hasRetrospect;
 
-    @Column(name = "deleted", nullable = false)
-    private Boolean deleted;
+    @Column(name = "is_deleted", nullable = false)
+    private Boolean isDeleted;
 
     public void remove()
     {
-        this.deleted = Boolean.TRUE;
+        this.isDeleted = Boolean.TRUE;
     }
 
 
     @PrePersist
     private void init()
     {
-        deleted = Boolean.FALSE;
+        isDeleted = Boolean.FALSE;
         hasRetrospect = Boolean.FALSE;
         entireDetailGoalCnt = 0;
         completedDetailGoalCnt = 0;
         goalStatus = GoalStatus.PROCESS;
     }
 
+
+    public void increaseEntireDetailGoalCnt()
+    {
+        this.entireDetailGoalCnt +=1;
+    }
+
+    public void decreaseEntireDetailGoalCnt()
+    {
+        if(entireDetailGoalCnt < 1)
+        {
+            throw new BusinessException(ErrorCode.ENTIRE_DETAIL_GOAL_CNT_INVALID);
+        }
+
+        this.entireDetailGoalCnt -=1;
+    }
+
+
+    public void increaseCompletedDetailGoalCnt()
+    {
+        this.completedDetailGoalCnt +=1;
+    }
+
+    public void decreaseCompletedDetailGoalCnt()
+    {
+        if(completedDetailGoalCnt < 1)
+        {
+            throw new BusinessException(ErrorCode.COMPLETED_DETAIL_GOAL_CNT_INVALID);
+        }
+
+        this.completedDetailGoalCnt -=1;
+    }
+
+    public boolean checkGoalCompleted()
+    {
+        return completedDetailGoalCnt == entireDetailGoalCnt;
+    }
+    
 
     public void update(final String title, final LocalDate startDate, final LocalDate endDate, final Boolean reminderEnabled)
     {
@@ -119,30 +157,6 @@ public class Goal extends BaseEntity {
 
         return ChronoUnit.DAYS.between(now, endDate);
     }
-
-    // 세부 목표 들어갈때 Validation 모두 추가 예정
-    public void increaseEntireDetailGoalCnt()
-    {
-        this.entireDetailGoalCnt += 1;
-    }
-
-    public void decreaseEntireDetailGoalCnt()
-    {
-        this.entireDetailGoalCnt -= 1;
-    }
-
-
-    public void increaseCompletedDetailGoalCnt()
-    {
-        this.completedDetailGoalCnt += 1;
-    }
-
-    public void decreaseCompletedDetailGoalCnt()
-    {
-        this.completedDetailGoalCnt -= 1;
-    }
-
-
 
     private boolean isNotValidDateTimeRange(final LocalDate date) {
         return date.isBefore(MIN_DATE) || date.isAfter(MAX_DATE);

@@ -1,7 +1,7 @@
 package com.backend.auth.jwt;
 
 import com.backend.auth.application.OAuthService;
-import com.backend.member.domain.Member;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,17 +23,17 @@ class TokenProviderTest {
     @MockBean
     OAuthService oAuthService;
 
-    Member mockMember;
+    String uid;
 
     @BeforeEach
     void setUp(){
-        mockMember = Member.from("apple", "mock_social_id");
+        uid = "mock_social_uid";
     }
 
     @Test
     void generateAccessToken() {
         // when
-        String accessToken = tokenProvider.generateAccessToken(mockMember);
+        String accessToken = tokenProvider.generateAccessToken(uid);
         // then
         assertNotNull(accessToken);
     }
@@ -41,7 +41,7 @@ class TokenProviderTest {
     @Test
     void generateRefreshToken() {
         // when
-        String refreshToken = tokenProvider.generateRefreshToken(mockMember);
+        String refreshToken = tokenProvider.generateRefreshToken(uid);
         // then
         assertNotNull(refreshToken);
     }
@@ -49,20 +49,19 @@ class TokenProviderTest {
     @Test
     void getPayload() {
         // given
-        String accessToken = tokenProvider.generateAccessToken(mockMember);
+        String accessToken = tokenProvider.generateAccessToken(uid);
         // when
-        String extractedSocialId = tokenProvider.getPayload(accessToken);
+        String extractedUid = tokenProvider.getPayload(accessToken);
         // then
-        assertEquals(mockMember.getSocialId(), extractedSocialId);
+        assertEquals(uid, extractedUid);
     }
 
     @Test
     void validateToken() {
         // given
-        String accessToken = tokenProvider.generateAccessToken(mockMember);
-        // when
-        boolean isValidToken = tokenProvider.validateToken(accessToken);
-        // then
-        assertTrue(isValidToken);
+        String accessToken = tokenProvider.generateAccessToken(uid);
+        // when & then
+        Assertions.assertThatCode(() -> tokenProvider.validateToken(accessToken))
+                        .doesNotThrowAnyException();
     }
 }

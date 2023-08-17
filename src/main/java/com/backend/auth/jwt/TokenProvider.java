@@ -1,10 +1,10 @@
 package com.backend.auth.jwt;
 
-import com.backend.member.domain.Member;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.UnsupportedJwtException;
+import com.backend.auth.application.RefreshTokenService;
+import com.backend.auth.domain.RefreshToken;
+import com.backend.global.common.code.ErrorCode;
+import com.backend.global.exception.BusinessException;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,27 +20,37 @@ public class TokenProvider {
 
     private final Key key;
 
-    public TokenProvider(@Value("${jwt.secret}") String secretKey){
+    private final RefreshTokenService refreshTokenService;
+
+    public TokenProvider(@Value("${jwt.secret}") String secretKey, RefreshTokenService refreshTokenService){
+        this.refreshTokenService = refreshTokenService;
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateAccessToken(Member member){
-        return generateToken(member, ACCESS_TOKEN_EXPIRE_TIME);
+    public String generateAccessToken(String uid){
+        return generateToken(uid, ACCESS_TOKEN_EXPIRE_TIME);
     }
 
-    public String generateRefreshToken(Member member){
-        return generateToken(member, REFRESH_TOKEN_EXPIRE_TIME);
+    public String generateRefreshToken(String uid){
+        String refreshToken = generateToken(uid, REFRESH_TOKEN_EXPIRE_TIME);
+        refreshTokenService.saveRefreshToken(refreshToken, uid);
+        return refreshToken;
     }
 
-    public String generateToken(Member member, Long expireTime){
+    public String generateToken(String uid, Long expireTime){
         Date now = new Date();
         return Jwts.builder()
-                .setSubject(member.getSocialId())
+                .setSubject(uid)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + expireTime))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    public String reissueAccessToken(String refreshToken) {
+        String uid =  refreshTokenService.findUidByRefreshToken(refreshToken);
+        return generateAccessToken(uid);
     }
 
     public String getPayload(String token){
@@ -52,19 +62,16 @@ public class TokenProvider {
                 .getSubject();
     }
 
-    public boolean validateToken(String token){
+    public void validateToken(String token) throws Exception {
         try{
             Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token);
-            return true;
         } catch (ExpiredJwtException e){
-            throw e;
-        } catch (UnsupportedJwtException e){
-            throw e;
-        } catch (IllegalArgumentException e){
-            throw e;
+            throw new BusinessException(ErrorCode.TOKEN_EXPIRED);
+        } catch (UnsupportedJwtException | MalformedJwtException | IllegalArgumentException e){
+            throw new Exception("잘못된 형식의 토큰입니다.");
         }
     }
 }

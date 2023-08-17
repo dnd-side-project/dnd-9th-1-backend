@@ -60,7 +60,7 @@ public class DetailGoalServiceTest {
 
         // when
         List<DetailGoal> detailGoalList = detailGoalRepository.findAll();
-        Goal findGoal = goalRepository.getById(savedGoal.getId());
+        Goal findGoal = goalRepository.getByIdAndIsDeletedFalse(savedGoal.getId());
 
         // then
         assertThat(detailGoalList).hasSize(1);
@@ -81,7 +81,7 @@ public class DetailGoalServiceTest {
         detailGoalService.updateDetailGoal(savedDetailGoal.getId(), detailGoalUpdateRequest);
 
         // then
-        DetailGoal updatedDetailGoal = detailGoalRepository.getById(savedDetailGoal.getId());
+        DetailGoal updatedDetailGoal = detailGoalRepository.getByIdAndIsDeletedFalse(savedDetailGoal.getId());
         assertThat(updatedDetailGoal.getAlarmDays()).usingRecursiveComparison().isEqualTo(List.of(DayOfWeek.THURSDAY, DayOfWeek.FRIDAY));
     }
 
@@ -102,7 +102,7 @@ public class DetailGoalServiceTest {
         detailGoalService.removeDetailGoal(savedGoal.getId());
 
         // when
-        Goal findGoal = goalRepository.getById(savedGoal.getId());
+        Goal findGoal = goalRepository.getByIdAndIsDeletedFalse(savedGoal.getId());
 
         // then
         assertThat(findGoal.getDetailGoalCnt()).isEqualTo(1);
@@ -158,7 +158,7 @@ public class DetailGoalServiceTest {
         detailGoalService.completeDetailGoal(savedDetailGoal.getId());
 
         // then
-        List<DetailGoal> result = detailGoalRepository.findDetailGoalsByGoalIdAndIsDeletedIs(savedDetailGoal.getGoalId(), false);
+        List<DetailGoal> result = detailGoalRepository.findDetailGoalsByGoalIdAndIsDeletedFalse(savedDetailGoal.getGoalId());
         assertThat(result.get(0).getIsCompleted()).isTrue();
     }
 
@@ -174,7 +174,7 @@ public class DetailGoalServiceTest {
         detailGoalService.inCompleteDetailGoal(savedDetailGoal.getId());
 
         // then
-        List<DetailGoal> result = detailGoalRepository.findDetailGoalsByGoalIdAndIsDeletedIs(savedDetailGoal.getGoalId(), false);
+        List<DetailGoal> result = detailGoalRepository.findDetailGoalsByGoalIdAndIsDeletedFalse(savedDetailGoal.getGoalId());
         assertThat(result.get(0).getIsCompleted()).isFalse();
     }
 

@@ -55,7 +55,7 @@ public class GoalService {
     @Transactional
     public GoalResponse updateGoal(final GoalUpdateRequest goalSaveRequest) {
 
-        Goal goal = goalRepository.getById(goalSaveRequest.goalId());
+        Goal goal = goalRepository.getByIdAndIsDeletedFalse(goalSaveRequest.goalId());
         goal.update(goalSaveRequest.title(),goalSaveRequest.startDate(),goalSaveRequest.endDate(),goalSaveRequest.reminderEnabled());
         return GoalResponse.from(goal, goal.calculateDday(LocalDate.now()));
     }
@@ -63,7 +63,7 @@ public class GoalService {
     @Transactional
     public void removeGoal(Long goalId)
     {
-        Goal goal = goalRepository.getById(goalId);
+        Goal goal = goalRepository.getByIdAndIsDeletedFalse(goalId);
         goal.remove();
     }
 }

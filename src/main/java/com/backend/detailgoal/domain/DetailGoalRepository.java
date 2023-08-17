@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface DetailGoalRepository extends JpaRepository<DetailGoal, Long> {
 
-    List<DetailGoal> findDetailGoalsByGoalIdAndIsDeletedIs(Long goalId, Boolean isDeleted);
+    List<DetailGoal> findDetailGoalsByGoalIdAndIsDeletedFalse(Long goalId);
 
-    default DetailGoal getById(Long detailGoalId){
+    default DetailGoal getByIdAndIsDeletedFalse(Long detailGoalId){
 
         return findById(detailGoalId).orElseThrow(() -> new BusinessException(ErrorCode.DETAIL_GOAL_NOT_FOUND));
     }

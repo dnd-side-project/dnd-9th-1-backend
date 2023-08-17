@@ -54,16 +54,15 @@ public class DetailGoalController {
     @DeleteMapping("/detail-goals/{id}")
     public ResponseEntity<CustomResponse> removeDetailGoal(@PathVariable Long id)
     {
-        detailGoalService.removeDetailGoal(id);
-        return CustomResponse.success(DELETE_SUCCESS);
+
+        return CustomResponse.success(DELETE_SUCCESS, detailGoalService.removeDetailGoal(id));
     }
 
     @Operation(summary = "하위 목표 달성", description = "하위 목표를 달성하는 API 입니다.")
     @PatchMapping("/detail-goals/{id}/complete")
     public ResponseEntity<CustomResponse> completeDetailGoal(@PathVariable Long id)
     {
-        detailGoalService.completeDetailGoal(id);
-        return CustomResponse.success(UPDATE_SUCCESS);
+        return CustomResponse.success(UPDATE_SUCCESS, detailGoalService.completeDetailGoal(id));
     }
 
     @Operation(summary = "하위 목표 달성 취소", description = "하위 목표 달성을 취소하는 API 입니다.")

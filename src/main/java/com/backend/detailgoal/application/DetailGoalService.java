@@ -2,6 +2,7 @@ package com.backend.detailgoal.application;
 
 import com.backend.detailgoal.application.dto.response.DetailGoalListResponse;
 import com.backend.detailgoal.application.dto.response.DetailGoalResponse;
+import com.backend.detailgoal.application.dto.response.GoalCompletedResponse;
 import com.backend.detailgoal.domain.DetailGoal;
 import com.backend.detailgoal.domain.DetailGoalRepository;
 import com.backend.detailgoal.presentation.dto.request.DetailGoalSaveRequest;
@@ -24,7 +25,7 @@ public class DetailGoalService {
 
     public List<DetailGoalListResponse> getDetailGoalList(Long goalId)
     {
-        List<DetailGoal> detailGoalList = detailGoalRepository.findDetailGoalsByGoalIdOrderByIdAsc(goalId);
+        List<DetailGoal> detailGoalList = detailGoalRepository.findDetailGoalsByGoalIdAndIsDeletedIs(goalId, false);
         return detailGoalList.stream().map(DetailGoalListResponse::from).collect(Collectors.toList());
     }
 
@@ -46,12 +47,14 @@ public class DetailGoalService {
     }
 
     @Transactional
-    public void removeDetailGoal(Long detailGoalId)
+    public GoalCompletedResponse removeDetailGoal(Long detailGoalId)
     {
         DetailGoal detailGoal = detailGoalRepository.getById(detailGoalId);
         detailGoal.remove();
         Goal goal = goalRepository.getById(detailGoal.getGoalId());
         goal.decreaseDetailGoalCnt();
+
+        return new GoalCompletedResponse(checkEntireDetailGoalCompleted(detailGoal));
     }
 
     @Transactional
@@ -65,17 +68,28 @@ public class DetailGoalService {
     }
 
     @Transactional
-    public void completeDetailGoal(Long detailGoalId)
+    public GoalCompletedResponse completeDetailGoal(Long detailGoalId)
     {
         DetailGoal detailGoal = detailGoalRepository.getById(detailGoalId);
         detailGoal.complete();
+        return new GoalCompletedResponse(checkEntireDetailGoalCompleted(detailGoal));
     }
+
+
 
     @Transactional
     public void inCompleteDetailGoal(Long detailGoalId)
     {
         DetailGoal detailGoal = detailGoalRepository.getById(detailGoalId);
         detailGoal.inComplete();
+    }
+
+    private boolean checkEntireDetailGoalCompleted(DetailGoal detailGoal) {
+
+        List<DetailGoal> detailGoalList = detailGoalRepository.findDetailGoalsByGoalIdAndIsDeletedIs(detailGoal.getGoalId(), false);
+        int size = detailGoalList.size();
+        long count = detailGoalList.stream().filter(DetailGoal::getIsCompleted).count();
+        return size == (int) count;
     }
 
 }

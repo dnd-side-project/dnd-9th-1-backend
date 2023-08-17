@@ -41,7 +41,7 @@ public class DetailGoal extends BaseEntity {
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "detail_goals_alarm_days", joinColumns = @JoinColumn(name = "detail_goal_id"))
     @Column(name = "alarm_days")
     @Enumerated(EnumType.STRING)
@@ -80,7 +80,7 @@ public class DetailGoal extends BaseEntity {
     public DetailGoal(Long goalId, String title, Boolean isCompleted, Boolean alarmEnabled, List<DayOfWeek> alarmDays, LocalTime alarmTime) {
 
         this.goalId = goalId;
-        validateTitleLength(title);
+        this.title = title;
         this.isCompleted = isCompleted;
         this.alarmEnabled = alarmEnabled;
         this.alarmDays = alarmDays;

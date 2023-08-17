@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface DetailGoalRepository extends JpaRepository<DetailGoal, Long> {
 
-    List<DetailGoal> findDetailGoalsByGoalIdOrderByIdAsc(Long goalId);
+    List<DetailGoal> findDetailGoalsByGoalIdAndIsDeletedIs(Long goalId, Boolean isDeleted);
 
     default DetailGoal getById(Long detailGoalId){
 

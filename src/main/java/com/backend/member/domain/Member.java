@@ -7,8 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.Locale;
-
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
@@ -20,39 +18,40 @@ public class Member extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
-    private Boolean enabledPush;
+    private String uid;
 
     @Enumerated(value = EnumType.STRING)
-    @Column(nullable = false, length = 15)
-    private SocialType socialType;
+    @Column(nullable = false)
+    private Provider provider;
 
     @Column(nullable = false)
-    private String socialId;
+    private Boolean enabledPush;
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private MemberStatus memberStatus;
 
     @Builder
-    private Member(
+    private Member (
+            final String uid,
+            final Provider provider,
             final Boolean enabledPush,
-            final SocialType socialType,
-            final String socialId,
             final MemberStatus memberStatus
     ) {
         this.enabledPush = enabledPush;
-        this.socialType  = socialType;
-        this.socialId = socialId;
+        this.provider = provider;
+        this.uid = uid;
         this.memberStatus = memberStatus;
     }
 
-    public static Member from(String provider, String socialId){
+    public static Member from(Provider provider, String uid){
         return Member.builder()
-                .socialType(SocialType.valueOf(provider.toUpperCase(Locale.ROOT)))
-                .socialId(socialId)
+                .uid(uid)
+                .provider(provider)
                 .memberStatus(MemberStatus.ACTIVE)
                 .build();
     }
+
     @PrePersist
     private void setting(){
         this.enabledPush = false;

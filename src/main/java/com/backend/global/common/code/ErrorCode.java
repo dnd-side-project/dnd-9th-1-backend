@@ -55,8 +55,17 @@ public enum ErrorCode {
     Business Error
      */
 
-    /* Plan */
-    PLAN_NOT_FOUND(NOT_FOUND.value(), "PLAN-001", "상위 목표가 존재하지 않습니다."),
+
+    /* Goal */
+    GOAL_NOT_FOUND(NOT_FOUND.value(), "GOAL-001", "상위 목표가 존재하지 않습니다."),
+
+    ENTIRE_DETAIL_GOAL_CNT_INVALID(BAD_REQUEST.value(), "GOAL-002", "총 하위 목표 개수가 0개일때는 뺄수 없습니다."),
+
+    COMPLETED_DETAIL_GOAL_CNT_INVALID(BAD_REQUEST.value(), "GOAL-003", "성공한 하위목표 개수가 0개 일때는 뺄 수 없습니다."),
+
+    /* Detail Goal */
+    DETAIL_GOAL_NOT_FOUND(NOT_FOUND.value(), "DETAIL-GOAL-001", "하위 목표가 존재하지 않습니다."),
+
 
     /* Auth */
     TOKEN_EXPIRED(UNAUTHORIZED.value(), "AUTH-001", "토큰의 유효기간이 만료되었습니다.");

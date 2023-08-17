@@ -162,7 +162,7 @@ public class GoalServiceTest {
 
         // then
         Goal removedGoal = goalRepository.getById(savedGoal.getId());
-        Assertions.assertThat(removedGoal.getDeleted()).isTrue();
+        Assertions.assertThat(removedGoal.getIsDeleted()).isTrue();
     }
 
     @DisplayName("상위 목표 상태에 따라 통계를 제공한다.")

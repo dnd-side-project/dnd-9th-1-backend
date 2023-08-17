@@ -7,6 +7,7 @@ import com.backend.goal.application.dto.response.GoalResponse;
 import com.backend.goal.presentation.dto.GoalSaveRequest;
 import com.backend.goal.presentation.dto.GoalUpdateRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,8 @@ public class GoalService {
     private final GoalRepository goalRepository;
 
     private final GoalQueryRepository goalQueryRepository;
+
+    private final ApplicationEventPublisher applicationEventPublisher;
 
 
     public GoalListResponse getGoalList(Long goalId, Pageable pageable, String goalStatus)
@@ -65,5 +68,7 @@ public class GoalService {
     {
         Goal goal = goalRepository.getByIdAndIsDeletedFalse(goalId);
         goal.remove();
+
+        applicationEventPublisher.publishEvent(new RemoveRelatedDetailGoalEvent(goal.getId()));
     }
 }

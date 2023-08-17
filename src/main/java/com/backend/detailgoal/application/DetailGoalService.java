@@ -51,6 +51,7 @@ public class DetailGoalService {
     {
         DetailGoal detailGoal = detailGoalRepository.getByIdAndIsDeletedFalse(detailGoalId);
         detailGoal.remove();
+
         Goal goal = goalRepository.getByIdAndIsDeletedFalse(detailGoal.getGoalId());
         goal.decreaseDetailGoalCnt();
 
@@ -72,6 +73,7 @@ public class DetailGoalService {
     {
         DetailGoal detailGoal = detailGoalRepository.getByIdAndIsDeletedFalse(detailGoalId);
         detailGoal.complete();
+
         return new GoalCompletedResponse(checkEntireDetailGoalCompleted(detailGoal));
     }
 

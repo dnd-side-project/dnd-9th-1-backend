@@ -44,10 +44,10 @@ public class Goal extends BaseEntity {
     @Column(name = "completed_detail_goal_cnt", nullable = false)
     private Integer completedDetailGoalCnt;
 
-    @Column(name = "start_date", nullable = false)
+    @Column(name = "start_date")
     private LocalDate startDate;
 
-    @Column(name = "end_date", nullable = false)
+    @Column(name = "end_date")
     private LocalDate endDate;
 
     @Column(name = "reminder_enabled", nullable = false)

@@ -2,6 +2,7 @@ package com.backend.goal.presentation;
 
 import com.backend.global.common.response.CustomResponse;
 import com.backend.goal.application.GoalService;
+import com.backend.goal.domain.GoalStatus;
 import com.backend.goal.presentation.dto.GoalSaveRequest;
 import com.backend.goal.presentation.dto.GoalUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,8 +28,8 @@ public class GoalController {
     @GetMapping("/goals")
     public ResponseEntity<CustomResponse> getGoalList(
                                                        @Parameter(hidden = true) @PageableDefault(size = 10) Pageable pageable,
-                                                       @RequestParam(required = false) Long lastId,
-                                                       @RequestParam String goalStatus)
+                                                       @Parameter(name = "페이징 커서", description = "처음 조회 시 Null 전달, 이후부터는 이전 응답 데이터 중 마지막 ID를 전달") @RequestParam(required = false) Long lastId,
+                                                     @Parameter(name = "상위 목표 타입", description = "STORE, PROCESS, COMPLETE로 구분")  @RequestParam String goalStatus)
     {
         return CustomResponse.success(SELECT_SUCCESS,goalService.getGoalList(lastId,pageable,goalStatus));
     }

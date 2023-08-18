@@ -72,6 +72,7 @@ public class GoalService {
         applicationEventPublisher.publishEvent(new RemoveRelatedDetailGoalEvent(goal.getId()));
     }
 
+    @Transactional
     public void recoverGoalStatus(Long goalId)
     {
         Goal goal = goalRepository.getByIdAndIsDeletedFalse(goalId);

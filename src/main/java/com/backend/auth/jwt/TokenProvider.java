@@ -1,7 +1,6 @@
 package com.backend.auth.jwt;
 
 import com.backend.auth.application.RefreshTokenService;
-import com.backend.auth.domain.RefreshToken;
 import com.backend.global.common.code.ErrorCode;
 import com.backend.global.exception.BusinessException;
 import io.jsonwebtoken.*;
@@ -18,6 +17,8 @@ public class TokenProvider {
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60; // 30분
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7; // 7일
 
+    private static final String TOKEN_HEADER_PREFIX = "Bearer ";
+
     private final Key key;
 
     private final RefreshTokenService refreshTokenService;
@@ -33,9 +34,7 @@ public class TokenProvider {
     }
 
     public String generateRefreshToken(String uid){
-        String refreshToken = generateToken(uid, REFRESH_TOKEN_EXPIRE_TIME);
-        refreshTokenService.saveRefreshToken(refreshToken, uid);
-        return refreshToken;
+        return generateToken(uid, REFRESH_TOKEN_EXPIRE_TIME);
     }
 
     public String generateToken(String uid, Long expireTime){
@@ -46,11 +45,6 @@ public class TokenProvider {
                 .setExpiration(new Date(now.getTime() + expireTime))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
-    }
-
-    public String reissueAccessToken(String refreshToken) {
-        String uid =  refreshTokenService.findUidByRefreshToken(refreshToken);
-        return generateAccessToken(uid);
     }
 
     public String getPayload(String token){
@@ -71,7 +65,21 @@ public class TokenProvider {
         } catch (ExpiredJwtException e){
             throw new BusinessException(ErrorCode.TOKEN_EXPIRED);
         } catch (UnsupportedJwtException | MalformedJwtException | IllegalArgumentException e){
-            throw new Exception("잘못된 형식의 토큰입니다.");
+            throw new BusinessException(ErrorCode.INVALID_TOKEN);
         }
+    }
+
+    public String getToken(String bearerToken) {
+        if(bearerToken == null || !bearerToken.startsWith(TOKEN_HEADER_PREFIX)){
+            throw new BusinessException(ErrorCode.INVALID_TOKEN);
+        }
+        return bearerToken.substring(TOKEN_HEADER_PREFIX.length());
+    }
+
+    public Long getExpiration(String accessToken) {
+        Date expiration = Jwts.parserBuilder().setSigningKey(key).build()
+                .parseClaimsJws(accessToken).getBody().getExpiration();
+        Date now = new Date();
+        return (expiration.getTime() - now.getTime());
     }
 }

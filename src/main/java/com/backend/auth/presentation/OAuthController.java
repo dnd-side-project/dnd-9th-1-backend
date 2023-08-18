@@ -1,10 +1,6 @@
 package com.backend.auth.presentation;
 
 import com.backend.auth.application.OAuthService;
-import com.backend.auth.presentation.dto.TokenReissueRequest;
-import com.backend.auth.presentation.dto.response.AccessTokenResponse;
-import com.backend.auth.presentation.dto.response.TokenResponse;
-import com.backend.global.common.code.SuccessCode;
 import com.backend.global.common.response.CustomResponse;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -12,7 +8,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +34,13 @@ public class OAuthController {
                 description = "access token 만료 시 refresh token을 통해 access token을 재발급합니다.")
     @PostMapping("/reissue")
     @ExceptionHandler({UnsupportedJwtException.class, MalformedJwtException.class, IllegalArgumentException.class})
-    public ResponseEntity<CustomResponse> reissue(@Valid @RequestBody TokenReissueRequest reissueRequest) throws Exception {
-        return CustomResponse.success(LOGIN_SUCCESS, oauthService.reissue(reissueRequest.refreshToken()));
+    public ResponseEntity<CustomResponse> reissue(@RequestHeader(value = "Authorization") String bearerRefreshToken) throws Exception {
+        return CustomResponse.success(LOGIN_SUCCESS, oauthService.reissue(bearerRefreshToken));
+    }
+
+    @Operation(summary = "로그아웃", description = "사용자의 refresh token을 삭제하여 앱에서 로그아웃 처리합니다.")
+    public ResponseEntity<CustomResponse> deleteRefreshToken(@RequestHeader(value = "Authorization") String bearerAccessToken) throws Exception {
+        oauthService.logout(bearerAccessToken);
+        return CustomResponse.success(LOGOUT_SUCCESS);
     }
 }

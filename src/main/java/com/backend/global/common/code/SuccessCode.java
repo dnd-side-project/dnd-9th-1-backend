@@ -9,7 +9,9 @@ public enum SuccessCode {
     INSERT_SUCCESS(201, "INSERT SUCCESS"),
     DELETE_SUCCESS(200, "DELETE SUCCESS"),
     UPDATE_SUCCESS(200, "UPDATE SUCCESS"),
-    LOGIN_SUCCESS(200, "LOGIN SUCCESS");
+    LOGIN_SUCCESS(200, "LOGIN SUCCESS"),
+
+    LOGOUT_SUCCESS(200, "LOGOUT SUCCESS");
 
     private final int status;
     private final String message;

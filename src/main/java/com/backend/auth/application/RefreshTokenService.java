@@ -17,8 +17,14 @@ public class RefreshTokenService {
         refreshTokenRepository.save(new RefreshToken(refreshToken, uid)); 
     }
     public String findUidByRefreshToken(String refreshToken){
-        RefreshToken result = refreshTokenRepository.findById(refreshToken)
+        RefreshToken result = refreshTokenRepository.findByRefreshToken(refreshToken)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ERROR));
         return result.getUid();
+    }
+
+    public void deleteByUid(String uid) {
+        // uid에 해당하는 정보가 redis에 있는지 확인
+        refreshTokenRepository.findById(uid).orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ERROR));
+        refreshTokenRepository.deleteById(uid);
     }
 }

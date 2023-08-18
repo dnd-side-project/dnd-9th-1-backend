@@ -11,6 +11,8 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
+import static com.backend.global.common.code.ErrorCode.RECOVER_GOAL_IMPOSSIBLE;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -129,6 +131,20 @@ public class Goal extends BaseEntity {
         this.endDate = endDate;
         this.reminderEnabled = reminderEnabled;
     }
+
+    public void recoverGoalStatus()
+    {
+        if(!goalStatus.equals(GoalStatus.STORE))
+        {
+            throw new BusinessException(RECOVER_GOAL_IMPOSSIBLE);
+        }
+
+        goalStatus = GoalStatus.PROCESS;
+        this.reminderEnabled = false;
+        this.startDate = null;
+        this.endDate = null;
+    }
+
 
     private void validateTitleLength(final String title) {
 

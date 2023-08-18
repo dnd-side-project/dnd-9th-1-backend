@@ -57,6 +57,13 @@ public class GoalController {
         return CustomResponse.success(UPDATE_SUCCESS, goalService.updateGoal(goalSaveRequest));
     }
 
+    @Operation(summary = "상위 목표 상태 변경", description = "보관함에 들어간 상위 목표를 복구하는 API입니다")
+    @PatchMapping("/goals/{id}/recover")
+    public ResponseEntity<CustomResponse> saveGoal(@PathVariable Long id)
+    {
+        goalService.recoverGoalStatus(id);
+        return CustomResponse.success(UPDATE_SUCCESS);
+    }
 
     @Operation(summary = "상위 목표 생성", description = "상위 목표를 생성하는 API 입니다.")
     @PostMapping("/goals")
@@ -66,4 +73,6 @@ public class GoalController {
         goalService.saveGoal(1L, goalSaveRequest);
         return CustomResponse.success(INSERT_SUCCESS);
     }
+
+
 }

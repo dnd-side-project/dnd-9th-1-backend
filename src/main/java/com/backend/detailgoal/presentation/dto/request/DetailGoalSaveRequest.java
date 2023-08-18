@@ -18,7 +18,7 @@ public record DetailGoalSaveRequest(
         @NotNull(message = "알림 설정 여부는 빈값일 수 없습니다.")
         Boolean alarmEnabled,
 
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "a KK:mm", timezone = "Asia/Seoul")
         LocalTime alarmTime,
 
         List<String> alarmDays

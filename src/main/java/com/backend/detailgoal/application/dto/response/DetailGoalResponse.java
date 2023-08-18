@@ -16,7 +16,7 @@ public record DetailGoalResponse(
 
         String title,
 
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "a KK:mm", timezone = "Asia/Seoul")
         LocalTime alarmTime,
 
         List<DayOfWeek> alarmDays,

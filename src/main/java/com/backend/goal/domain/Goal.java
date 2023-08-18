@@ -109,7 +109,7 @@ public class Goal extends BaseEntity {
     {
         return completedDetailGoalCnt == entireDetailGoalCnt;
     }
-    
+
 
     public void update(final String title, final LocalDate startDate, final LocalDate endDate, final Boolean reminderEnabled)
     {

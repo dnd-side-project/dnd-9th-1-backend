@@ -27,7 +27,7 @@ public class OAuthService {
         memberService.findMemberOrRegister(Provider.from(provider), uid);
         String accessToken = tokenProvider.generateAccessToken(uid);
         String refreshToken = tokenProvider.generateRefreshToken(uid);
-        refreshTokenService.saveRefreshToken(refreshToken, uid);
+        refreshTokenService.saveRefreshToken(uid, refreshToken);
         return new TokenResponse(accessToken, refreshToken);
     }
 
@@ -49,4 +49,15 @@ public class OAuthService {
         Long expiration = tokenProvider.getExpiration(accessToken);
         blackListService.saveBlackList(accessToken, expiration);
     }
+
+    public void withDraw(String bearerAccessToken) throws Exception {
+        String accessToken = tokenProvider.getToken(bearerAccessToken);
+        tokenProvider.validateToken(accessToken);
+
+        String uid = tokenProvider.getPayload(accessToken);
+        memberService.withDraw(uid);
+
+        refreshTokenService.deleteByUid(uid);
+    }
+
 }

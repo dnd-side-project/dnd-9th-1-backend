@@ -61,7 +61,10 @@ public enum ErrorCode {
     /* Auth */
     TOKEN_EXPIRED(UNAUTHORIZED.value(), "AUTH-001", "토큰의 유효기간이 만료되었습니다."),
 
-    INVALID_TOKEN(BAD_REQUEST.value(), "AUTH-002", "토큰이 입력되지 않았거나 잘못된 형식의 토큰입니다.");
+    INVALID_TOKEN(BAD_REQUEST.value(), "AUTH-002", "토큰이 입력되지 않았거나 잘못된 형식의 토큰입니다."),
+
+    MEMBER_NOT_FOUND(NOT_FOUND.value(), "AUTH-003", "회원이 존재하지 않습니다.");
+
     private final int status;
 
     private final String code;

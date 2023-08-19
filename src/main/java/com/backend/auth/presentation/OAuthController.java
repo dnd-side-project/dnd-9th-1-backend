@@ -39,8 +39,15 @@ public class OAuthController {
     }
 
     @Operation(summary = "로그아웃", description = "사용자의 refresh token을 삭제하여 앱에서 로그아웃 처리합니다.")
+    @PostMapping("/logout")
     public ResponseEntity<CustomResponse> deleteRefreshToken(@RequestHeader(value = "Authorization") String bearerAccessToken) throws Exception {
         oauthService.logout(bearerAccessToken);
         return CustomResponse.success(LOGOUT_SUCCESS);
+    }
+
+    @Operation(summary = "회원 탈퇴", description = "회원 탈퇴 요청 시 사용자의 상태를 DELETE로 변경한다.")
+    public ResponseEntity<CustomResponse> withDraw(@RequestHeader(value = "Authorization") String bearerAccessToken) throws Exception {
+        oauthService.withDraw(bearerAccessToken);
+        return CustomResponse.success(DELETE_SUCCESS);
     }
 }

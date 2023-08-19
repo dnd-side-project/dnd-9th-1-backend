@@ -4,7 +4,6 @@ import com.backend.auth.jwt.TokenProvider;
 import com.backend.auth.presentation.dto.response.AccessTokenResponse;
 import com.backend.auth.presentation.dto.response.TokenResponse;
 import com.backend.global.exception.BusinessException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -24,26 +24,14 @@ public class OAuthServiceTest {
     @Autowired
     private OAuthService oAuthService;
 
-    @Autowired
-    private TokenProvider tokenProvider;
+    private static String uid = "user1234";
 
-    @Autowired
-    private RefreshTokenService refreshTokenService;
+    private static String BEARER_TOKEN_PREFIX = "Bearer ";
 
-    private String refreshToken;
-
-    private String uid;
-
-    @BeforeEach
-    void setUp() {
-        uid = "abc123";
-        refreshToken = tokenProvider.generateRefreshToken(uid);
-        refreshTokenService.saveRefreshToken(refreshToken, uid);
-    }
 
     @DisplayName("Access Token을 이용해 OAuth 인증 후 JWT를 발급한다.")
     @Test
-    public void LoginSuccess() {
+    public void loginSuccess() {
         // given
         String provider = "kakao";
 
@@ -56,7 +44,7 @@ public class OAuthServiceTest {
 
     @DisplayName("kakao, apple 이외의 요청이 들어온 경우에 예외가 발생한다.")
     @Test
-    public void LoginFailedByInvalidProvider() {
+    public void loginFailedByInvalidProvider() {
         // given
         String provider = "naver";
 
@@ -68,8 +56,11 @@ public class OAuthServiceTest {
     @DisplayName("access token이 만료되어 refresh token을 통해 재발급한다.")
     @Test
     public void reissueRefreshToken() throws Exception {
+        // given
+        TokenResponse tokenResponse = oAuthService.login("kakao", uid);
+
         // when
-        AccessTokenResponse accessTokenResponse = oAuthService.reissue(refreshToken);
+        AccessTokenResponse accessTokenResponse = oAuthService.reissue(BEARER_TOKEN_PREFIX + tokenResponse.refreshToken());
 
         // then
         assertThat(accessTokenResponse.accessToken()).isNotNull();
@@ -81,6 +72,16 @@ public class OAuthServiceTest {
         // given
         String invalidRefreshToken = "mock_refresh_token";
         // when & then
-        assertThrows(Exception.class, () -> oAuthService.reissue(invalidRefreshToken));
+        assertThrows(Exception.class, () -> oAuthService.reissue(BEARER_TOKEN_PREFIX + invalidRefreshToken));
     }
+
+    @DisplayName("로그아웃을 성공적으로 완료한다.")
+    @Test
+    public void logoutSuccess(){
+        // given
+        TokenResponse tokenResponse = oAuthService.login("kakao", uid);
+        // when & then
+        assertThatNoException().isThrownBy(() -> oAuthService.withDraw( BEARER_TOKEN_PREFIX + tokenResponse.accessToken()));
+    }
+
 }

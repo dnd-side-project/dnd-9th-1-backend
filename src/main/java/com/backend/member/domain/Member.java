@@ -57,4 +57,8 @@ public class Member extends BaseEntity {
         this.enabledPush = false;
         this.memberStatus = MemberStatus.ACTIVE;
     }
+
+    public void withDraw() {
+        this.memberStatus = MemberStatus.DELETE;
+    }
 }

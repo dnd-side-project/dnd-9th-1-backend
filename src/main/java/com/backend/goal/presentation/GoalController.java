@@ -41,6 +41,13 @@ public class GoalController {
         return CustomResponse.success(SELECT_SUCCESS,goalService.getGoalCounts());
     }
 
+    @Operation(summary = "회고 작성 가능한 목표 개수 조회", description = "회고 작성 가능한 목표 개수를 조회하는 API 입니다.")
+    @GetMapping("/goals/retrospect-enabled/count")
+    public ResponseEntity<CustomResponse> getRetrospectEnabledGoalCount()
+    {
+        return CustomResponse.success(SELECT_SUCCESS,goalService.getGoalCountRetrospectEnabled());
+    }
+
 
     @Operation(summary = "상위 목표 삭제", description = "상위 목표를 삭제하는 API 입니다.")
     @DeleteMapping("/goals/{id}")

@@ -22,7 +22,7 @@ public class GoalEventHandler {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void removeDetailGoalList(RemoveRelatedDetailGoalEvent event) {
 
-        List<DetailGoal> detailGoalList = detailGoalRepository.findDetailGoalsByGoalIdAndIsDeletedFalse(event.goalId());
+        List<DetailGoal> detailGoalList = detailGoalRepository.findAllByGoalIdAndIsDeletedFalse(event.goalId());
         detailGoalList.forEach((DetailGoal::remove));
     }
 

@@ -46,6 +46,18 @@ public class GoalQueryRepository {
         return new SliceImpl<>(goalList, pageable, hasNext);
     }
 
+    public Long getGoalCountRetrospectEnabled()
+    {
+        return query.select(goal.count())
+                .from(goal)
+                .where(
+                        goal.isDeleted.isFalse(), // 삭제 되지 않은 것들만 조회
+                        goal.hasRetrospect.isFalse(), // 아직 회고를 작성하지 않는 것들 조회
+                        goal.goalStatus.eq(GoalStatus.COMPLETE) // 완료상태인것들 체크
+                )
+                .fetchOne();
+    }
+
     public Map<GoalStatus, Long> getStatusCounts() {
 
 

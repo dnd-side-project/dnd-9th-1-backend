@@ -144,10 +144,15 @@ public class Goal extends BaseEntity {
             throw new BusinessException(RECOVER_GOAL_IMPOSSIBLE);
         }
 
-        goalStatus = GoalStatus.PROCESS;
+        changeGoalStatus(GoalStatus.PROCESS);
         this.reminderEnabled = reminderEnabled;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public void changeGoalStatus(GoalStatus goalStatus)
+    {
+        this.goalStatus = goalStatus;
     }
 
 

@@ -26,7 +26,7 @@ public class DetailGoalService {
 
     public List<DetailGoalListResponse> getDetailGoalList(Long goalId)
     {
-        List<DetailGoal> detailGoalList = detailGoalRepository.findDetailGoalsByGoalIdAndIsDeletedFalse(goalId);
+        List<DetailGoal> detailGoalList = detailGoalRepository.findAllByGoalIdAndIsDeletedFalse(goalId);
         return detailGoalList.stream().map(DetailGoalListResponse::from).collect(Collectors.toList());
     }
 

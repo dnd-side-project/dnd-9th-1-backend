@@ -9,6 +9,7 @@ import com.backend.detailgoal.presentation.dto.request.DetailGoalSaveRequest;
 import com.backend.detailgoal.presentation.dto.request.DetailGoalUpdateRequest;
 import com.backend.goal.domain.Goal;
 import com.backend.goal.domain.GoalRepository;
+import com.backend.goal.domain.GoalStatus;
 import com.backend.goal.domain.RewardType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,9 @@ import java.util.stream.Collectors;
 public class DetailGoalService {
 
     private final DetailGoalRepository detailGoalRepository;
+
     private final GoalRepository goalRepository;
+
     private final RewardService rewardService;
 
 
@@ -71,10 +74,16 @@ public class DetailGoalService {
         {
             RewardType reward = rewardService.provideReward();
             goal.achieveReward(reward);
-            return new GoalCompletedResponse(isCompleted, goal.getReward(), goal.getReward().order);
+            goal.complete();
+
+            int count = goalRepository.countByGoalStatusAndIsDeletedFalse(GoalStatus.COMPLETE);
+            return new GoalCompletedResponse(isCompleted, goal.getReward(), count);
+
+            // 성취한 목표 개수 구하기
         }
 
-        return new GoalCompletedResponse(isCompleted,null, null);
+        return new GoalCompletedResponse(isCompleted, goal.getReward(), null);
+
     }
 
     @Transactional
@@ -103,10 +112,13 @@ public class DetailGoalService {
         {
             RewardType reward = rewardService.provideReward(); // 6. 리워드 랜덤으로 지금
             goal.achieveReward(reward);
-            return new GoalCompletedResponse(isCompleted, goal.getReward(), goal.getReward().order); // 7. 성공과 함께 리워드 정보
+            goal.complete();
+
+            int count = goalRepository.countByGoalStatusAndIsDeletedFalse(GoalStatus.COMPLETE);
+            return new GoalCompletedResponse(isCompleted, goal.getReward(), count);
         }
 
-        return new GoalCompletedResponse(isCompleted,null, null); // 8. 아니면 미완료 여부만 알려줌
+        return new GoalCompletedResponse(isCompleted, goal.getReward(), null); // 8. 아니면 미완료 여부만 알려줌
     }
 
 

@@ -76,6 +76,10 @@ public class Goal extends BaseEntity {
         completedDetailGoalCnt = 0;
     }
 
+    public void complete()
+    {
+        this.goalStatus = GoalStatus.COMPLETE;
+    }
 
     public void increaseEntireDetailGoalCnt()
     {

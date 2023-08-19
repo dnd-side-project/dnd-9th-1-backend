@@ -14,4 +14,6 @@ public interface GoalRepository extends JpaRepository<Goal, Long> {
         return findById(id).orElseThrow(() -> {throw new BusinessException(ErrorCode.GOAL_NOT_FOUND);
         });
     }
+
+    int countByGoalStatusAndIsDeletedFalse(GoalStatus goalStatus);
 }

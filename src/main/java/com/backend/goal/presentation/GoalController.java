@@ -2,7 +2,7 @@ package com.backend.goal.presentation;
 
 import com.backend.global.common.response.CustomResponse;
 import com.backend.goal.application.GoalService;
-import com.backend.goal.domain.GoalStatus;
+import com.backend.goal.presentation.dto.GoalRecoverRequest;
 import com.backend.goal.presentation.dto.GoalSaveRequest;
 import com.backend.goal.presentation.dto.GoalUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,8 +28,8 @@ public class GoalController {
     @GetMapping("/goals")
     public ResponseEntity<CustomResponse> getGoalList(
                                                        @Parameter(hidden = true) @PageableDefault(size = 10) Pageable pageable,
-                                                       @Parameter(name = "페이징 커서", description = "처음 조회 시 Null 전달, 이후부터는 이전 응답 데이터 중 마지막 ID를 전달") @RequestParam(required = false) Long lastId,
-                                                     @Parameter(name = "상위 목표 타입", description = "STORE, PROCESS, COMPLETE로 구분")  @RequestParam String goalStatus)
+                                                       @Parameter(description = "처음 조회 시 Null 전달, 이후부터는 이전 응답 데이터 중 마지막 ID를 전달") @RequestParam(required = false) Long lastId,
+                                                       @Parameter(description = "store(보관함), process(채움함), complete(완료함) 중 하나로 호출") @RequestParam String goalStatus)
     {
         return CustomResponse.success(SELECT_SUCCESS,goalService.getGoalList(lastId,pageable,goalStatus));
     }
@@ -44,7 +44,7 @@ public class GoalController {
 
     @Operation(summary = "상위 목표 삭제", description = "상위 목표를 삭제하는 API 입니다.")
     @DeleteMapping("/goals/{id}")
-    public ResponseEntity<CustomResponse> removeGoal(@PathVariable Long id)
+    public ResponseEntity<CustomResponse> removeGoal(@Parameter(description = "상위 목표 ID") @PathVariable Long id)
     {
         goalService.removeGoal(id);
         return CustomResponse.success(DELETE_SUCCESS);
@@ -58,11 +58,11 @@ public class GoalController {
         return CustomResponse.success(UPDATE_SUCCESS, goalService.updateGoal(goalSaveRequest));
     }
 
-    @Operation(summary = "상위 목표 상태 변경", description = "보관함에 들어간 상위 목표를 복구하는 API입니다")
+    @Operation(summary = "보관함 내 상위 목표 복구", description = "보관함에 들어간 상위 목표를 복구하는 API 입니다.")
     @PatchMapping("/goals/{id}/recover")
-    public ResponseEntity<CustomResponse> saveGoal(@PathVariable Long id)
+    public ResponseEntity<CustomResponse> recoverGoal(@Parameter(description = "상위 목표 ID") @PathVariable Long id, @RequestBody @Valid GoalRecoverRequest goalRecoverRequest)
     {
-        goalService.recoverGoalStatus(id);
+        goalService.recoverGoal(id, goalRecoverRequest);
         return CustomResponse.success(UPDATE_SUCCESS);
     }
 

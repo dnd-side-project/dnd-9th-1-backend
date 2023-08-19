@@ -44,7 +44,7 @@ public class DetailGoalService {
         detailGoalRepository.save(detailGoal);
 
         Goal goal = goalRepository.getByIdAndIsDeletedFalse(goalId);
-        goal.increaseEntireDetailGoalCnt();
+        goal.increaseEntireDetailGoalCnt(); // 전체 하위 목표 개수 증가
         return detailGoal;
     }
 
@@ -55,7 +55,12 @@ public class DetailGoalService {
         detailGoal.remove();
 
         Goal goal = goalRepository.getByIdAndIsDeletedFalse(detailGoal.getGoalId());
-        goal.decreaseEntireDetailGoalCnt();
+        goal.decreaseEntireDetailGoalCnt(); // 전체 하위 목표 감소
+
+        if(detailGoal.getIsCompleted()) // 만약 이미 성취된 목표였다면, 성취된 목표 개수까지 함께 제거
+        {
+            goal.decreaseCompletedDetailGoalCnt();
+        }
 
         return new GoalCompletedResponse(goal.checkGoalCompleted());
     }
@@ -76,11 +81,12 @@ public class DetailGoalService {
     {
         DetailGoal detailGoal = detailGoalRepository.getByIdAndIsDeletedFalse(detailGoalId);
         detailGoal.complete();
+
         Goal goal = goalRepository.getByIdAndIsDeletedFalse(detailGoal.getGoalId());
-        goal.increaseCompletedDetailGoalCnt();
+        goal.increaseCompletedDetailGoalCnt(); // 성공한 개수 체크
+
         return new GoalCompletedResponse(goal.checkGoalCompleted());
     }
-
 
 
     @Transactional

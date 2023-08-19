@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Objects;
 
 import static com.backend.global.common.code.ErrorCode.RECOVER_GOAL_IMPOSSIBLE;
 
@@ -44,10 +43,10 @@ public class Goal extends BaseEntity {
     @Column(name = "completed_detail_goal_cnt", nullable = false)
     private Integer completedDetailGoalCnt;
 
-    @Column(name = "start_date")
+    @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
-    @Column(name = "end_date")
+    @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
     @Column(name = "reminder_enabled", nullable = false)
@@ -109,6 +108,12 @@ public class Goal extends BaseEntity {
 
     public boolean checkGoalCompleted()
     {
+        // 만약 전체 개수가 0개라면 체크 하면 안됨
+        if (entireDetailGoalCnt == 0)
+        {
+            return false;
+        }
+
         return completedDetailGoalCnt == entireDetailGoalCnt;
     }
 
@@ -132,7 +137,7 @@ public class Goal extends BaseEntity {
         this.reminderEnabled = reminderEnabled;
     }
 
-    public void recoverGoalStatus()
+    public void recover(final LocalDate startDate, final LocalDate endDate, final Boolean reminderEnabled)
     {
         if(!goalStatus.equals(GoalStatus.STORE))
         {
@@ -140,9 +145,9 @@ public class Goal extends BaseEntity {
         }
 
         goalStatus = GoalStatus.PROCESS;
-        this.reminderEnabled = false;
-        this.startDate = null;
-        this.endDate = null;
+        this.reminderEnabled = reminderEnabled;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
 
@@ -154,6 +159,7 @@ public class Goal extends BaseEntity {
     }
 
     private void validatePeriod(final LocalDate startDate, final LocalDate endDate) {
+
         if (startDate.isAfter(endDate)) {
             throw new IllegalArgumentException("종료일시가 시작일시보다 이전일 수 없습니다.");
         }
@@ -164,7 +170,7 @@ public class Goal extends BaseEntity {
         }
     }
 
-    public Long calculateDday(LocalDate now)
+    public Long calculateDday(final LocalDate now)
     {
         if(now.isAfter(endDate))
         {

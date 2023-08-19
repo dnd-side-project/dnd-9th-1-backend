@@ -4,6 +4,7 @@ import com.backend.goal.application.dto.response.GoalCountResponse;
 import com.backend.goal.application.dto.response.GoalListResponse;
 import com.backend.goal.domain.*;
 import com.backend.goal.application.dto.response.GoalResponse;
+import com.backend.goal.presentation.dto.GoalRecoverRequest;
 import com.backend.goal.presentation.dto.GoalSaveRequest;
 import com.backend.goal.presentation.dto.GoalUpdateRequest;
 import lombok.RequiredArgsConstructor;
@@ -73,9 +74,9 @@ public class GoalService {
     }
 
     @Transactional
-    public void recoverGoalStatus(Long goalId)
+    public void recoverGoal(Long goalId, GoalRecoverRequest goalRecoverRequest)
     {
         Goal goal = goalRepository.getByIdAndIsDeletedFalse(goalId);
-        goal.recoverGoalStatus();
+        goal.recover(goalRecoverRequest.startDate(), goalRecoverRequest.endDate(), goalRecoverRequest.reminderEnabled());
     }
 }

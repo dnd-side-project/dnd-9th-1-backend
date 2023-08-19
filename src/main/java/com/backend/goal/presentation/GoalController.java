@@ -57,20 +57,20 @@ public class GoalController {
         return CustomResponse.success(DELETE_SUCCESS);
     }
 
-
-    @Operation(summary = "상위 목표 수정", description = "상위 목표를 수정하는 API 입니다.")
-    @PatchMapping("/goals/{id}")
-    public ResponseEntity<CustomResponse> updateGoal(@RequestBody @Valid GoalUpdateRequest goalSaveRequest)
-    {
-        return CustomResponse.success(UPDATE_SUCCESS, goalService.updateGoal(goalSaveRequest));
-    }
-
     @Operation(summary = "보관함 내 상위 목표 복구", description = "보관함에 들어간 상위 목표를 복구하는 API 입니다.")
     @PatchMapping("/goals/{id}/recover")
     public ResponseEntity<CustomResponse> recoverGoal(@Parameter(description = "상위 목표 ID") @PathVariable Long id, @RequestBody @Valid GoalRecoverRequest goalRecoverRequest)
     {
         goalService.recoverGoal(id, goalRecoverRequest);
         return CustomResponse.success(UPDATE_SUCCESS);
+    }
+
+
+    @Operation(summary = "상위 목표 수정", description = "상위 목표를 수정하는 API 입니다.")
+    @PatchMapping("/goals/{id}")
+    public ResponseEntity<CustomResponse> updateGoal(@RequestBody @Valid GoalUpdateRequest goalSaveRequest)
+    {
+        return CustomResponse.success(UPDATE_SUCCESS, goalService.updateGoal(goalSaveRequest));
     }
 
     @Operation(summary = "상위 목표 생성", description = "상위 목표를 생성하는 API 입니다.")

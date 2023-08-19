@@ -5,6 +5,7 @@ import com.backend.goal.application.dto.response.GoalCountResponse;
 import com.backend.goal.application.dto.response.GoalListResponse;
 import com.backend.goal.domain.Goal;
 import com.backend.goal.domain.GoalRepository;
+import com.backend.goal.domain.GoalStatus;
 import com.backend.goal.presentation.dto.GoalSaveRequest;
 import com.backend.goal.presentation.dto.GoalUpdateRequest;
 import org.assertj.core.api.Assertions;
@@ -15,11 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDate;
 
 
 @SpringBootTest
 @ActiveProfiles("test")
+@Transactional
 public class GoalServiceTest {
 
     @Autowired
@@ -137,7 +141,7 @@ public class GoalServiceTest {
     {
         // given
 
-        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 1), true);
+        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 1), true, GoalStatus.PROCESS);
         Goal savedGoal = goalRepository.save(goal);
 
         GoalUpdateRequest goalUpdateRequest = new GoalUpdateRequest(savedGoal.getId(), "수정된 제목", LocalDate.now(), LocalDate.now(), false);
@@ -154,7 +158,7 @@ public class GoalServiceTest {
     void 상위목표를_삭제할수_있다()
     {
         // given
-        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 1), true);
+        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 1), true , GoalStatus.PROCESS);
         Goal savedGoal = goalRepository.save(goal);
 
         // when
@@ -170,8 +174,8 @@ public class GoalServiceTest {
     void 상위목표_상태에_따라_통계를_제공한다()
     {
         // given
-        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 1), true);
-        Goal savedGoal = goalRepository.save(goal);
+        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 1), true, GoalStatus.PROCESS);
+        goalRepository.save(goal);
 
         // when
         GoalCountResponse goalCounts = goalService.getGoalCounts();

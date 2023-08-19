@@ -71,7 +71,6 @@ public class Goal extends BaseEntity {
         hasRetrospect = Boolean.FALSE;
         entireDetailGoalCnt = 0;
         completedDetailGoalCnt = 0;
-        goalStatus = GoalStatus.PROCESS;
     }
 
 
@@ -126,7 +125,7 @@ public class Goal extends BaseEntity {
         this.reminderEnabled = reminderEnabled;
     }
 
-    public Goal(final Long memberId, final String title, final LocalDate startDate, final LocalDate endDate, final Boolean reminderEnabled)
+    public Goal(final Long memberId, final String title, final LocalDate startDate, final LocalDate endDate, final Boolean reminderEnabled, final GoalStatus goalStatus)
     {
         validateTitleLength(title);
         validatePeriod(startDate, endDate);
@@ -135,24 +134,20 @@ public class Goal extends BaseEntity {
         this.startDate = startDate;
         this.endDate = endDate;
         this.reminderEnabled = reminderEnabled;
+        this.goalStatus = goalStatus;
     }
 
     public void recover(final LocalDate startDate, final LocalDate endDate, final Boolean reminderEnabled)
     {
-        if(!goalStatus.equals(GoalStatus.STORE))
+        if(!isRecoveringEnable())
         {
             throw new BusinessException(RECOVER_GOAL_IMPOSSIBLE);
         }
 
-        changeGoalStatus(GoalStatus.PROCESS);
+        this.goalStatus = GoalStatus.PROCESS;
         this.reminderEnabled = reminderEnabled;
         this.startDate = startDate;
         this.endDate = endDate;
-    }
-
-    public void changeGoalStatus(GoalStatus goalStatus)
-    {
-        this.goalStatus = goalStatus;
     }
 
 
@@ -187,5 +182,9 @@ public class Goal extends BaseEntity {
 
     private boolean isNotValidDateTimeRange(final LocalDate date) {
         return date.isBefore(MIN_DATE) || date.isAfter(MAX_DATE);
+    }
+
+    private boolean isRecoveringEnable() {
+        return !goalStatus.equals(GoalStatus.STORE);
     }
 }

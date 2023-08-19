@@ -1,6 +1,7 @@
 package com.backend.goal.presentation.dto;
 
 import com.backend.goal.domain.Goal;
+import com.backend.goal.domain.GoalStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -33,7 +34,7 @@ public record GoalSaveRequest(
 
         public Goal toEntity(Long memberId)
         {
-                return new Goal(memberId, title,startDate,endDate,reminderEnabled);
+                return new Goal(memberId, title,startDate,endDate,reminderEnabled, GoalStatus.PROCESS);
         }
 
 }

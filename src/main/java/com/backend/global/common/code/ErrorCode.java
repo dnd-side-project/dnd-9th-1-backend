@@ -63,6 +63,8 @@ public enum ErrorCode {
 
     COMPLETED_DETAIL_GOAL_CNT_INVALID(BAD_REQUEST.value(), "GOAL-003", "성공한 하위목표 개수가 0개 일때는 뺄 수 없습니다."),
 
+    RECOVER_GOAL_IMPOSSIBLE(BAD_REQUEST.value(), "GOAL-004", "상위 목표가 보관함에 있을때 채움함으로 복구할 수 있습니다."),
+
     /* Detail Goal */
     DETAIL_GOAL_NOT_FOUND(NOT_FOUND.value(), "DETAIL-GOAL-001", "하위 목표가 존재하지 않습니다."),
 

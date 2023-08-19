@@ -21,7 +21,7 @@ public class GoalTest {
 
         // when & then
         assertThatThrownBy(() -> {
-            new Goal(1L, "테스트 제목", startDate, endDate, true);
+            new Goal(1L, "테스트 제목", startDate, endDate, true, GoalStatus.PROCESS);
         }).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -35,7 +35,7 @@ public class GoalTest {
 
         // when & then
         assertThatThrownBy(() -> {
-            new Goal(1L, "테스트 제목", startDate, endDate, true);
+            new Goal(1L, "테스트 제목", startDate, endDate, true, GoalStatus.PROCESS);
         }).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -49,7 +49,7 @@ public class GoalTest {
 
         // when & then
         assertThatThrownBy(() -> {
-            new Goal(1L, "테스트 제목", startDate, endDate, true);
+            new Goal(1L, "테스트 제목", startDate, endDate, true, GoalStatus.PROCESS);
         }).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -64,7 +64,7 @@ public class GoalTest {
 
         // when & then
         assertThatThrownBy(() -> {
-            new Goal(1L, title, startDate, endDate, true);
+            new Goal(1L, title, startDate, endDate, true, GoalStatus.PROCESS);
         }).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -75,7 +75,7 @@ public class GoalTest {
         // given
         LocalDate startDate = LocalDate.of(2023,7,1);
         LocalDate endDate = LocalDate.of(2023,8,10);
-        Goal goal = new Goal(1L, "테스트 제목", startDate, endDate, true);
+        Goal goal = new Goal(1L, "테스트 제목", startDate, endDate, true, GoalStatus.PROCESS);
 
         // when
         Long dDay = goal.calculateDday(LocalDate.of(2023, 7, 1));
@@ -91,7 +91,7 @@ public class GoalTest {
         // given
         LocalDate startDate = LocalDate.of(2023,7,1);
         LocalDate endDate = LocalDate.of(2023,8,10);
-        Goal goal = new Goal(1L, "테스트 제목", startDate, endDate, true);
+        Goal goal = new Goal(1L, "테스트 제목", startDate, endDate, true, GoalStatus.PROCESS);
 
         // when & then
         assertThatThrownBy(() -> {
@@ -106,7 +106,7 @@ public class GoalTest {
         // given
         LocalDate startDate = LocalDate.of(2023,7,1);
         LocalDate endDate = LocalDate.of(2023,8,10);
-        Goal goal = new Goal(1L, "테스트 제목", startDate, endDate, true);
+        Goal goal = new Goal(1L, "테스트 제목", startDate, endDate, true, GoalStatus.PROCESS);
 
         // when
         Long dDay = goal.calculateDday(LocalDate.of(2023, 8, 10));

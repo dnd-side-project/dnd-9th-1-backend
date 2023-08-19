@@ -13,7 +13,7 @@ public class BlackListService {
     private final BlackListRepository blackListRepository;
 
     public void saveBlackList(String accessToken, Long expiration){
-        blackListRepository.save(new BlackList(accessToken, "logout", expiration));
+        blackListRepository.save(new BlackList(accessToken, expiration));
     }
 
     public boolean isBlackList(String accessToken){

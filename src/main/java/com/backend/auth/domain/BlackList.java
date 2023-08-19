@@ -13,8 +13,6 @@ public class BlackList {
     @Id
     private String accessToken;
 
-    private String status;
-
     @TimeToLive
     private Long expiration;
 }

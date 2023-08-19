@@ -9,6 +9,7 @@ import com.backend.detailgoal.presentation.dto.request.DetailGoalSaveRequest;
 import com.backend.detailgoal.presentation.dto.request.DetailGoalUpdateRequest;
 import com.backend.goal.domain.Goal;
 import com.backend.goal.domain.GoalRepository;
+import com.backend.goal.domain.RewardType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,8 @@ public class DetailGoalService {
 
     private final DetailGoalRepository detailGoalRepository;
     private final GoalRepository goalRepository;
+    private final RewardService rewardService;
+
 
 
     public List<DetailGoalListResponse> getDetailGoalList(Long goalId)
@@ -62,7 +65,16 @@ public class DetailGoalService {
             goal.decreaseCompletedDetailGoalCnt();
         }
 
-        return new GoalCompletedResponse(goal.checkGoalCompleted());
+        boolean isCompleted = goal.checkGoalCompleted();
+
+        if(isCompleted)
+        {
+            RewardType reward = rewardService.provideReward();
+            goal.achieveReward(reward);
+            return new GoalCompletedResponse(isCompleted, goal.getReward(), goal.getReward().order);
+        }
+
+        return new GoalCompletedResponse(isCompleted,null, null);
     }
 
     @Transactional
@@ -79,13 +91,22 @@ public class DetailGoalService {
     @Transactional
     public GoalCompletedResponse completeDetailGoal(Long detailGoalId)
     {
-        DetailGoal detailGoal = detailGoalRepository.getByIdAndIsDeletedFalse(detailGoalId);
-        detailGoal.complete();
+        DetailGoal detailGoal = detailGoalRepository.getByIdAndIsDeletedFalse(detailGoalId); // 1. 삭제되지 않은 세부 목표 가져온다
+        detailGoal.complete(); // 완료 처리
 
-        Goal goal = goalRepository.getByIdAndIsDeletedFalse(detailGoal.getGoalId());
-        goal.increaseCompletedDetailGoalCnt(); // 성공한 개수 체크
+        Goal goal = goalRepository.getByIdAndIsDeletedFalse(detailGoal.getGoalId()); // 2. 전체 목표를 가져옴
+        goal.increaseCompletedDetailGoalCnt(); // 3. 성공 개수 증가시키기
 
-        return new GoalCompletedResponse(goal.checkGoalCompleted());
+        boolean isCompleted = goal.checkGoalCompleted(); // 4. 전체 목표 개수와 성공 목표 개수가 같은지 체크
+
+        if(isCompleted) // 5. 만약 상위 목표를 성공했다면
+        {
+            RewardType reward = rewardService.provideReward(); // 6. 리워드 랜덤으로 지금
+            goal.achieveReward(reward);
+            return new GoalCompletedResponse(isCompleted, goal.getReward(), goal.getReward().order); // 7. 성공과 함께 리워드 정보
+        }
+
+        return new GoalCompletedResponse(isCompleted,null, null); // 8. 아니면 미완료 여부만 알려줌
     }
 
 

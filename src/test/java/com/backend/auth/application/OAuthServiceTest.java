@@ -1,7 +1,5 @@
 package com.backend.auth.application;
 
-import com.backend.auth.jwt.TokenProvider;
-import com.backend.auth.presentation.dto.response.AccessTokenResponse;
 import com.backend.auth.presentation.dto.response.TokenResponse;
 import com.backend.global.exception.BusinessException;
 import org.junit.jupiter.api.DisplayName;
@@ -60,10 +58,11 @@ public class OAuthServiceTest {
         TokenResponse tokenResponse = oAuthService.login("kakao", uid);
 
         // when
-        AccessTokenResponse accessTokenResponse = oAuthService.reissue(BEARER_TOKEN_PREFIX + tokenResponse.refreshToken());
+        TokenResponse renewTokenResponse = oAuthService.reissue(BEARER_TOKEN_PREFIX + tokenResponse.refreshToken());
 
         // then
-        assertThat(accessTokenResponse.accessToken()).isNotNull();
+        assertThat(renewTokenResponse.accessToken()).isNotNull();
+        assertThat(renewTokenResponse.refreshToken()).isNotNull();
     }
 
     @DisplayName("저장되어 있지 않은 refresh token이 입력되면 예외가 발생한다. ")

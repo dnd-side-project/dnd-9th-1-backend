@@ -10,6 +10,7 @@ import com.backend.detailgoal.presentation.dto.request.DetailGoalUpdateRequest;
 import com.backend.global.DatabaseCleaner;
 import com.backend.goal.domain.Goal;
 import com.backend.goal.domain.GoalRepository;
+import com.backend.goal.domain.GoalStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -52,7 +53,7 @@ public class DetailGoalServiceTest {
     void 하위목표를_생성하면_상위목표의_하위목표_카운트가_증가한다()
     {
          // given
-        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 20), LocalDate.of(2023, 8, 24), true);
+        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 20), LocalDate.of(2023, 8, 24), true, GoalStatus.PROCESS);
         Goal savedGoal = goalRepository.save(goal);
 
         DetailGoalSaveRequest detailGoalSaveRequest = new DetailGoalSaveRequest("테스트 제목", true, LocalTime.of(10, 0), List.of("MONDAY", "TUESDAY"));
@@ -90,7 +91,7 @@ public class DetailGoalServiceTest {
     void 하위목표를_삭제하면_상위목표의_하위목표_카운트가_감소한다()
     {
         // given
-        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 20), LocalDate.of(2023, 8, 24), true);
+        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 20), LocalDate.of(2023, 8, 24), true, GoalStatus.PROCESS);
         Goal savedGoal = goalRepository.save(goal);
 
         DetailGoalSaveRequest detailGoalSaveRequest = new DetailGoalSaveRequest("테스트 제목", true, LocalTime.of(10, 0), List.of("MONDAY", "TUESDAY"));
@@ -130,7 +131,7 @@ public class DetailGoalServiceTest {
     void 하위_목표_리스트를_조회한다()
     {
         // given
-        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 20), LocalDate.of(2023, 8, 24), true);
+        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 20), LocalDate.of(2023, 8, 24), true, GoalStatus.PROCESS);
         Goal savedGoal = goalRepository.save(goal);
 
         for(int i = 0; i < 5; i++)
@@ -151,7 +152,7 @@ public class DetailGoalServiceTest {
     void 하위목표를_체크하면_완료상태로_변한다()
     {
         // given
-        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 20), LocalDate.of(2023, 8, 24), true);
+        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 20), LocalDate.of(2023, 8, 24), true, GoalStatus.PROCESS);
         Goal savedGoal = goalRepository.save(goal);
 
         DetailGoal detailGoal = new DetailGoal(savedGoal.getId(), "테스트 제목", false, true, List.of(DayOfWeek.MONDAY), LocalTime.of(10, 0));
@@ -161,7 +162,7 @@ public class DetailGoalServiceTest {
         detailGoalService.completeDetailGoal(savedDetailGoal.getId());
 
         // then
-        List<DetailGoal> result = detailGoalRepository.findDetailGoalsByGoalIdAndIsDeletedFalse(savedDetailGoal.getGoalId());
+        List<DetailGoal> result = detailGoalRepository.findAllByGoalIdAndIsDeletedFalse(savedDetailGoal.getGoalId());
         assertThat(result.get(0).getIsCompleted()).isTrue();
     }
 
@@ -170,7 +171,7 @@ public class DetailGoalServiceTest {
     void 하위목표를_체크해제_하면_미완료_상태로_변한다()
     {
         // given
-        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 20), LocalDate.of(2023, 8, 24), true);
+        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 20), LocalDate.of(2023, 8, 24), true, GoalStatus.PROCESS);
         Goal savedGoal = goalRepository.save(goal);
 
         DetailGoal detailGoal = new DetailGoal(savedGoal.getId(), "테스트 제목", true, true, List.of(DayOfWeek.MONDAY), LocalTime.of(10, 0));
@@ -181,7 +182,7 @@ public class DetailGoalServiceTest {
         detailGoalService.inCompleteDetailGoal(savedDetailGoal.getId());
 
         // then
-        List<DetailGoal> result = detailGoalRepository.findDetailGoalsByGoalIdAndIsDeletedFalse(savedDetailGoal.getGoalId());
+        List<DetailGoal> result = detailGoalRepository.findAllByGoalIdAndIsDeletedFalse(savedDetailGoal.getGoalId());
         assertThat(result.get(0).getIsCompleted()).isFalse();
     }
 
@@ -190,7 +191,7 @@ public class DetailGoalServiceTest {
     void 완료_하위목표_개수와_전체_하위목표_개수가_같아지면_상위목표가_성공한다()
     {
         // given
-        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 20), LocalDate.of(2023, 8, 24), true);
+        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 20), LocalDate.of(2023, 8, 24), true, GoalStatus.PROCESS);
         Goal savedGoal = goalRepository.save(goal);
 
         DetailGoalSaveRequest detailGoalSaveRequest = new DetailGoalSaveRequest("테스트 제목", true, LocalTime.of(10, 0), List.of("MONDAY", "TUESDAY"));
@@ -212,7 +213,7 @@ public class DetailGoalServiceTest {
     void 하위목표를_삭제했을때_전체_하위목표_개수와_달성한_하위목표_개수가_같아지면_상위목표가_성공한다()
     {
         // given
-        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 20), LocalDate.of(2023, 8, 24), true);
+        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 20), LocalDate.of(2023, 8, 24), true, GoalStatus.PROCESS);
         Goal savedGoal = goalRepository.save(goal);
 
         DetailGoalSaveRequest detailGoalSaveRequest = new DetailGoalSaveRequest("테스트 제목", true, LocalTime.of(10, 0), List.of("MONDAY", "TUESDAY"));

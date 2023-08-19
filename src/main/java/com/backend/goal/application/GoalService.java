@@ -1,9 +1,13 @@
 package com.backend.goal.application;
 
+import com.backend.detailgoal.application.dto.response.DetailGoalResponse;
+import com.backend.detailgoal.domain.DetailGoal;
 import com.backend.goal.application.dto.response.GoalCountResponse;
 import com.backend.goal.application.dto.response.GoalListResponse;
+import com.backend.goal.application.dto.response.RetrospectEnabledGoalCountResponse;
 import com.backend.goal.domain.*;
 import com.backend.goal.application.dto.response.GoalResponse;
+import com.backend.goal.presentation.dto.GoalRecoverRequest;
 import com.backend.goal.presentation.dto.GoalSaveRequest;
 import com.backend.goal.presentation.dto.GoalUpdateRequest;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +51,12 @@ public class GoalService {
         return new GoalCountResponse(statusCounts);
     }
 
+    public RetrospectEnabledGoalCountResponse getGoalCountRetrospectEnabled()
+    {
+        Long count = goalQueryRepository.getGoalCountRetrospectEnabled();
+        return new RetrospectEnabledGoalCountResponse(count);
+    }
+
 
     @Transactional
     public Long saveGoal(final Long memberId, final GoalSaveRequest goalSaveRequest)
@@ -70,5 +80,12 @@ public class GoalService {
         goal.remove();
 
         applicationEventPublisher.publishEvent(new RemoveRelatedDetailGoalEvent(goal.getId()));
+    }
+
+    @Transactional
+    public void recoverGoal(Long goalId, GoalRecoverRequest goalRecoverRequest)
+    {
+        Goal goal = goalRepository.getByIdAndIsDeletedFalse(goalId);
+        goal.recover(goalRecoverRequest.startDate(), goalRecoverRequest.endDate(), goalRecoverRequest.reminderEnabled());
     }
 }

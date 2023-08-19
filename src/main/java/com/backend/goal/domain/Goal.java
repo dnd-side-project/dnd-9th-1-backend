@@ -185,6 +185,6 @@ public class Goal extends BaseEntity {
     }
 
     private boolean isRecoveringEnable() {
-        return !goalStatus.equals(GoalStatus.STORE);
+        return goalStatus.equals(GoalStatus.STORE);
     }
 }

@@ -16,6 +16,7 @@ import static com.backend.global.common.code.SuccessCode.*;
 
 @Tag(name = "회원 인증", description = "소셜 로그인 API입니다.")
 @RequiredArgsConstructor
+@RequestMapping("/auth")
 @RestController
 public class OAuthController {
 
@@ -23,7 +24,7 @@ public class OAuthController {
 
     @Operation(summary = "소셜 로그인",
                 description = "카카오, 애플 서버에서 로그인한 사용자의 userId를 통해 access token과 refresh token을 반환합니다.")
-    @PostMapping("/auth/{provider}")
+    @PostMapping("/{provider}")
     public ResponseEntity<CustomResponse> generateAccessTokenAndRefreshToken(
             @Parameter(description = "kakao, apple 중 현재 로그인하는 소셜 타입", in = ParameterIn.PATH) @PathVariable String provider,
             @Parameter(description = "사용자 ID") @RequestParam String userId) {

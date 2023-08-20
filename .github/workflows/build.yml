@@ -24,7 +24,7 @@ jobs: # defining jobs, executed in this workflows
       uses: actions/checkout@v3 # clone repository
 
     - name: Connect to Redis
-      run: redis-cli -h redis ping
+      run: supercharge/redis-github-actions@1.6.0
 
       # Caching Gradle
     - name: Cache Gradle
@@ -53,7 +53,6 @@ jobs: # defining jobs, executed in this workflows
       # Gradle test
     - name: Test with Gradle
       run: ./gradlew -Dspring.profiles.active=test --info test
-
       # Publish Unit Test Results
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action@v1

@@ -22,6 +22,8 @@ jobs: # defining jobs, executed in this workflows
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3 # clone repository
+      with:
+        submodules: recursive
 
     - name: Connect to Redis
       run: supercharge/redis-github-actions@1.6.0

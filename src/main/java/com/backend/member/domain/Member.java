@@ -39,12 +39,14 @@ public class Member extends BaseEntity {
             final String uid,
             final Provider provider,
             final Boolean enabledPush,
-            final MemberStatus memberStatus
+            final MemberStatus memberStatus,
+            final Role role
     ) {
         this.enabledPush = enabledPush;
         this.provider = provider;
         this.uid = uid;
         this.memberStatus = memberStatus;
+        this.role = role;
     }
 
     public static Member from(Provider provider, String uid){
@@ -52,6 +54,7 @@ public class Member extends BaseEntity {
                 .uid(uid)
                 .provider(provider)
                 .memberStatus(MemberStatus.ACTIVE)
+                .role(Role.ROLE_USER)
                 .build();
     }
 

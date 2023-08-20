@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -80,7 +81,7 @@ public class DetailGoalService {
             return new GoalCompletedResponse(isCompleted, goal.getReward(), count);
         }
 
-        return new GoalCompletedResponse(isCompleted, goal.getReward(), null);
+        return new GoalCompletedResponse(isCompleted, goal.getReward(), 0);
     }
 
     @Transactional
@@ -97,17 +98,17 @@ public class DetailGoalService {
     @Transactional
     public GoalCompletedResponse completeDetailGoal(Long detailGoalId)
     {
-        DetailGoal detailGoal = detailGoalRepository.getByIdAndIsDeletedFalse(detailGoalId); // 1. 삭제되지 않은 세부 목표 가져온다
-        detailGoal.complete(); // 완료 처리
+        DetailGoal detailGoal = detailGoalRepository.getByIdAndIsDeletedFalse(detailGoalId); // 1. 삭제되지 않은 하위 목표 가져온다
+        detailGoal.complete(); // 2. 하위 목표를 완료 상태로 변경한다.
 
-        Goal goal = goalRepository.getByIdAndIsDeletedFalse(detailGoal.getGoalId()); // 2. 전체 목표를 가져옴
-        goal.increaseCompletedDetailGoalCnt(); // 3. 성공 개수 증가시키기
+        Goal goal = goalRepository.getByIdAndIsDeletedFalse(detailGoal.getGoalId()); // 3. 전체 목표를 가져온다.
+        goal.increaseCompletedDetailGoalCnt(); // 4. 완료한 하위 목표 개수를 증가시킨다.
 
-        boolean isCompleted = goal.checkGoalCompleted(); // 4. 전체 목표 개수와 성공 목표 개수가 같은지 체크
+        boolean isCompleted = goal.checkGoalCompleted(); // 5. 전체 하위 목표 개수와 완료한 하위 목표 개수가 같은지 체크한다.
 
-        if(isCompleted) // 5. 만약 상위 목표를 성공했다면
+        if(isCompleted)
         {
-            RewardType reward = rewardService.provideReward(); // 6. 리워드 랜덤으로 지금
+            RewardType reward = rewardService.provideReward(); // 6. 리워드를 랜덤으로 지급한다.
             goal.achieveReward(reward);
             goal.complete();
 
@@ -115,7 +116,7 @@ public class DetailGoalService {
             return new GoalCompletedResponse(isCompleted, goal.getReward(), count);
         }
 
-        return new GoalCompletedResponse(isCompleted, goal.getReward(), null); // 8. 아니면 미완료 여부만 알려줌
+        return new GoalCompletedResponse(isCompleted, goal.getReward(), 0);
     }
 
 

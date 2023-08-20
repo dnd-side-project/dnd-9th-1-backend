@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -22,7 +23,7 @@ public class SchedulerService {
     public void storeOutDateGoal() {
 
         log.info("scheduler activated...");
-        List<Goal> goalList = goalQueryRepository.findGoalListEndDateExpired();
+        List<Goal> goalList = goalQueryRepository.findGoalListEndDateExpired(LocalDate.now());
         log.info("{} goal move to store", goalList.size());
         goalList.forEach(Goal::store);
     }

@@ -59,14 +59,14 @@ public class GoalQueryRepository {
                 .fetchOne();
     }
 
-    public List<Goal> findGoalListEndDateExpired()
+    public List<Goal> findGoalListEndDateExpired(LocalDate today)
     {
         return query.select(goal)
                 .from(goal)
                 .where(
                         goal.isDeleted.isFalse(),
                         goal.goalStatus.eq(GoalStatus.PROCESS),
-                        goal.endDate.before(LocalDate.now())
+                        goal.endDate.before(today)
                 )
                 .fetch();
     }

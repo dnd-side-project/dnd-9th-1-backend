@@ -38,12 +38,28 @@ public class SchedulerServiceTest {
     void 채움함내의_종료알자가_만료된_상위목표는_보관함으로_이동한다()
     {
         // given
+
+        /*
+        종료 기간이 만료된 채움함 내 상위 목표
+         */
         for(int i =0; i < 3; i++)
         {
             Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 1), true, GoalStatus.PROCESS);
             goalRepository.save(goal);
         }
 
+        /*
+        종료 기간이 만료되지 않은 채움함 내 상위 목표
+         */
+        for(int i =0; i < 3; i++)
+        {
+            Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(9999, 8, 1), true, GoalStatus.PROCESS);
+            goalRepository.save(goal);
+        }
+
+        /*
+        종료 기간이 만료됐지만 완료함에 있는 상위 목표
+         */
         for(int i =0; i < 3; i++)
         {
             Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 1), true, GoalStatus.COMPLETE);

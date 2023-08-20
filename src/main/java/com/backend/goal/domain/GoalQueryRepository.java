@@ -71,6 +71,7 @@ public class GoalQueryRepository {
                 .fetch();
     }
 
+
     public Map<GoalStatus, Long> getStatusCounts() {
 
 

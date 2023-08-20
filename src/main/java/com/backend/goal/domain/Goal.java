@@ -1,12 +1,16 @@
 package com.backend.goal.domain;
 
+import com.backend.global.common.code.ErrorCode;
 import com.backend.global.entity.BaseEntity;
+import com.backend.global.exception.BusinessException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+
+import static com.backend.global.common.code.ErrorCode.RECOVER_GOAL_IMPOSSIBLE;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -39,8 +43,6 @@ public class Goal extends BaseEntity {
     @Column(name = "completed_detail_goal_cnt", nullable = false)
     private Integer completedDetailGoalCnt;
 
-
-
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
@@ -53,23 +55,86 @@ public class Goal extends BaseEntity {
     @Column(name = "has_retrospect", nullable = false)
     private Boolean hasRetrospect;
 
-    @Column(name = "deleted", nullable = false)
-    private Boolean deleted;
+    @Column(name = "is_deleted", nullable = false)
+    private Boolean isDeleted;
+
+    @Column(name = "reward")
+    private RewardType reward;
 
     public void remove()
     {
-        this.deleted = Boolean.TRUE;
+        this.isDeleted = Boolean.TRUE;
     }
 
+    public void writeRetrospect()
+    {
+        this.hasRetrospect = Boolean.TRUE;
+    }
+
+    public void store()
+    {
+        this.goalStatus = GoalStatus.STORE;
+    }
 
     @PrePersist
     private void init()
     {
-        deleted = Boolean.FALSE;
+        isDeleted = Boolean.FALSE;
         hasRetrospect = Boolean.FALSE;
         entireDetailGoalCnt = 0;
         completedDetailGoalCnt = 0;
-        goalStatus = GoalStatus.PROCESS;
+    }
+
+    public void complete()
+    {
+        this.goalStatus = GoalStatus.COMPLETE;
+    }
+
+    public void increaseEntireDetailGoalCnt()
+    {
+        this.entireDetailGoalCnt +=1;
+    }
+
+    public void decreaseEntireDetailGoalCnt()
+    {
+        if(entireDetailGoalCnt < 1)
+        {
+            throw new BusinessException(ErrorCode.ENTIRE_DETAIL_GOAL_CNT_INVALID);
+        }
+
+        this.entireDetailGoalCnt -=1;
+    }
+
+
+    public void increaseCompletedDetailGoalCnt()
+    {
+        this.completedDetailGoalCnt +=1;
+    }
+
+    public void decreaseCompletedDetailGoalCnt()
+    {
+        if(completedDetailGoalCnt < 1)
+        {
+            throw new BusinessException(ErrorCode.COMPLETED_DETAIL_GOAL_CNT_INVALID);
+        }
+
+        this.completedDetailGoalCnt -=1;
+    }
+
+    public boolean checkGoalCompleted()
+    {
+        // 만약 전체 개수가 0개라면 체크 하면 안됨
+        if (entireDetailGoalCnt == 0)
+        {
+            return false;
+        }
+
+        return completedDetailGoalCnt == entireDetailGoalCnt;
+    }
+
+    public void achieveReward(RewardType reward)
+    {
+        this.reward = reward;
     }
 
     public void update(final String title, final LocalDate startDate, final LocalDate endDate, final Boolean reminderEnabled)
@@ -80,7 +145,7 @@ public class Goal extends BaseEntity {
         this.reminderEnabled = reminderEnabled;
     }
 
-    public Goal(final Long memberId, final String title, final LocalDate startDate, final LocalDate endDate, final Boolean reminderEnabled)
+    public Goal(final Long memberId, final String title, final LocalDate startDate, final LocalDate endDate, final Boolean reminderEnabled, final GoalStatus goalStatus)
     {
         validateTitleLength(title);
         validatePeriod(startDate, endDate);
@@ -89,7 +154,22 @@ public class Goal extends BaseEntity {
         this.startDate = startDate;
         this.endDate = endDate;
         this.reminderEnabled = reminderEnabled;
+        this.goalStatus = goalStatus;
     }
+
+    public void recover(final LocalDate startDate, final LocalDate endDate, final Boolean reminderEnabled)
+    {
+        if(!isRecoveringEnable())
+        {
+            throw new BusinessException(RECOVER_GOAL_IMPOSSIBLE);
+        }
+
+        this.goalStatus = GoalStatus.PROCESS;
+        this.reminderEnabled = reminderEnabled;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
 
     private void validateTitleLength(final String title) {
 
@@ -99,6 +179,7 @@ public class Goal extends BaseEntity {
     }
 
     private void validatePeriod(final LocalDate startDate, final LocalDate endDate) {
+
         if (startDate.isAfter(endDate)) {
             throw new IllegalArgumentException("종료일시가 시작일시보다 이전일 수 없습니다.");
         }
@@ -109,7 +190,7 @@ public class Goal extends BaseEntity {
         }
     }
 
-    public Long calculateDday(LocalDate now)
+    public Long calculateDday(final LocalDate now)
     {
         if(now.isAfter(endDate))
         {
@@ -119,31 +200,11 @@ public class Goal extends BaseEntity {
         return ChronoUnit.DAYS.between(now, endDate);
     }
 
-    // 세부 목표 들어갈때 Validation 모두 추가 예정
-    public void increaseEntireDetailGoalCnt()
-    {
-        this.entireDetailGoalCnt += 1;
-    }
-
-    public void decreaseEntireDetailGoalCnt()
-    {
-        this.entireDetailGoalCnt -= 1;
-    }
-
-
-    public void increaseCompletedDetailGoalCnt()
-    {
-        this.completedDetailGoalCnt += 1;
-    }
-
-    public void decreaseCompletedDetailGoalCnt()
-    {
-        this.completedDetailGoalCnt -= 1;
-    }
-
-
-
     private boolean isNotValidDateTimeRange(final LocalDate date) {
         return date.isBefore(MIN_DATE) || date.isAfter(MAX_DATE);
+    }
+
+    private boolean isRecoveringEnable() {
+        return goalStatus.equals(GoalStatus.STORE);
     }
 }

@@ -26,8 +26,6 @@ public class QGoal extends EntityPathBase<Goal> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
-    public final BooleanPath deleted = createBoolean("deleted");
-
     public final DatePath<java.time.LocalDate> endDate = createDate("endDate", java.time.LocalDate.class);
 
     public final NumberPath<Integer> entireDetailGoalCnt = createNumber("entireDetailGoalCnt", Integer.class);
@@ -38,9 +36,13 @@ public class QGoal extends EntityPathBase<Goal> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final BooleanPath isDeleted = createBoolean("isDeleted");
+
     public final NumberPath<Long> memberId = createNumber("memberId", Long.class);
 
     public final BooleanPath reminderEnabled = createBoolean("reminderEnabled");
+
+    public final EnumPath<RewardType> reward = createEnum("reward", RewardType.class);
 
     public final DatePath<java.time.LocalDate> startDate = createDate("startDate", java.time.LocalDate.class);
 

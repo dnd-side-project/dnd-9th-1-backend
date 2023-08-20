@@ -18,7 +18,7 @@ public class SchedulerService {
 
     private final GoalQueryRepository goalQueryRepository;
 
-    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul") // 1초마다 실행
+    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
     public void storeOutDateGoal() {
 
         log.info("scheduler activated...");

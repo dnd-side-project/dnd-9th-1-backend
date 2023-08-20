@@ -13,6 +13,7 @@ import com.backend.goal.domain.GoalRepository;
 import com.backend.goal.domain.GoalStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -208,26 +209,79 @@ public class DetailGoalServiceTest {
         assertThat(goalCompletedResponse.isGoalCompleted()).isTrue();
     }
 
-    @DisplayName("하위 목표를 삭제했을때 전체 하위 목표 개수와 달성한 하위 목표 개수가 같아지면 상위 목표가 성공한다")
-    @Test
-    void 하위목표를_삭제했을때_전체_하위목표_개수와_달성한_하위목표_개수가_같아지면_상위목표가_성공한다()
-    {
-        // given
-        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 20), LocalDate.of(2023, 8, 24), true, GoalStatus.PROCESS);
-        Goal savedGoal = goalRepository.save(goal);
+    @Nested
+    @DisplayName("하위 목표를 삭제했을때 하위목표 개수와 달성한하위목표 개수가 같으면")
+    class 하위목표를_삭제했을때_하위목표개수와_달성한_하위목표_개수가_같으면{
 
-        DetailGoalSaveRequest detailGoalSaveRequest = new DetailGoalSaveRequest("테스트 제목", true, LocalTime.of(10, 0), List.of("MONDAY", "TUESDAY"));
-        DetailGoal detailGoal = detailGoalService.saveDetailGoal(savedGoal.getId(), detailGoalSaveRequest);
+        @DisplayName("상위 목표가 성공한다")
+        @Test
+        void 상위목표가_성공한다()
+        {
+            // given
+            Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 20), LocalDate.of(2023, 8, 24), true, GoalStatus.PROCESS);
+            Goal savedGoal = goalRepository.save(goal);
 
-        DetailGoalSaveRequest detailGoalSaveRequest2 = new DetailGoalSaveRequest("테스트 제목", true, LocalTime.of(10, 0), List.of("MONDAY", "TUESDAY"));
-        DetailGoal detailGoal1 = detailGoalService.saveDetailGoal(savedGoal.getId(), detailGoalSaveRequest2);
+            DetailGoalSaveRequest detailGoalSaveRequest = new DetailGoalSaveRequest("테스트 제목", true, LocalTime.of(10, 0), List.of("MONDAY", "TUESDAY"));
+            DetailGoal detailGoal = detailGoalService.saveDetailGoal(savedGoal.getId(), detailGoalSaveRequest);
 
-        // when
-        GoalCompletedResponse beforeRemoveResponse = detailGoalService.completeDetailGoal(detailGoal.getId());
-        GoalCompletedResponse afterRemovedResponse = detailGoalService.removeDetailGoal(detailGoal1.getId());
+            DetailGoalSaveRequest detailGoalSaveRequest2 = new DetailGoalSaveRequest("테스트 제목", true, LocalTime.of(10, 0), List.of("MONDAY", "TUESDAY"));
+            DetailGoal detailGoal1 = detailGoalService.saveDetailGoal(savedGoal.getId(), detailGoalSaveRequest2);
 
-        // then
-        assertThat(beforeRemoveResponse.isGoalCompleted()).isFalse();
-        assertThat(afterRemovedResponse.isGoalCompleted()).isTrue();
+            // when
+            GoalCompletedResponse beforeRemoveResponse = detailGoalService.completeDetailGoal(detailGoal.getId());
+            GoalCompletedResponse afterRemovedResponse = detailGoalService.removeDetailGoal(detailGoal1.getId());
+
+            // then
+            assertThat(beforeRemoveResponse.isGoalCompleted()).isFalse();
+            assertThat(afterRemovedResponse.isGoalCompleted()).isTrue();
+        }
+
+        @DisplayName("보석을 지급한다")
+        @Test
+        void 보석을_지급한다()
+        {
+            // given
+            Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 20), LocalDate.of(2023, 8, 24), true, GoalStatus.PROCESS);
+            Goal savedGoal = goalRepository.save(goal);
+
+            DetailGoalSaveRequest detailGoalSaveRequest = new DetailGoalSaveRequest("테스트 제목", true, LocalTime.of(10, 0), List.of("MONDAY", "TUESDAY"));
+            DetailGoal detailGoal = detailGoalService.saveDetailGoal(savedGoal.getId(), detailGoalSaveRequest);
+
+            DetailGoalSaveRequest detailGoalSaveRequest2 = new DetailGoalSaveRequest("테스트 제목", true, LocalTime.of(10, 0), List.of("MONDAY", "TUESDAY"));
+            DetailGoal detailGoal1 = detailGoalService.saveDetailGoal(savedGoal.getId(), detailGoalSaveRequest2);
+
+            // when
+            detailGoalService.completeDetailGoal(detailGoal.getId());
+            GoalCompletedResponse afterRemovedResponse = detailGoalService.removeDetailGoal(detailGoal1.getId());
+
+            // then
+            assertThat(afterRemovedResponse.rewardType()).isNotNull();
+        }
+
+        @DisplayName("지금까지 성공한 상위목표 개수를 반환한다")
+        @Test
+        void 지금까지_성공한_상위목표_개수를_반환한다()
+        {
+            // given
+            Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 20), LocalDate.of(2023, 8, 24), true, GoalStatus.PROCESS);
+            Goal savedGoal = goalRepository.save(goal);
+
+            DetailGoalSaveRequest detailGoalSaveRequest = new DetailGoalSaveRequest("테스트 제목", true, LocalTime.of(10, 0), List.of("MONDAY", "TUESDAY"));
+            DetailGoal detailGoal = detailGoalService.saveDetailGoal(savedGoal.getId(), detailGoalSaveRequest);
+
+            DetailGoalSaveRequest detailGoalSaveRequest2 = new DetailGoalSaveRequest("테스트 제목", true, LocalTime.of(10, 0), List.of("MONDAY", "TUESDAY"));
+            DetailGoal detailGoal1 = detailGoalService.saveDetailGoal(savedGoal.getId(), detailGoalSaveRequest2);
+
+            // when
+            detailGoalService.completeDetailGoal(detailGoal.getId());
+            GoalCompletedResponse afterRemovedResponse = detailGoalService.removeDetailGoal(detailGoal1.getId());
+
+            // then
+            assertThat(afterRemovedResponse.completedGoalCount()).isEqualTo(1);
+        }
     }
+
+
+
+
 }

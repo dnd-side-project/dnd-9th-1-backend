@@ -58,9 +58,17 @@ public class Goal extends BaseEntity {
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted;
 
+    @Column(name = "reward")
+    private RewardType reward;
+
     public void remove()
     {
         this.isDeleted = Boolean.TRUE;
+    }
+
+    public void writeRetrospect()
+    {
+        this.hasRetrospect = Boolean.TRUE;
     }
 
 
@@ -73,6 +81,10 @@ public class Goal extends BaseEntity {
         completedDetailGoalCnt = 0;
     }
 
+    public void complete()
+    {
+        this.goalStatus = GoalStatus.COMPLETE;
+    }
 
     public void increaseEntireDetailGoalCnt()
     {
@@ -116,6 +128,10 @@ public class Goal extends BaseEntity {
         return completedDetailGoalCnt == entireDetailGoalCnt;
     }
 
+    public void achieveReward(RewardType reward)
+    {
+        this.reward = reward;
+    }
 
     public void update(final String title, final LocalDate startDate, final LocalDate endDate, final Boolean reminderEnabled)
     {

@@ -9,10 +9,13 @@ import com.backend.detailgoal.presentation.dto.request.DetailGoalSaveRequest;
 import com.backend.detailgoal.presentation.dto.request.DetailGoalUpdateRequest;
 import com.backend.goal.domain.Goal;
 import com.backend.goal.domain.GoalRepository;
+import com.backend.goal.domain.GoalStatus;
+import com.backend.goal.domain.RewardType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,7 +24,11 @@ import java.util.stream.Collectors;
 public class DetailGoalService {
 
     private final DetailGoalRepository detailGoalRepository;
+
     private final GoalRepository goalRepository;
+
+    private final RewardService rewardService;
+
 
 
     public List<DetailGoalListResponse> getDetailGoalList(Long goalId)
@@ -62,7 +69,19 @@ public class DetailGoalService {
             goal.decreaseCompletedDetailGoalCnt();
         }
 
-        return new GoalCompletedResponse(goal.checkGoalCompleted());
+        boolean isCompleted = goal.checkGoalCompleted();
+
+        if(isCompleted)
+        {
+            RewardType reward = rewardService.provideReward();
+            goal.achieveReward(reward);
+            goal.complete();
+
+            int count = goalRepository.countByGoalStatusAndIsDeletedFalse(GoalStatus.COMPLETE);
+            return new GoalCompletedResponse(isCompleted, goal.getReward(), count);
+        }
+
+        return new GoalCompletedResponse(isCompleted, goal.getReward(), 0);
     }
 
     @Transactional
@@ -79,13 +98,25 @@ public class DetailGoalService {
     @Transactional
     public GoalCompletedResponse completeDetailGoal(Long detailGoalId)
     {
-        DetailGoal detailGoal = detailGoalRepository.getByIdAndIsDeletedFalse(detailGoalId);
-        detailGoal.complete();
+        DetailGoal detailGoal = detailGoalRepository.getByIdAndIsDeletedFalse(detailGoalId); // 1. 삭제되지 않은 하위 목표 가져온다
+        detailGoal.complete(); // 2. 하위 목표를 완료 상태로 변경한다.
 
-        Goal goal = goalRepository.getByIdAndIsDeletedFalse(detailGoal.getGoalId());
-        goal.increaseCompletedDetailGoalCnt(); // 성공한 개수 체크
+        Goal goal = goalRepository.getByIdAndIsDeletedFalse(detailGoal.getGoalId()); // 3. 전체 목표를 가져온다.
+        goal.increaseCompletedDetailGoalCnt(); // 4. 완료한 하위 목표 개수를 증가시킨다.
 
-        return new GoalCompletedResponse(goal.checkGoalCompleted());
+        boolean isCompleted = goal.checkGoalCompleted(); // 5. 전체 하위 목표 개수와 완료한 하위 목표 개수가 같은지 체크한다.
+
+        if(isCompleted)
+        {
+            RewardType reward = rewardService.provideReward(); // 6. 리워드를 랜덤으로 지급한다.
+            goal.achieveReward(reward);
+            goal.complete();
+
+            int count = goalRepository.countByGoalStatusAndIsDeletedFalse(GoalStatus.COMPLETE);
+            return new GoalCompletedResponse(isCompleted, goal.getReward(), count);
+        }
+
+        return new GoalCompletedResponse(isCompleted, goal.getReward(), 0);
     }
 
 

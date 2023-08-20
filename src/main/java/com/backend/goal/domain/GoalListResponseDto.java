@@ -6,14 +6,24 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDate;
 
 public record GoalListResponseDto(
+
         Long goalId,
+
         String title,
+
         LocalDate startDate,
+
         LocalDate endDate,
+
         Integer entireDetailGoalCnt,
+
         Integer completedDetailGoalCnt,
+
         Long dDay,
-        Boolean hasRetrospect
+
+        Boolean hasRetrospect,
+
+        RewardType reward
 ) {
 
     public static GoalListResponseDto from(Goal goal)
@@ -25,7 +35,8 @@ public record GoalListResponseDto(
                 goal.getEntireDetailGoalCnt(),
                 goal.getCompletedDetailGoalCnt(),
                 goal.calculateDday(LocalDate.now()),
-                goal.getHasRetrospect()
+                goal.getHasRetrospect(),
+                goal.getReward()
         )
                 ;
     }

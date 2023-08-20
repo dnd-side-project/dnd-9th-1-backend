@@ -1,10 +1,10 @@
 package com.backend.goal.domain;
 
 
+import com.backend.global.common.code.ErrorCode;
+import com.backend.global.exception.BusinessException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.*;
@@ -113,5 +113,37 @@ public class GoalTest {
 
         // then
         assertThat(dDay).isEqualTo(0L);
+    }
+
+    @DisplayName("현재 보관함에 있는 상태라면 상위 목표를 복구할 수 있다")
+    @Test
+    void 현재_보관함에_있는_상태라면_상위목표를_복구할수_있다()
+    {
+        // given
+        LocalDate startDate = LocalDate.of(2023,7,1);
+        LocalDate endDate = LocalDate.of(2023,8,10);
+        Goal goal = new Goal(1L, "테스트 제목", startDate, endDate, true, GoalStatus.STORE);
+
+        // when
+        goal.recover(LocalDate.of(2023,7,3), LocalDate.of(2023,8,10),false);
+
+        // then
+        assertThat(goal.getGoalStatus()).isEqualTo(GoalStatus.PROCESS);
+        assertThat(goal.getReminderEnabled()).isFalse();
+    }
+
+    @DisplayName("목표가 현재 보관함에 없다면 복구시 예외가 발생한다")
+    @Test
+    void 목표가_현재_보관함에_없다면_예외가_발생한다()
+    {
+        // given
+        LocalDate startDate = LocalDate.of(2023,7,1);
+        LocalDate endDate = LocalDate.of(2023,8,10);
+        Goal goal = new Goal(1L, "테스트 제목", startDate, endDate, true, GoalStatus.PROCESS);
+
+        // when & then
+        assertThatThrownBy(() -> {
+            goal.recover(LocalDate.of(2023,7,3), LocalDate.of(2023,8,10),false);}
+        ).isInstanceOf(BusinessException.class).hasMessage(ErrorCode.RECOVER_GOAL_IMPOSSIBLE.getMessage());
     }
 }

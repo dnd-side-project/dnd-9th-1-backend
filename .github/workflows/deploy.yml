@@ -1,7 +1,7 @@
 name: deploy
 on: 
   push: 
-    branches: ["main", "dev"]
+    branches: ["dev"]
 permissions: 
   contents: read
 jobs: 
@@ -13,6 +13,9 @@ jobs:
       with:
         token: ${{  secrets.ACTION_TOKEN  }}
         submodules: true
+
+    - name: Update submodules
+      run: git submodule update --init --remote
 
       # Caching Gradle
     - name: Cache Gradle

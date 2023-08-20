@@ -1,7 +1,6 @@
 package com.backend.goal.application;
 
-import com.backend.detailgoal.application.dto.response.DetailGoalResponse;
-import com.backend.detailgoal.domain.DetailGoal;
+
 import com.backend.goal.application.dto.response.GoalCountResponse;
 import com.backend.goal.application.dto.response.GoalListResponse;
 import com.backend.goal.application.dto.response.RetrospectEnabledGoalCountResponse;

@@ -78,12 +78,9 @@ public class DetailGoalService {
 
             int count = goalRepository.countByGoalStatusAndIsDeletedFalse(GoalStatus.COMPLETE);
             return new GoalCompletedResponse(isCompleted, goal.getReward(), count);
-
-            // 성취한 목표 개수 구하기
         }
 
         return new GoalCompletedResponse(isCompleted, goal.getReward(), null);
-
     }
 
     @Transactional

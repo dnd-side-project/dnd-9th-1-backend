@@ -66,6 +66,11 @@ public class Goal extends BaseEntity {
         this.isDeleted = Boolean.TRUE;
     }
 
+    public void writeRetrospect()
+    {
+        this.hasRetrospect = Boolean.TRUE;
+    }
+
 
     @PrePersist
     private void init()

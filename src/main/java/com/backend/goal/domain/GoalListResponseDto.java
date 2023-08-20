@@ -6,14 +6,23 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDate;
 
 public record GoalListResponseDto(
+
         Long goalId,
+
         String title,
+
         LocalDate startDate,
+
         LocalDate endDate,
+
         Integer entireDetailGoalCnt,
+
         Integer completedDetailGoalCnt,
+
         Long dDay,
+
         Boolean hasRetrospect,
+
         RewardType reward
 ) {
 

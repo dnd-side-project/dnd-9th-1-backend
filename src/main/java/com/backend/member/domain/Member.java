@@ -31,6 +31,9 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private MemberStatus memberStatus;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @Builder
     private Member (
             final String uid,

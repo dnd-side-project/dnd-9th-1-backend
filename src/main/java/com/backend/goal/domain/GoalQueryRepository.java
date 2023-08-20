@@ -9,6 +9,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -56,6 +57,18 @@ public class GoalQueryRepository {
                         goal.goalStatus.eq(GoalStatus.COMPLETE) // 완료상태인것들 체크
                 )
                 .fetchOne();
+    }
+
+    public List<Goal> findGoalListEndDateExpired(LocalDate today)
+    {
+        return query.select(goal)
+                .from(goal)
+                .where(
+                        goal.isDeleted.isFalse(),
+                        goal.goalStatus.eq(GoalStatus.PROCESS),
+                        goal.endDate.before(today)
+                )
+                .fetch();
     }
 
     public Map<GoalStatus, Long> getStatusCounts() {

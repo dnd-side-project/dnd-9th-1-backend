@@ -71,6 +71,10 @@ public class Goal extends BaseEntity {
         this.hasRetrospect = Boolean.TRUE;
     }
 
+    public void store()
+    {
+        this.goalStatus = GoalStatus.STORE;
+    }
 
     @PrePersist
     private void init()

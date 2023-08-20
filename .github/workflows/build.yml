@@ -14,10 +14,17 @@ permissions:
 jobs: # defining jobs, executed in this workflows
   build:
     runs-on: ubuntu-latest
-
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3 # clone repository
+
+    - name: Connect to Redis
+      run: redis-cli -h redis ping
 
       # Caching Gradle
     - name: Cache Gradle
@@ -46,6 +53,7 @@ jobs: # defining jobs, executed in this workflows
       # Gradle test
     - name: Test with Gradle
       run: ./gradlew -Dspring.profiles.active=test --info test
+
       # Publish Unit Test Results
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action@v1

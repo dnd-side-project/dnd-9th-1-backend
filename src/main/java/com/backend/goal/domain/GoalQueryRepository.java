@@ -1,7 +1,6 @@
 package com.backend.goal.domain;
 
 import com.querydsl.core.Tuple;
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +9,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +28,7 @@ public class GoalQueryRepository {
         List<Goal> goalList = query.select(goal)
                 .from(goal)
                 .where(
-                        goal.deleted.isFalse(), // 삭제 되지 않은 것들만 조회
+                        goal.isDeleted.isFalse(), // 삭제 되지 않은 것들만 조회
                         ltGoalId(goalId),
                         goal.goalStatus.eq(goalStatus)
                 )
@@ -45,6 +45,30 @@ public class GoalQueryRepository {
         }
 
         return new SliceImpl<>(goalList, pageable, hasNext);
+    }
+
+    public Long getGoalCountRetrospectEnabled()
+    {
+        return query.select(goal.count())
+                .from(goal)
+                .where(
+                        goal.isDeleted.isFalse(), // 삭제 되지 않은 것들만 조회
+                        goal.hasRetrospect.isFalse(), // 아직 회고를 작성하지 않는 것들 조회
+                        goal.goalStatus.eq(GoalStatus.COMPLETE) // 완료상태인것들 체크
+                )
+                .fetchOne();
+    }
+
+    public List<Goal> findGoalListEndDateExpired(LocalDate today)
+    {
+        return query.select(goal)
+                .from(goal)
+                .where(
+                        goal.isDeleted.isFalse(),
+                        goal.goalStatus.eq(GoalStatus.PROCESS),
+                        goal.endDate.before(today)
+                )
+                .fetch();
     }
 
     public Map<GoalStatus, Long> getStatusCounts() {

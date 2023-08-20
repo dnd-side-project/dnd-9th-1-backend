@@ -3,8 +3,11 @@ package com.backend.goal.application;
 import com.backend.global.DatabaseCleaner;
 import com.backend.goal.application.dto.response.GoalCountResponse;
 import com.backend.goal.application.dto.response.GoalListResponse;
+import com.backend.goal.application.dto.response.RetrospectEnabledGoalCountResponse;
 import com.backend.goal.domain.Goal;
 import com.backend.goal.domain.GoalRepository;
+import com.backend.goal.domain.GoalStatus;
+import com.backend.goal.presentation.dto.GoalRecoverRequest;
 import com.backend.goal.presentation.dto.GoalSaveRequest;
 import com.backend.goal.presentation.dto.GoalUpdateRequest;
 import org.assertj.core.api.Assertions;
@@ -15,11 +18,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDate;
 
 
 @SpringBootTest
 @ActiveProfiles("test")
+@Transactional
 public class GoalServiceTest {
 
     @Autowired
@@ -137,7 +143,7 @@ public class GoalServiceTest {
     {
         // given
 
-        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 1), true);
+        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 1), true, GoalStatus.PROCESS);
         Goal savedGoal = goalRepository.save(goal);
 
         GoalUpdateRequest goalUpdateRequest = new GoalUpdateRequest(savedGoal.getId(), "수정된 제목", LocalDate.now(), LocalDate.now(), false);
@@ -154,7 +160,7 @@ public class GoalServiceTest {
     void 상위목표를_삭제할수_있다()
     {
         // given
-        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 1), true);
+        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 1), true , GoalStatus.PROCESS);
         Goal savedGoal = goalRepository.save(goal);
 
         // when
@@ -162,7 +168,7 @@ public class GoalServiceTest {
 
         // then
         Goal removedGoal = goalRepository.getById(savedGoal.getId());
-        Assertions.assertThat(removedGoal.getDeleted()).isTrue();
+        Assertions.assertThat(removedGoal.getIsDeleted()).isTrue();
     }
 
     @DisplayName("상위 목표 상태에 따라 통계를 제공한다.")
@@ -170,13 +176,50 @@ public class GoalServiceTest {
     void 상위목표_상태에_따라_통계를_제공한다()
     {
         // given
-        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 1), true);
-        Goal savedGoal = goalRepository.save(goal);
+        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 1), true, GoalStatus.PROCESS);
+        goalRepository.save(goal);
 
         // when
         GoalCountResponse goalCounts = goalService.getGoalCounts();
 
         // then
         Assertions.assertThat(goalCounts.counts().keySet()).hasSize(3);
+    }
+
+    @DisplayName("상위 목표를 보관함에서 채움함으로 복구한다")
+    @Test
+    void 상위목표를_보관함에서_채움함으로_복구한다()
+    {
+        // given
+        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 1), true, GoalStatus.STORE);
+        Goal savedGoal = goalRepository.save(goal);
+        GoalRecoverRequest goalRecoverRequest = new GoalRecoverRequest(LocalDate.of(2023, 8, 1), LocalDate.of(2023, 9, 30), false);
+
+        // when
+        goalService.recoverGoal(savedGoal.getId(), goalRecoverRequest);
+
+        // then
+        Goal recoverdGoal = goalRepository.getById(savedGoal.getId());
+        Assertions.assertThat(recoverdGoal.getEndDate()).isEqualTo(LocalDate.of(2023, 9, 30));
+        Assertions.assertThat(recoverdGoal.getGoalStatus()).isEqualTo(GoalStatus.PROCESS);
+        Assertions.assertThat(recoverdGoal.getReminderEnabled()).isFalse();
+    }
+
+    @DisplayName("완료함의_목표들중_회고가능한_목표수를_계산한다")
+    @Test
+    void 완료함의_목표들중_회고가능한_목표수를_계산한다()
+    {
+        // given
+        for(int i =0; i < 10; i++)
+        {
+            Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 1), true, GoalStatus.COMPLETE);
+            goalRepository.save(goal);
+        }
+
+        // when
+        RetrospectEnabledGoalCountResponse count = goalService.getGoalCountRetrospectEnabled();
+
+        // then
+        Assertions.assertThat(count.count()).isEqualTo(10);
     }
 }

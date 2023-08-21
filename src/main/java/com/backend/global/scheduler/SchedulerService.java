@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Slf4j
@@ -32,18 +33,19 @@ public class SchedulerService {
     @Scheduled(cron = "0 0 * * * *", zone = "Asia/Seoul")
     public void storeOutDateGoal() {
 
-        log.info("scheduler activated...");
         List<Goal> goalList = goalQueryRepository.findGoalListEndDateExpired(LocalDate.now());
-        log.info("{} goal move to store", goalList.size());
         goalList.forEach(Goal::store);
     }
 
     @Scheduled(cron = "0 */30 * * * *", zone = "Asia/Seoul")
     public void sendAlarm()
     {
-        DayOfWeek today = LocalDate.now().getDayOfWeek();
-        List<DetailGoalAlarmResponse> detailGoalAlarmList = detailGoalQueryRepository.getMemberIdListDetailGoalAlarmTimeArrived(today);
+        DayOfWeek dayOfWeek = LocalDate.now().getDayOfWeek();
+        LocalTime localTime = LocalTime.now();
+        LocalTime now = LocalTime.of(localTime.getHour(), localTime.getMinute(), 0);
 
-        detailGoalAlarmList.forEach(alarmDto -> applicationEventPublisher.publishEvent(new AlarmEvent(alarmDto.memberId(),alarmDto.detailGoalTitle())));
+        List<DetailGoalAlarmResponse> detailGoalAlarmList = detailGoalQueryRepository.getMemberIdListDetailGoalAlarmTimeArrived(dayOfWeek, now);
+        detailGoalAlarmList.forEach(alarmDto ->
+                applicationEventPublisher.publishEvent(new AlarmEvent(alarmDto.memberId(),alarmDto.detailGoalTitle())));
     }
 }

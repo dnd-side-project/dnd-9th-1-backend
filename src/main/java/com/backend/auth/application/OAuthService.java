@@ -29,7 +29,7 @@ public class OAuthService {
 
     public TokenResponse reissue(String bearerRefreshToken) throws Exception {
         String refreshToken = tokenProvider.getToken(bearerRefreshToken);
-        tokenProvider.validateToken(refreshToken);
+
         String uid = refreshTokenService.findUidByRefreshToken(refreshToken);
         String renewAccessToken = tokenProvider.generateAccessToken(uid);
         String renewRefreshToken = tokenProvider.generateRefreshToken(uid);
@@ -38,7 +38,6 @@ public class OAuthService {
 
     public void logout(String bearerAccessToken) throws Exception {
         String accessToken = tokenProvider.getToken(bearerAccessToken);
-        tokenProvider.validateToken(accessToken);
 
         String uid = tokenProvider.getPayload(accessToken);
         refreshTokenService.deleteByUid(uid);
@@ -49,7 +48,6 @@ public class OAuthService {
 
     public void withDraw(String bearerAccessToken) throws Exception {
         String accessToken = tokenProvider.getToken(bearerAccessToken);
-        tokenProvider.validateToken(accessToken);
 
         String uid = tokenProvider.getPayload(accessToken);
         memberService.withDraw(uid);

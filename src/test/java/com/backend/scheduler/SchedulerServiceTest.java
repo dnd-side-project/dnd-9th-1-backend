@@ -73,4 +73,5 @@ public class SchedulerServiceTest {
         List<Goal> goalList = goalRepository.getGoalsByGoalStatusAndIsDeletedFalse(GoalStatus.STORE);
         assertThat(goalList).hasSize(3);
     }
+
 }

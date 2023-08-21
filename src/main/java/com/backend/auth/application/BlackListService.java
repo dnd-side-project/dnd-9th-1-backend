@@ -2,6 +2,8 @@ package com.backend.auth.application;
 
 import com.backend.auth.domain.BlackList;
 import com.backend.auth.domain.BlackListRepository;
+import com.backend.global.common.code.ErrorCode;
+import com.backend.global.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +18,9 @@ public class BlackListService {
         blackListRepository.save(new BlackList(accessToken, expiration));
     }
 
-    public boolean isBlackList(String accessToken){
-        Optional<BlackList> blackList = blackListRepository.findById(accessToken);
-        return blackList.isPresent();
+    public void checkBlackList(String accessToken){
+        blackListRepository.findById(accessToken)
+                .orElseThrow(() -> new BusinessException(ErrorCode.INVALID_TOKEN));
     }
 
 }

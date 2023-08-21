@@ -33,18 +33,13 @@ public class JwtFilter extends OncePerRequestFilter {
         String accessToken = tokenProvider.getToken(request.getHeader(AUTHORIZATION_HEADER));
 
         // 2. 블랙 리스트에 등록된 토큰인 경우 요청을 거부한다.
-        if(blackListService.isBlackList(accessToken)){
-            throw new BusinessException(ErrorCode.INVALID_TOKEN);
-        }
+        blackListService.checkBlackList(accessToken);
 
         // 3. 토큰의 유효성을 검사한다. 정상 토큰인 경우, Authentication을 Security Context에 저장한다.
-        try {
-            tokenProvider.validateToken(accessToken);
-            Authentication authentication = tokenProvider.getAuthentication(accessToken);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        } catch (Exception e) {
-            throw new BusinessException(ErrorCode.INVALID_TOKEN);
-        }
+        tokenProvider.validateToken(accessToken);
+        Authentication authentication = tokenProvider.getAuthentication(accessToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         // 4. 필터를 거쳐 요청을 전달한다.
         filterChain.doFilter(request, response);
     }

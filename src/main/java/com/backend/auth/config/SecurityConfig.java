@@ -1,5 +1,7 @@
 package com.backend.auth.config;
 
+import com.backend.auth.application.BlackListService;
+import com.backend.auth.domain.BlackList;
 import com.backend.auth.jwt.JwtAccessDeniedHandler;
 import com.backend.auth.jwt.JwtAuthenticationEntryPoint;
 import com.backend.auth.jwt.JwtFilter;
@@ -18,6 +20,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final TokenProvider tokenProvider;
+
+    private final BlackListService blackListService;
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
@@ -50,7 +54,7 @@ public class SecurityConfig {
                 .and()
 
                 .formLogin().disable()
-                .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtFilter(tokenProvider, blackListService), UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 }

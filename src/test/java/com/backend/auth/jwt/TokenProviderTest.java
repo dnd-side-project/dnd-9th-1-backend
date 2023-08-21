@@ -1,7 +1,6 @@
 package com.backend.auth.jwt;
 
 import com.backend.auth.application.OAuthService;
-import com.backend.member.application.MemberService;
 import com.backend.member.domain.Member;
 import com.backend.member.domain.MemberRepository;
 import com.backend.member.domain.Provider;
@@ -20,8 +19,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 @SpringBootTest
 @ActiveProfiles("test")
 class TokenProviderTest {
-
-    private final static String TEST_SECRET_KEY = "test_secret_key";
 
     @Autowired
     TokenProvider tokenProvider;

@@ -22,10 +22,11 @@ public class OAuthServiceTest {
     @Autowired
     private OAuthService oAuthService;
 
-    private static String uid = "user1234";
+    private static String UID = "user1234";
 
     private static String BEARER_TOKEN_PREFIX = "Bearer ";
 
+    private static String FCM_TOKEN = "fcm_token";
 
     @DisplayName("Access Token을 이용해 OAuth 인증 후 JWT를 발급한다.")
     @Test
@@ -34,7 +35,7 @@ public class OAuthServiceTest {
         String provider = "kakao";
 
         //  when
-        TokenResponse response = oAuthService.login(provider, uid);
+        TokenResponse response = oAuthService.login(provider, UID, FCM_TOKEN);
 
         // then
         assertThat(response.accessToken()).isNotNull();
@@ -48,14 +49,14 @@ public class OAuthServiceTest {
 
         // when & then
         assertThrows(BusinessException.class,
-                () -> oAuthService.login(provider, uid));
+                () -> oAuthService.login(provider, UID , FCM_TOKEN));
     }
 
     @DisplayName("access token이 만료되어 refresh token을 통해 재발급한다.")
     @Test
     public void reissueRefreshToken() throws Exception {
         // given
-        TokenResponse tokenResponse = oAuthService.login("kakao", uid);
+        TokenResponse tokenResponse = oAuthService.login("kakao", UID, FCM_TOKEN);
 
         // when
         TokenResponse renewTokenResponse = oAuthService.reissue(BEARER_TOKEN_PREFIX + tokenResponse.refreshToken());
@@ -78,7 +79,7 @@ public class OAuthServiceTest {
     @Test
     public void logoutSuccess(){
         // given
-        TokenResponse tokenResponse = oAuthService.login("kakao", uid);
+        TokenResponse tokenResponse = oAuthService.login("kakao", UID, FCM_TOKEN);
         // when & then
         assertThatNoException().isThrownBy(() -> oAuthService.withdraw( BEARER_TOKEN_PREFIX + tokenResponse.accessToken()));
     }

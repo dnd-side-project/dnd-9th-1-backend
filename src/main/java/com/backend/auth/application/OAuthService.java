@@ -19,7 +19,7 @@ public class OAuthService {
 
     private final BlackListService blackListService;
 
-    public TokenResponse login(String provider, String uid) {
+    public TokenResponse login(String provider, String uid, String fcmToken) {
         memberService.findMemberOrRegister(Provider.from(provider), uid);
         String accessToken = tokenProvider.generateAccessToken(uid);
         String refreshToken = tokenProvider.generateRefreshToken(uid);

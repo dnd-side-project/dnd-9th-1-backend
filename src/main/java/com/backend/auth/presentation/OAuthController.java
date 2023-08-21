@@ -1,6 +1,7 @@
 package com.backend.auth.presentation;
 
 import com.backend.auth.application.OAuthService;
+import com.backend.auth.presentation.dto.LoginRequestDto;
 import com.backend.global.common.response.CustomResponse;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -27,8 +28,8 @@ public class OAuthController {
     @PostMapping("/{provider}")
     public ResponseEntity<CustomResponse> login (
             @Parameter(description = "kakao, apple 중 현재 로그인하는 소셜 타입", in = ParameterIn.PATH) @PathVariable String provider,
-            @Parameter(description = "사용자 ID") @RequestParam String userId) {
-        return CustomResponse.success(LOGIN_SUCCESS, oauthService.login(provider, userId));
+            @RequestBody LoginRequestDto loginRequestDto) {
+        return CustomResponse.success(LOGIN_SUCCESS, oauthService.login(provider, loginRequestDto.userId(), loginRequestDto.fcmToken()));
     }
 
     @Operation(summary = "토큰 재발급",

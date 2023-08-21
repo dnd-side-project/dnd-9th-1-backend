@@ -49,6 +49,10 @@ public class SecurityConfig {
                     .frameOptions().disable()
                 .and()
 
+                .authorizeHttpRequests()
+                .anyRequest().permitAll()
+                .and()
+
                 .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()

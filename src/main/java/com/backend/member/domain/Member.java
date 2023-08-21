@@ -64,7 +64,7 @@ public class Member extends BaseEntity {
         this.memberStatus = MemberStatus.ACTIVE;
     }
 
-    public void withDraw() {
+    public void withdraw() {
         this.memberStatus = MemberStatus.DELETE;
     }
 }

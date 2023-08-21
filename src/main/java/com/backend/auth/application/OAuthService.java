@@ -46,11 +46,11 @@ public class OAuthService {
         blackListService.saveBlackList(accessToken, expiration);
     }
 
-    public void withDraw(String bearerAccessToken) throws Exception {
+    public void withdraw(String bearerAccessToken) throws Exception {
         String accessToken = tokenProvider.getToken(bearerAccessToken);
 
         String uid = tokenProvider.getPayload(accessToken);
-        memberService.withDraw(uid);
+        memberService.withdraw(uid);
         refreshTokenService.deleteByUid(uid);
 
         Long expiration = tokenProvider.getExpiration(accessToken);

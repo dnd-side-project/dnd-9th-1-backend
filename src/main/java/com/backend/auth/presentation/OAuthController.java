@@ -47,8 +47,9 @@ public class OAuthController {
     }
 
     @Operation(summary = "회원 탈퇴", description = "회원 탈퇴 요청 시 사용자의 상태를 DELETE로 변경한다.")
-    public ResponseEntity<CustomResponse> withDraw(@RequestHeader(value = "Authorization") String bearerAccessToken) throws Exception {
-        oauthService.withDraw(bearerAccessToken);
+    @PostMapping("/withdraw")
+    public ResponseEntity<CustomResponse> withdraw(@RequestHeader(value = "Authorization") String bearerAccessToken) throws Exception {
+        oauthService.withdraw(bearerAccessToken);
         return CustomResponse.success(DELETE_SUCCESS);
     }
 }

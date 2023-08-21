@@ -80,7 +80,7 @@ public class OAuthServiceTest {
         // given
         TokenResponse tokenResponse = oAuthService.login("kakao", uid);
         // when & then
-        assertThatNoException().isThrownBy(() -> oAuthService.withDraw( BEARER_TOKEN_PREFIX + tokenResponse.accessToken()));
+        assertThatNoException().isThrownBy(() -> oAuthService.withdraw( BEARER_TOKEN_PREFIX + tokenResponse.accessToken()));
     }
 
 }

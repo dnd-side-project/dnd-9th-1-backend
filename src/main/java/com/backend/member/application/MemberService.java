@@ -21,8 +21,8 @@ public class MemberService {
         return member.orElseGet(() -> memberRepository.save(Member.from(provider, uid)));
     }
 
-    public void withDraw(String uid) {
+    public void withdraw(String uid) {
         Member member = memberRepository.getByUid(uid);
-        member.withDraw();
+        member.withdraw();
     }
 }

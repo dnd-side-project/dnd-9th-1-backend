@@ -1,7 +1,6 @@
 package com.backend.auth.config;
 
 import com.backend.auth.application.BlackListService;
-import com.backend.auth.domain.BlackList;
 import com.backend.auth.jwt.JwtAccessDeniedHandler;
 import com.backend.auth.jwt.JwtAuthenticationEntryPoint;
 import com.backend.auth.jwt.JwtFilter;
@@ -50,7 +49,7 @@ public class SecurityConfig {
                 .and()
 
                 .authorizeHttpRequests()
-                .anyRequest().permitAll()
+                .requestMatchers("/**").permitAll()
                 .and()
 
                 .sessionManagement()

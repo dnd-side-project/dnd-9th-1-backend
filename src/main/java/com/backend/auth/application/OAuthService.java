@@ -51,8 +51,10 @@ public class OAuthService {
 
         String uid = tokenProvider.getPayload(accessToken);
         memberService.withDraw(uid);
-
         refreshTokenService.deleteByUid(uid);
+
+        Long expiration = tokenProvider.getExpiration(accessToken);
+        blackListService.saveBlackList(accessToken, expiration);
     }
 
 }

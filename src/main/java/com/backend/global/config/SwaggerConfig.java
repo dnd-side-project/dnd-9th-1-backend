@@ -3,6 +3,7 @@ package com.backend.global.config;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +21,7 @@ public class SwaggerConfig {
                                 .description("DND 9기 1팀 'Milestone' 프로젝트의 API 명세서입니다.")
                                 .version("v0.0.1")
                 )
+                .addSecurityItem(new SecurityRequirement().addList("Authorization"))
                 .components(
                         new Components()
                                 .addSecuritySchemes(

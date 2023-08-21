@@ -108,9 +108,9 @@ public class TokenProvider {
     public Authentication getAuthentication(String accessToken) {
         Claims claims = getClaims(accessToken);
 
-        if(claims.get(AUTHORITIES_KEY) == null){
-            throw new BusinessException(ErrorCode.INVALID_TOKEN);
-        }
+//        if(claims.get(AUTHORITIES_KEY) == null){
+//            throw new BusinessException(ErrorCode.INVALID_TOKEN);
+//        }
 
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))

@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -27,20 +28,23 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info("url : " + request.getRequestURL());
+        final String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
+        log.info("authorization : {}", authorization);
 
-        // 1. HttpServletRequest 헤더에서 토큰을 꺼낸다.
-        String accessToken = tokenProvider.getToken(request.getHeader(AUTHORIZATION_HEADER));
+        if(authorization == null || !authorization.startsWith("Bearer ")){
+            log.error("authorization is wrong");
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-        // 2. 블랙 리스트에 등록된 토큰인 경우 요청을 거부한다.
-        blackListService.checkBlackList(accessToken);
+        String accessToken = authorization.split(" ")[1];
+        if(blackListService.isBlackList(accessToken)){
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-        // 3. 토큰의 유효성을 검사한다. 정상 토큰인 경우, Authentication을 Security Context에 저장한다.
-        tokenProvider.validateToken(accessToken);
         Authentication authentication = tokenProvider.getAuthentication(accessToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        // 4. 필터를 거쳐 요청을 전달한다.
         filterChain.doFilter(request, response);
     }
 }

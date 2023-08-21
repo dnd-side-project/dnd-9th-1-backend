@@ -18,9 +18,9 @@ public class BlackListService {
         blackListRepository.save(new BlackList(accessToken, expiration));
     }
 
-    public void checkBlackList(String accessToken){
-        blackListRepository.findById(accessToken)
-                .orElseThrow(() -> new BusinessException(ErrorCode.INVALID_TOKEN));
+    public boolean isBlackList (String accessToken){
+        Optional<BlackList>  blackList = blackListRepository.findById(accessToken);
+        return blackList.isPresent();
     }
 
 }

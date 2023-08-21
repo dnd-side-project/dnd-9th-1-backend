@@ -25,7 +25,7 @@ public class OAuthController {
     @Operation(summary = "소셜 로그인",
                 description = "카카오, 애플 서버에서 로그인한 사용자의 userId를 통해 access token과 refresh token을 반환합니다.")
     @PostMapping("/{provider}")
-    public ResponseEntity<CustomResponse> generateAccessTokenAndRefreshToken(
+    public ResponseEntity<CustomResponse> login (
             @Parameter(description = "kakao, apple 중 현재 로그인하는 소셜 타입", in = ParameterIn.PATH) @PathVariable String provider,
             @Parameter(description = "사용자 ID") @RequestParam String userId) {
         return CustomResponse.success(LOGIN_SUCCESS, oauthService.login(provider, userId));
@@ -41,7 +41,7 @@ public class OAuthController {
 
     @Operation(summary = "로그아웃", description = "사용자의 refresh token을 삭제하여 앱에서 로그아웃 처리합니다.")
     @PostMapping("/logout")
-    public ResponseEntity<CustomResponse> deleteRefreshToken(@RequestHeader(value = "Authorization") String bearerAccessToken) throws Exception {
+    public ResponseEntity<CustomResponse> logout (@RequestHeader(value = "Authorization") String bearerAccessToken) throws Exception {
         oauthService.logout(bearerAccessToken);
         return CustomResponse.success(LOGOUT_SUCCESS);
     }

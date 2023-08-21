@@ -18,11 +18,11 @@ class RefreshTokenRepositoryTest {
     @Test
     void insertAndGetTest() {
         // given
-        RefreshToken refreshToken = new RefreshToken("refreshToken", "uid");
+        RefreshToken refreshToken = new RefreshToken("uid", "refresh token");
 
         // when
         refreshTokenRepository.save(refreshToken);
-        RefreshToken extractedRefreshToken = refreshTokenRepository.findById(refreshToken.getRefreshToken()).get();
+        RefreshToken extractedRefreshToken = refreshTokenRepository.findByRefreshToken(refreshToken.getRefreshToken()).get();
 
         // then
         assertThat(extractedRefreshToken.getUid()).isEqualTo(refreshToken.getUid());

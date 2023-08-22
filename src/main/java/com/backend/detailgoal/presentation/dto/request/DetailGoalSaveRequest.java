@@ -2,6 +2,7 @@ package com.backend.detailgoal.presentation.dto.request;
 
 import com.backend.detailgoal.domain.DetailGoal;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -25,7 +26,7 @@ public record DetailGoalSaveRequest(
         @Schema(description = "알람 받을 시각", example = "오후 11:30")
         LocalTime alarmTime,
 
-        @Schema(description = "요일 정보", examples = {"MONDAY", "TUESDAY", "FRIDAY"})
+        @Schema(description = "요일 정보", example = "[\"MONDAY\", \"TUSEDAY\", \"FRIDAY\"]")
         List<String> alarmDays
 ) {
 

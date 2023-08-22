@@ -46,9 +46,10 @@ public class OAuthService {
 
     public void logout(String bearerAccessToken) throws Exception {
         String accessToken = tokenProvider.getToken(bearerAccessToken);
-
         String uid = tokenProvider.getPayload(accessToken);
+
         refreshTokenService.deleteByUid(uid);
+        fcmTokenService.deleteByUid(uid);
 
         Long expiration = tokenProvider.getExpiration(accessToken);
         blackListService.saveBlackList(accessToken, expiration);
@@ -60,6 +61,7 @@ public class OAuthService {
         String uid = tokenProvider.getPayload(accessToken);
         memberService.withdraw(uid);
         refreshTokenService.deleteByUid(uid);
+        fcmTokenService.deleteByUid(uid);
 
         Long expiration = tokenProvider.getExpiration(accessToken);
         blackListService.saveBlackList(accessToken, expiration);

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.backend.global.common.code.SuccessCode.*;
 
-@Tag(name = "회원 인증", description = "소셜 로그인 API입니다.")
+@Tag(name = "auth", description = "소셜 로그인 API입니다.")
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 @RestController

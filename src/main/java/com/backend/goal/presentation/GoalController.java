@@ -11,6 +11,7 @@ import com.backend.goal.presentation.dto.GoalSaveRequest;
 import com.backend.goal.presentation.dto.GoalUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 import static com.backend.global.common.code.SuccessCode.*;
 
@@ -32,6 +31,7 @@ public class GoalController {
     private final GoalService goalService;
 
     @Operation(summary = "상위 목표 리스트 조회", description = "상위 목표 리스트를 조회하는 API 입니다.")
+    @ApiResponse(responseCode = "200", description = "code : 200, message : SELECT_SUCCESS")
     @GetMapping
     public ResponseEntity<CustomResponse<GoalListResponse>> getGoalList(
                                                        @Parameter(hidden = true) @PageableDefault(size = 10) Pageable pageable,
@@ -42,6 +42,7 @@ public class GoalController {
     }
 
     @Operation(summary = "상위 목표 상태별 개수 조회", description = "상위 목표 상태별 개수를 조회하는 API 입니다.")
+    @ApiResponse(responseCode = "200", description = "code : 200, message : SELECT_SUCCESS")
     @GetMapping("/count")
     public ResponseEntity<CustomResponse<GoalCountResponse>> getGoalCounts()
     {
@@ -49,6 +50,7 @@ public class GoalController {
     }
 
     @Operation(summary = "회고 작성 가능한 목표 개수 조회", description = "회고 작성 가능한 목표 개수를 조회하는 API 입니다.")
+    @ApiResponse(responseCode = "200", description = "code : 200, message : SELECT_SUCCESS")
     @GetMapping("/retrospect-enabled/count")
     public ResponseEntity<CustomResponse<RetrospectEnabledGoalCountResponse>> getRetrospectEnabledGoalCount()
     {
@@ -57,6 +59,7 @@ public class GoalController {
 
 
     @Operation(summary = "상위 목표 삭제", description = "상위 목표를 삭제하는 API 입니다.")
+    @ApiResponse(responseCode = "200", description = "code : 200, message : DELETE_SUCCESS")
     @DeleteMapping("/{id}")
     public ResponseEntity<CustomResponse<Void>> removeGoal(@Parameter(description = "상위 목표 ID") @PathVariable Long id)
     {
@@ -65,6 +68,7 @@ public class GoalController {
     }
 
     @Operation(summary = "보관함 내 상위 목표 복구", description = "보관함에 들어간 상위 목표를 복구하는 API 입니다.")
+    @ApiResponse(responseCode = "200", description = "code : 200, message : UPDATE_SUCCESS")
     @PatchMapping("/{id}/recover")
     public ResponseEntity<CustomResponse<Void>> recoverGoal(@Parameter(description = "상위 목표 ID") @PathVariable Long id, @RequestBody @Valid GoalRecoverRequest goalRecoverRequest)
     {
@@ -74,6 +78,7 @@ public class GoalController {
 
 
     @Operation(summary = "상위 목표 수정", description = "상위 목표를 수정하는 API 입니다.")
+    @ApiResponse(responseCode = "200", description = "code : 200, message : UPDATE_SUCCESS")
     @PatchMapping("/{id}")
     public ResponseEntity<CustomResponse<GoalResponse>> updateGoal(@RequestBody @Valid GoalUpdateRequest goalSaveRequest)
     {
@@ -81,6 +86,7 @@ public class GoalController {
     }
 
     @Operation(summary = "상위 목표 생성", description = "상위 목표를 생성하는 API 입니다.")
+    @ApiResponse(responseCode = "201", description = "code : 201, message : INSERT_SUCCESS")
     @PostMapping
     public ResponseEntity<CustomResponse<Void>> saveGoal(@RequestBody @Valid GoalSaveRequest goalSaveRequest)
     {

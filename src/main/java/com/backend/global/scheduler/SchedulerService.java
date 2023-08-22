@@ -17,6 +17,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Random;
 
 @Slf4j
 @Service
@@ -29,6 +30,8 @@ public class SchedulerService {
     private final DetailGoalQueryRepository detailGoalQueryRepository;
 
     private final ApplicationEventPublisher applicationEventPublisher;
+
+    private static final int RAND_COUNT = 10;
 
     @Scheduled(cron = "0 0 * * * *", zone = "Asia/Seoul")
     public void storeOutDateGoal() {
@@ -48,4 +51,6 @@ public class SchedulerService {
         detailGoalAlarmList.forEach(alarmDto ->
                 applicationEventPublisher.publishEvent(new AlarmEvent(alarmDto.memberId(),alarmDto.detailGoalTitle())));
     }
+
+
 }

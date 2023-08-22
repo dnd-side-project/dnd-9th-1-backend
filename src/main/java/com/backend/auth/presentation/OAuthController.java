@@ -29,7 +29,7 @@ public class OAuthController {
     @Operation(summary = "소셜 로그인",
                 description = "카카오, 애플 서버에서 로그인한 사용자의 userId를 통해 access token과 refresh token을 반환합니다.")
     @PostMapping("/auth/{provider}")
-    public ResponseEntity<CustomResponse> generateAccessTokenAndRefreshToken(
+    public ResponseEntity<CustomResponse<TokenResponse>> generateAccessTokenAndRefreshToken(
             @Parameter(description = "kakao, apple 중 현재 로그인하는 소셜 타입", in = ParameterIn.PATH) @PathVariable String provider,
             @Parameter(description = "사용자 ID") @RequestParam String userId) {
         return CustomResponse.success(LOGIN_SUCCESS, oauthService.login(provider, userId));
@@ -39,7 +39,7 @@ public class OAuthController {
                 description = "access token 만료 시 refresh token을 통해 access token을 재발급합니다.")
     @PostMapping("/reissue")
     @ExceptionHandler({UnsupportedJwtException.class, MalformedJwtException.class, IllegalArgumentException.class})
-    public ResponseEntity<CustomResponse> reissue(@Valid @RequestBody TokenReissueRequest reissueRequest) throws Exception {
+    public ResponseEntity<CustomResponse<AccessTokenResponse>> reissue(@Valid @RequestBody TokenReissueRequest reissueRequest) throws Exception {
         return CustomResponse.success(LOGIN_SUCCESS, oauthService.reissue(reissueRequest.refreshToken()));
     }
 }

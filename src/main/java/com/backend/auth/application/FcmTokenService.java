@@ -5,6 +5,8 @@ import com.backend.auth.domain.FcmTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class FcmTokenService {
@@ -18,6 +20,14 @@ public class FcmTokenService {
     }
 
     public String findFcmToken(String uid) {
-        return fcmTokenRepository.getById(FCM_TOKEN_PREFIX + uid).getFcmToken();
+        Optional<FcmToken> fcmToken = fcmTokenRepository.findById(FCM_TOKEN_PREFIX + uid);
+        if(fcmToken.isPresent()){
+            return fcmToken.get().getFcmToken();
+        }
+        return null;
+    }
+
+    public void deleteByUid(String uid) {
+        fcmTokenRepository.deleteById(uid);
     }
 }

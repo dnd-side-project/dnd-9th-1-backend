@@ -74,7 +74,10 @@ public enum ErrorCode {
 
     INVALID_TOKEN(BAD_REQUEST.value(), "AUTH-002", "토큰이 입력되지 않았거나 잘못된 형식의 토큰입니다."),
 
-    MEMBER_NOT_FOUND(NOT_FOUND.value(), "AUTH-003", "회원이 존재하지 않습니다.");
+    MEMBER_NOT_FOUND(NOT_FOUND.value(), "AUTH-003", "회원이 존재하지 않습니다."),
+
+    /* Retrospect */
+    RETROSPECT_IS_NOT_WRITTEN(NOT_FOUND.value(), "RETROSPECT-001", "회고가 작성되지 않은 상위 목표입니다.");
 
     private final int status;
 

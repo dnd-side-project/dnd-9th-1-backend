@@ -13,12 +13,17 @@ public class RefreshTokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
 
-    public  void saveRefreshToken(String refreshToken, String uid){
-        refreshTokenRepository.save(new RefreshToken(refreshToken, uid)); 
+    public  void saveRefreshToken(String uid, String refreshToken){
+        refreshTokenRepository.save(new RefreshToken(uid, refreshToken));
     }
     public String findUidByRefreshToken(String refreshToken){
-        RefreshToken result = refreshTokenRepository.findById(refreshToken)
+        RefreshToken result = refreshTokenRepository.findByRefreshToken(refreshToken)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ERROR));
         return result.getUid();
+    }
+
+    public void deleteByUid(String uid) {
+        refreshTokenRepository.findById(uid).orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
+        refreshTokenRepository.deleteById(uid);
     }
 }

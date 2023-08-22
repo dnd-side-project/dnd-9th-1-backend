@@ -21,12 +21,12 @@ public class CustomResponse<T> {
         this.message = message;
     }
 
-    public static <T> ResponseEntity<CustomResponse> success(final SuccessCode successCode, final T data) {
+    public static <T> ResponseEntity<CustomResponse<T>> success(final SuccessCode successCode, final T data) {
         return ResponseEntity.status(successCode.getStatus())
                 .body(new CustomResponse<>(successCode.getStatus(), successCode.getMessage(), data));
     }
 
-    public static <T> ResponseEntity<CustomResponse> success(final SuccessCode successCode) {
+    public static <T> ResponseEntity<CustomResponse<T>> success(final SuccessCode successCode) {
         return ResponseEntity.status(successCode.getStatus())
                 .body(new CustomResponse<>(successCode.getStatus(), successCode.getMessage(), null));
     }

@@ -1,12 +1,8 @@
 package com.backend.auth.application;
 
 import com.backend.auth.jwt.TokenProvider;
-import com.backend.auth.presentation.dto.response.AccessTokenResponse;
 import com.backend.auth.presentation.dto.response.TokenResponse;
-import com.backend.global.common.code.ErrorCode;
-import com.backend.global.exception.BusinessException;
 import com.backend.member.application.MemberService;
-import com.backend.member.domain.Member;
 import com.backend.member.domain.Provider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,16 +15,54 @@ public class OAuthService {
 
     private final TokenProvider tokenProvider;
 
-    public TokenResponse login(String provider, String uid) {
+    private final RefreshTokenService refreshTokenService;
+
+    private final BlackListService blackListService;
+
+    private final FcmTokenService fcmTokenService;
+
+    public TokenResponse login(String provider, String uid, String fcmToken) {
         memberService.findMemberOrRegister(Provider.from(provider), uid);
+
         String accessToken = tokenProvider.generateAccessToken(uid);
         String refreshToken = tokenProvider.generateRefreshToken(uid);
+
+        refreshTokenService.saveRefreshToken(uid, refreshToken);
+        fcmTokenService.saveFcmToken(uid, fcmToken);
+
         return new TokenResponse(accessToken, refreshToken);
     }
 
-    public AccessTokenResponse reissue(String refreshToken) throws Exception {
-        tokenProvider.validateToken(refreshToken);
-        String accessToken = tokenProvider.reissueAccessToken(refreshToken);
-        return new AccessTokenResponse(accessToken);
+    public TokenResponse reissue(String bearerRefreshToken) throws Exception {
+        String refreshToken = tokenProvider.getToken(bearerRefreshToken);
+
+        String uid = refreshTokenService.findUidByRefreshToken(refreshToken);
+
+        String renewAccessToken = tokenProvider.generateAccessToken(uid);
+        String renewRefreshToken = tokenProvider.generateRefreshToken(uid);
+
+        return new TokenResponse(renewAccessToken, renewRefreshToken);
     }
+
+    public void logout(String bearerAccessToken) throws Exception {
+        String accessToken = tokenProvider.getToken(bearerAccessToken);
+
+        String uid = tokenProvider.getPayload(accessToken);
+        refreshTokenService.deleteByUid(uid);
+
+        Long expiration = tokenProvider.getExpiration(accessToken);
+        blackListService.saveBlackList(accessToken, expiration);
+    }
+
+    public void withdraw(String bearerAccessToken) throws Exception {
+        String accessToken = tokenProvider.getToken(bearerAccessToken);
+
+        String uid = tokenProvider.getPayload(accessToken);
+        memberService.withdraw(uid);
+        refreshTokenService.deleteByUid(uid);
+
+        Long expiration = tokenProvider.getExpiration(accessToken);
+        blackListService.saveBlackList(accessToken, expiration);
+    }
+
 }

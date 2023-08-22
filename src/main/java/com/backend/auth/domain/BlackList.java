@@ -4,15 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
-import org.springframework.data.redis.core.index.Indexed;
+import org.springframework.data.redis.core.TimeToLive;
 
 @Getter
 @AllArgsConstructor
-@RedisHash(value = "refreshToken", timeToLive = 60 * 60 * 24 * 14)
-public class RefreshToken {
+@RedisHash(value = "blackList")
+public class BlackList {
     @Id
-    private String uid;
+    private String accessToken;
 
-    @Indexed
-    private String refreshToken;
+    @TimeToLive
+    private Long expiration;
 }

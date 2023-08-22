@@ -23,7 +23,7 @@ public record DetailGoalUpdateRequest(
         @Schema(description = "알람 받을 시각", example = "오후 11:30")
         LocalTime alarmTime,
 
-        @Schema(description = "요일 정보", example = "MONDAY, TUESDAY, FRIDAY")
+        @Schema(description = "요일 정보", example = "[\"MONDAY\", \"TUSEDAY\", \"FRIDAY\"]")
         List<String> alarmDays
 ) {
 }

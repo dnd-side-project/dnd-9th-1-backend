@@ -40,7 +40,7 @@ public class SchedulerService {
         goalList.forEach(Goal::store);
     }
 
-    @Scheduled(cron = "0 */30 * * * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 */1 * * * *", zone = "Asia/Seoul")
     public void sendAlarm()
     {
         DayOfWeek dayOfWeek = LocalDate.now().getDayOfWeek();
@@ -49,7 +49,7 @@ public class SchedulerService {
 
         List<DetailGoalAlarmResponse> detailGoalAlarmList = detailGoalQueryRepository.getMemberIdListDetailGoalAlarmTimeArrived(dayOfWeek, now);
         detailGoalAlarmList.forEach(alarmDto ->
-                applicationEventPublisher.publishEvent(new AlarmEvent(alarmDto.memberId(),alarmDto.detailGoalTitle())));
+                applicationEventPublisher.publishEvent(new AlarmEvent(alarmDto.uid(), alarmDto.detailGoalTitle())));
     }
 
 

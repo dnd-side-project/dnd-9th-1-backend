@@ -1,7 +1,7 @@
 package com.backend.detailgoal.domain;
 
 public record AlarmEvent(
-        Long memberId,
+        String uid,
         String detailGoalTitle
 ) {
 

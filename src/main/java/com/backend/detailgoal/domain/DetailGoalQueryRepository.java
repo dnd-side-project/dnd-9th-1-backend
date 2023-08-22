@@ -24,7 +24,7 @@ public class DetailGoalQueryRepository {
 
     public List<DetailGoalAlarmResponse> getMemberIdListDetailGoalAlarmTimeArrived(DayOfWeek dayOfWeek, LocalTime alarmTime)
     {
-        return query.select(Projections.constructor(DetailGoalAlarmResponse.class, member.id, detailGoal.title))
+        return query.select(Projections.constructor(DetailGoalAlarmResponse.class, member.uid, detailGoal.title))
                 .from(detailGoal)
                 .leftJoin(goal).on(goal.id.eq(detailGoal.goalId))
                 .leftJoin(member).on(member.id.eq(goal.memberId))

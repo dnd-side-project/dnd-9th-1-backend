@@ -8,11 +8,13 @@ import com.backend.retrospect.application.dto.response.RetrospectResponse;
 import com.backend.retrospect.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class RetrospectService {
 
     private final GoalRepository goalRepository;

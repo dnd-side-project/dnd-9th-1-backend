@@ -16,7 +16,7 @@ public class RetrospectContent {
     @Column(name = "guide")
     private Guide guide;
 
-    @Column(name = "content")
+    @Column(name = "content", length = 1000)
     private String content;
 
     public RetrospectContent(Guide guide, String content){

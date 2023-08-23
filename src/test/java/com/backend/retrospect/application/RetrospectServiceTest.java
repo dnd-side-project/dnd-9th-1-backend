@@ -12,10 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -62,6 +64,21 @@ public class RetrospectServiceTest {
 
         // then
         assertThat(retrospect).isEqualTo(expectedResponse);
+    }
+
+    @DisplayName("회고 글 입력의 길이가 1000자인 경우에도 성공적으로 저장된다.")
+    @Test
+    void saveRetrospectWithOneThousandContent(){
+        // given
+        char[] chars = new char[1000];
+        Arrays.fill(chars, 'a');
+        String content = new String(chars);
+
+        Map<Guide, String> contents = new HashMap<>();
+        contents.put(Guide.NONE, content);
+
+        // when & then
+        assertThatNoException().isThrownBy(() ->  retrospectService.saveRetrospect(1L, false, contents, SuccessLevel.LEVEL1));
     }
 
     @DisplayName("상위 목표가 회고를 작성하지 않아 회고를 조회하는 것에 실패한다.")

@@ -15,7 +15,7 @@ import java.util.Map;
 @Table(name = "retrospect")
 public class Retrospect extends BaseEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "retrospect_id")
     private Long id;
 

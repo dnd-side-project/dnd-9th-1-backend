@@ -77,7 +77,9 @@ public enum ErrorCode {
     MEMBER_NOT_FOUND(NOT_FOUND.value(), "AUTH-003", "회원이 존재하지 않습니다."),
 
     /* Retrospect */
-    RETROSPECT_IS_NOT_WRITTEN(NOT_FOUND.value(), "RETROSPECT-001", "회고가 작성되지 않은 상위 목표입니다.");
+    RETROSPECT_IS_NOT_WRITTEN(NOT_FOUND.value(), "RETROSPECT-001", "회고가 작성되지 않은 상위 목표입니다."),
+
+    ALREADY_HAS_RETROSPECT(BAD_REQUEST.value(), "RETROSPECT-002", "이미 회고를 작성한 상위목표입니다.");
 
     private final int status;
 

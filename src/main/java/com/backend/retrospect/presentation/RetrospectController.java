@@ -18,9 +18,7 @@ import static com.backend.global.common.code.SuccessCode.*;
 @RequestMapping("/retrospect")
 @RequiredArgsConstructor
 public class RetrospectController {
-
-    private RetrospectService retrospectService;
-
+    private final RetrospectService retrospectService;
     @Operation(summary = "회고 작성", description = "완료함의 상위 목표에 대한 회고를 작성합니다.")
     @PostMapping("/{goal_id}")
     public ResponseEntity<CustomResponse<Long>> saveRetrospect(

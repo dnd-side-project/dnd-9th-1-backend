@@ -15,12 +15,11 @@ import static com.backend.global.common.code.SuccessCode.*;
 
 @Tag(name = "retrospect", description = "회고 작성, 조회, 삭제 API입니다.")
 @RestController
-@RequestMapping("/retrospect")
 @RequiredArgsConstructor
 public class RetrospectController {
     private final RetrospectService retrospectService;
     @Operation(summary = "회고 작성", description = "완료함의 상위 목표에 대한 회고를 작성합니다.")
-    @PostMapping("/{goal_id}")
+    @PostMapping("/goal/{goal_id}/retrospect")
     public ResponseEntity<CustomResponse<Long>> saveRetrospect(
             @Parameter(description = "상위 목표 아이디") @PathVariable(value = "goal_id") Long goalId,
             @RequestBody RetrospectSaveRequest saveRequest) {
@@ -29,7 +28,7 @@ public class RetrospectController {
     }
 
     @Operation(summary = "회고 조회", description = "완료함의 상위 목표에 대한 회고를 조회합니다.")
-    @GetMapping("/{goal_id}")
+    @GetMapping("/goal/{goal_id}/retrospect")
     public ResponseEntity<CustomResponse<RetrospectResponse>> getRetrospect (
             @Parameter(description = "상위 목표 아이디") @PathVariable(value = "goal_id") Long goalId) {
         return CustomResponse.success(SELECT_SUCCESS, retrospectService.getRetrospect(goalId));

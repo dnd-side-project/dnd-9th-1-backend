@@ -79,7 +79,9 @@ public enum ErrorCode {
     /* Retrospect */
     RETROSPECT_IS_NOT_WRITTEN(NOT_FOUND.value(), "RETROSPECT-001", "회고가 작성되지 않은 상위 목표입니다."),
 
-    ALREADY_HAS_RETROSPECT(BAD_REQUEST.value(), "RETROSPECT-002", "이미 회고를 작성한 상위목표입니다.");
+    ALREADY_HAS_RETROSPECT(BAD_REQUEST.value(), "RETROSPECT-002", "이미 회고를 작성한 상위목표입니다."),
+
+    CONTENT_TOO_LONG(BAD_REQUEST.value(), "RETROSPECT-003", "회고글의 길이가 제한된 길이를 초과하였습니다.");
 
     private final int status;
 

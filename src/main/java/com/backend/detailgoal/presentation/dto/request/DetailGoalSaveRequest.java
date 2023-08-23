@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Size;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public record DetailGoalSaveRequest(
@@ -21,6 +22,7 @@ public record DetailGoalSaveRequest(
         @NotNull(message = "알림 설정 여부는 빈값일 수 없습니다.")
         @Schema(description = "알람 수행 여부")
         Boolean alarmEnabled,
+
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "a hh:mm", timezone = "Asia/Seoul", locale = "ko_KR")
         @Schema(description = "알람 받을 시각", example = "오후 11:30")

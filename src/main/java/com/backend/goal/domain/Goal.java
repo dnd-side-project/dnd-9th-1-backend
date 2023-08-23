@@ -52,6 +52,9 @@ public class Goal extends BaseEntity {
     @Column(name = "reminder_enabled", nullable = false)
     private Boolean reminderEnabled;
 
+    @Column(name = "last_remind_date")
+    private LocalDate lastRemindDate;
+
     @Column(name = "has_retrospect", nullable = false)
     private Boolean hasRetrospect;
 
@@ -69,6 +72,11 @@ public class Goal extends BaseEntity {
     public void writeRetrospect()
     {
         this.hasRetrospect = Boolean.TRUE;
+    }
+
+    public void updateLastRemindDate(LocalDate now)
+    {
+        this.lastRemindDate = now;
     }
 
     public void store()

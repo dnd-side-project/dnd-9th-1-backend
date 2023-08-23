@@ -9,14 +9,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "retrospect_content")
 public class RetrospectContent {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "retrospect_content_id")
     private Long id;
 
     @Enumerated
     @Column(name = "guide")
     private Guide guide;
 
-    @Column(name = "content")
+    @Column(name = "content", length = 1000)
     private String content;
 
     public RetrospectContent(Guide guide, String content){

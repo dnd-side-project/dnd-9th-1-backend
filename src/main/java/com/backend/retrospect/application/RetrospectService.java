@@ -16,6 +16,7 @@ public class RetrospectService {
     private final RetrospectRepository retrospectRepository;
 
     public Long saveRetrospect(Long goalId, Boolean hasGuide, Map<Guide, String> contents, SuccessLevel successLevel) {
+        
         return retrospectRepository.save(new Retrospect(goalId, hasGuide, contents, successLevel)).getId();
     }
 

@@ -2,6 +2,7 @@ package com.backend.detailgoal.application.dto.response;
 
 import com.backend.detailgoal.domain.DetailGoal;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;

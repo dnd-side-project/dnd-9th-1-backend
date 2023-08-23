@@ -2,10 +2,10 @@ package com.backend.global.scheduler;
 
 import com.backend.detailgoal.application.dto.response.DetailGoalAlarmResponse;
 import com.backend.detailgoal.domain.AlarmEvent;
-import com.backend.detailgoal.domain.DetailGoal;
 import com.backend.detailgoal.domain.DetailGoalQueryRepository;
 import com.backend.goal.domain.Goal;
 import com.backend.goal.domain.GoalQueryRepository;
+import com.backend.goal.domain.ReminderEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -17,6 +17,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 @Slf4j
@@ -31,7 +32,9 @@ public class SchedulerService {
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    private static final int RAND_COUNT = 10;
+    private static final int RAND_COUNT = 2;
+
+    private static final int REMIND_INTERVAL = 14;
 
     @Scheduled(cron = "0 0 * * * *", zone = "Asia/Seoul")
     public void storeOutDateGoal() {
@@ -51,6 +54,31 @@ public class SchedulerService {
         detailGoalAlarmList.forEach(alarmDto ->
                 applicationEventPublisher.publishEvent(new AlarmEvent(alarmDto.uid(), alarmDto.detailGoalTitle())));
     }
+
+//    @Scheduled(cron = "0 19 * * 0 *", zone = "Asia/Seoul")
+//    public void sendReminder()
+//    {
+//        List<Goal> goalListReminderEnabled = goalQueryRepository.findGoalListReminderEnabled();
+//
+//        Random random = new Random();
+//
+//        // 랜덤하게 2개 선택
+//        for (int i = 0; i < RAND_COUNT; i++) {
+//
+//            int randomIndex = random.nextInt(goalListReminderEnabled.size());
+//            Goal goal = goalListReminderEnabled.get(randomIndex);
+//
+//            if(Objects.nonNull(goal.getLastRemindDate()) && isIntervalDateExpired(goal))
+//            {
+//                goal.updateLastRemindDate(LocalDate.now());
+//                applicationEventPublisher.publishEvent(new ReminderEvent(goal.getMemberId(), goal.getTitle()));
+//            }
+//        }
+//    }
+//
+//    private boolean isIntervalDateExpired(Goal goal) {
+//        return goal.getLastRemindDate().isBefore(LocalDate.now().minusDays(REMIND_INTERVAL));
+//    }
 
 
 }

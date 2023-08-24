@@ -1,8 +1,7 @@
-package com.backend.auth.jwt;
+package com.backend.auth.jwt.filter;
 
 import com.backend.auth.application.BlackListService;
-import com.backend.global.common.code.ErrorCode;
-import com.backend.global.exception.BusinessException;
+import com.backend.auth.jwt.TokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,7 +17,7 @@ import java.io.IOException;
 
 @Slf4j
 @RequiredArgsConstructor
-public class JwtFilter extends OncePerRequestFilter {
+public class AuthenticationFilter extends OncePerRequestFilter {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
 

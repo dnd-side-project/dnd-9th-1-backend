@@ -1,5 +1,6 @@
 package com.backend.global.event;
 
+
 import com.backend.goal.domain.event.ReminderEvent;
 import com.backend.infrastructure.fcm.FcmService;
 import com.backend.member.domain.MemberRepository;

@@ -17,6 +17,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class FcmService {
 
+
     private final FcmTokenService fcmTokenService;
 
     private final FirebaseMessaging firebaseMessaging;
@@ -50,4 +51,5 @@ public class FcmService {
             e.printStackTrace();
         }
     }
+
 }

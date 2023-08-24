@@ -1,5 +1,6 @@
 package com.backend.global.event;
 
+
 import com.backend.detailgoal.domain.event.AlarmEvent;
 import com.backend.infrastructure.fcm.FcmService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @RequiredArgsConstructor
 public class AlarmEventHandler {
 
+
     private final FcmService fcmService;
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -18,4 +20,5 @@ public class AlarmEventHandler {
 
        fcmService.sendMessage(event.uid(), event.detailGoalTitle());
     }
+
 }

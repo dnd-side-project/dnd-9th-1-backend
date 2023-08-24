@@ -20,6 +20,7 @@ import java.util.List;
 @Configuration
 public class FcmConfig {
 
+
     @Value("${fcm.certification}")
     private String googleApplicationCredentials;
 
@@ -49,5 +50,6 @@ public class FcmConfig {
 
         return FirebaseMessaging.getInstance(firebaseApp);
     }
+
 
 }

@@ -11,11 +11,11 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @RequiredArgsConstructor
 public class AlarmEventHandler {
 
-//    private final FcmService fcmService;
-//
-//    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-//    public void sendAlarm(AlarmEvent event) {
-//
-//       fcmService.sendMessage(event.uid(), event.detailGoalTitle());
-//    }
+    private final FcmService fcmService;
+
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void sendAlarm(AlarmEvent event) {
+
+       fcmService.sendMessage(event.uid(), event.detailGoalTitle());
+    }
 }

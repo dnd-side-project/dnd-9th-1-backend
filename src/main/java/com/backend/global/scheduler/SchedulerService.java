@@ -51,6 +51,7 @@ public class SchedulerService {
         LocalTime now = LocalTime.of(localTime.getHour(), localTime.getMinute(), 0);
 
         List<DetailGoalAlarmResponse> detailGoalAlarmList = detailGoalQueryRepository.getMemberIdListDetailGoalAlarmTimeArrived(dayOfWeek, now);
+        log.info("{}",detailGoalAlarmList.size());
         detailGoalAlarmList.forEach(alarmDto ->
                 applicationEventPublisher.publishEvent(new AlarmEvent(alarmDto.uid(), alarmDto.detailGoalTitle())));
     }

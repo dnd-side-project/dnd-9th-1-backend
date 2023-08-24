@@ -24,7 +24,7 @@ public record DetailGoalSaveRequest(
         Boolean alarmEnabled,
 
 
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "a hh:mm", timezone = "Asia/Seoul", locale = "ko_KR")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "a hh:mm", timezone = "Asia/Seoul", locale = "ko")
         @Schema(description = "알람 받을 시각", example = "오후 11:30")
         LocalTime alarmTime,
 

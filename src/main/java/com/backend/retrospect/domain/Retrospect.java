@@ -23,9 +23,10 @@ public class Retrospect extends BaseEntity {
     private Long goalId;
 
     @Column(name = "has_guide")
-    private boolean hasGuide;
+    private Boolean hasGuide;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @Column(name = "contents")
     @JoinColumn(name = "retrospect_id")
     private List<RetrospectContent> contents;
 

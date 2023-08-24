@@ -38,6 +38,8 @@ public class QGoal extends EntityPathBase<Goal> {
 
     public final BooleanPath isDeleted = createBoolean("isDeleted");
 
+    public final DatePath<java.time.LocalDate> lastRemindDate = createDate("lastRemindDate", java.time.LocalDate.class);
+
     public final NumberPath<Long> memberId = createNumber("memberId", Long.class);
 
     public final BooleanPath reminderEnabled = createBoolean("reminderEnabled");

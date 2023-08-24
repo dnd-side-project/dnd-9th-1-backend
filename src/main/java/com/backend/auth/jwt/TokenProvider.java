@@ -8,6 +8,7 @@ import com.backend.member.domain.MemberRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,6 +23,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 
+@Slf4j
 @Component
 public class TokenProvider {
     // private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 2; // 2시간
@@ -89,9 +91,20 @@ public class TokenProvider {
                     .build()
                     .parseClaimsJws(token);
         } catch (ExpiredJwtException e){
-            throw new BusinessException(ErrorCode.TOKEN_EXPIRED);
-        } catch (UnsupportedJwtException | MalformedJwtException | IllegalArgumentException e){
-            throw new BusinessException(ErrorCode.INVALID_TOKEN);
+            log.info("토큰의 기한이 만료되었습니다.");
+            throw new JwtException("토큰의 기한이 만료되었습니다.");
+        } catch (SecurityException e) {
+            log.info("잘못된 토큰 시그니처입니다.");
+            throw new JwtException("잘못된 토큰 시그니처입니다.");
+        } catch (UnsupportedJwtException e) {
+            log.info("지원하지 않는 형식의 토큰입니다.");
+            throw new JwtException("지원하지 않는 형식의 토큰입니다.");
+        } catch (MalformedJwtException e) {
+            log.info("유효하지 않은 토큰입니다. ");
+            throw new JwtException("유효하지 않은 토큰입니다. ");
+        } catch( IllegalArgumentException e){
+            log.info("유효하지 않은 토큰입니다.");
+            throw new JwtException("유효하지 않은 토큰입니다.");
         }
     }
 
@@ -111,10 +124,6 @@ public class TokenProvider {
 
     public Authentication getAuthentication(String accessToken) {
         Claims claims = getClaims(accessToken);
-
-//        if(claims.get(AUTHORITIES_KEY) == null){
-//            throw new BusinessException(ErrorCode.INVALID_TOKEN);
-//        }
 
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))

@@ -23,7 +23,6 @@ jobs: # defining jobs, executed in this workflows
     - name: Checkout repository
       uses: actions/checkout@v3 # clone repository
       with:
-        token: ${{  secrets.ACTION_TOKEN  }}
         submodules: true
 
     - name: Update submodules

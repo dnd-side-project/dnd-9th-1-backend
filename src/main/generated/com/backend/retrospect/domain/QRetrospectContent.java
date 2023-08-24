@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -17,6 +18,8 @@ public class QRetrospectContent extends EntityPathBase<RetrospectContent> {
 
     private static final long serialVersionUID = 1919447040L;
 
+    private static final PathInits INITS = PathInits.DIRECT2;
+
     public static final QRetrospectContent retrospectContent = new QRetrospectContent("retrospectContent");
 
     public final StringPath content = createString("content");
@@ -25,16 +28,27 @@ public class QRetrospectContent extends EntityPathBase<RetrospectContent> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final QRetrospect retrospect;
+
     public QRetrospectContent(String variable) {
-        super(RetrospectContent.class, forVariable(variable));
+        this(RetrospectContent.class, forVariable(variable), INITS);
     }
 
     public QRetrospectContent(Path<? extends RetrospectContent> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QRetrospectContent(PathMetadata metadata) {
-        super(RetrospectContent.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QRetrospectContent(PathMetadata metadata, PathInits inits) {
+        this(RetrospectContent.class, metadata, inits);
+    }
+
+    public QRetrospectContent(Class<? extends RetrospectContent> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.retrospect = inits.isInitialized("retrospect") ? new QRetrospect(forProperty("retrospect")) : null;
     }
 
 }

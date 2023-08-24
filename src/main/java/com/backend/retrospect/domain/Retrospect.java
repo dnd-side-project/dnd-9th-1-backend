@@ -25,7 +25,7 @@ public class Retrospect extends BaseEntity {
     @Column(name = "has_guide")
     private Boolean hasGuide;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "retrospect", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<RetrospectContent> contents;
 
     @Enumerated(EnumType.STRING)

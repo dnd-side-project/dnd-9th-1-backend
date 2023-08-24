@@ -4,18 +4,17 @@ import com.backend.detailgoal.application.dto.response.DetailGoalListResponse;
 import com.backend.detailgoal.application.dto.response.DetailGoalResponse;
 import com.backend.detailgoal.application.dto.response.GoalCompletedResponse;
 import com.backend.detailgoal.domain.DetailGoal;
-import com.backend.detailgoal.domain.DetailGoalRepository;
+import com.backend.detailgoal.domain.repository.DetailGoalRepository;
 import com.backend.detailgoal.presentation.dto.request.DetailGoalSaveRequest;
 import com.backend.detailgoal.presentation.dto.request.DetailGoalUpdateRequest;
 import com.backend.goal.domain.Goal;
-import com.backend.goal.domain.GoalRepository;
-import com.backend.goal.domain.GoalStatus;
-import com.backend.goal.domain.RewardType;
+import com.backend.goal.domain.repository.GoalRepository;
+import com.backend.goal.domain.enums.GoalStatus;
+import com.backend.goal.domain.enums.RewardType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

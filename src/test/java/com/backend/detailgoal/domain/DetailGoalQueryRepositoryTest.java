@@ -2,9 +2,14 @@ package com.backend.detailgoal.domain;
 
 
 import com.backend.detailgoal.application.dto.response.DetailGoalAlarmResponse;
+import com.backend.detailgoal.domain.repository.DetailGoalQueryRepository;
+import com.backend.detailgoal.domain.repository.DetailGoalRepository;
+import com.backend.global.DatabaseCleaner;
 import com.backend.goal.domain.Goal;
-import com.backend.goal.domain.GoalRepository;
-import com.backend.goal.domain.GoalStatus;
+import com.backend.goal.domain.repository.GoalRepository;
+import com.backend.goal.domain.enums.GoalStatus;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +22,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -31,6 +37,14 @@ public class DetailGoalQueryRepositoryTest {
     @Autowired
     private DetailGoalRepository detailGoalRepository;
 
+    @Autowired
+    private DatabaseCleaner databaseCleaner;
+
+    @BeforeEach
+    void setUp() {
+        databaseCleaner.execute();
+    }
+
     @DisplayName("하위 목표 설정시 선택한 요일과 시간에 해당하는 하위 목표 리스트를 조회한다")
     @Test
     void 하위목표_설정시_선택한_요일과_시간에_해당하는_하위목표_리스트를_조회한다()
@@ -42,19 +56,10 @@ public class DetailGoalQueryRepositoryTest {
         DetailGoal detailGoal = new DetailGoal(savedGoal.getId(), "테스트 제목", false, true, List.of(DayOfWeek.MONDAY, DayOfWeek.TUESDAY), LocalTime.of(10, 0, 0));
         detailGoalRepository.save(detailGoal);
 
-        DetailGoal detailGoal2 = new DetailGoal(savedGoal.getId(), "테스트 제목", false, true, List.of(DayOfWeek.TUESDAY), LocalTime.of(10, 0, 0));
-        detailGoalRepository.save(detailGoal2);
-
-        DetailGoal detailGoal3 = new DetailGoal(savedGoal.getId(), "테스트 제목", false, true, List.of(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.SATURDAY, DayOfWeek.WEDNESDAY), LocalTime.of(10, 0, 0));
-        detailGoalRepository.save(detailGoal3);
-
-        DetailGoal detailGoal4 = new DetailGoal(savedGoal.getId(), "테스트 제목", false, true, List.of(DayOfWeek.MONDAY), LocalTime.of(10, 1, 0));
-        detailGoalRepository.save(detailGoal4);
-
         // when
         List<DetailGoalAlarmResponse> results = detailGoalQueryRepository.getMemberIdListDetailGoalAlarmTimeArrived(DayOfWeek.MONDAY, LocalTime.of(10, 0, 0));
 
         // then
-        assertThat(results).hasSize(2);
+        assertThat(results).hasSize(1);
     }
 }

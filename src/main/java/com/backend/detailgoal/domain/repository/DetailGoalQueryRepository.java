@@ -1,4 +1,4 @@
-package com.backend.detailgoal.domain;
+package com.backend.detailgoal.domain.repository;
 
 import com.backend.detailgoal.application.dto.response.DetailGoalAlarmResponse;
 import com.backend.goal.domain.QGoal;

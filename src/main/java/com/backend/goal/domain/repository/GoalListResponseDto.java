@@ -1,8 +1,9 @@
-package com.backend.goal.domain;
+package com.backend.goal.domain.repository;
 
 
+import com.backend.goal.domain.Goal;
+import com.backend.goal.domain.enums.RewardType;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.criteria.CriteriaBuilder;
 
 import java.time.LocalDate;
 

@@ -1,5 +1,6 @@
-package com.backend.detailgoal.domain;
+package com.backend.detailgoal.domain.repository;
 
+import com.backend.detailgoal.domain.DetailGoal;
 import com.backend.global.common.code.ErrorCode;
 import com.backend.global.exception.BusinessException;
 import org.springframework.data.jpa.repository.JpaRepository;

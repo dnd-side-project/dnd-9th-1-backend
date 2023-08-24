@@ -39,4 +39,4 @@ spring:
       host: localhost
       port: 6379
 fcm:
-  certification: firebase/fcm_key.json
+  certification: config/fcm_key.json

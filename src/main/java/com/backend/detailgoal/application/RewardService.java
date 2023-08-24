@@ -1,6 +1,6 @@
 package com.backend.detailgoal.application;
 
-import com.backend.goal.domain.RewardType;
+import com.backend.goal.domain.enums.RewardType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

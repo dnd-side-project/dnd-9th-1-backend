@@ -1,6 +1,6 @@
 package com.backend.global.event;
 
-import com.backend.detailgoal.domain.AlarmEvent;
+import com.backend.detailgoal.domain.event.AlarmEvent;
 import com.backend.infrastructure.fcm.FcmService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

@@ -1,8 +1,8 @@
 package com.backend.global.event;
 
 import com.backend.detailgoal.domain.DetailGoal;
-import com.backend.detailgoal.domain.DetailGoalRepository;
-import com.backend.goal.domain.RemoveRelatedDetailGoalEvent;
+import com.backend.detailgoal.domain.repository.DetailGoalRepository;
+import com.backend.goal.domain.event.RemoveRelatedDetailGoalEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;

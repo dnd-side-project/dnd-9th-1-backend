@@ -1,6 +1,6 @@
 package com.backend.goal.application.dto.response;
 
-import com.backend.goal.domain.GoalListResponseDto;
+import com.backend.goal.domain.repository.GoalListResponseDto;
 
 import java.util.List;
 

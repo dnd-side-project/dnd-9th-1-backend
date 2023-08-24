@@ -1,4 +1,4 @@
-package com.backend.goal.domain;
+package com.backend.goal.domain.event;
 
 public record RemoveRelatedDetailGoalEvent(
         Long goalId

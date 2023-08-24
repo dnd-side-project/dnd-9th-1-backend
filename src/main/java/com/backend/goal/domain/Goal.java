@@ -3,6 +3,8 @@ package com.backend.goal.domain;
 import com.backend.global.common.code.ErrorCode;
 import com.backend.global.entity.BaseEntity;
 import com.backend.global.exception.BusinessException;
+import com.backend.goal.domain.enums.GoalStatus;
+import com.backend.goal.domain.enums.RewardType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

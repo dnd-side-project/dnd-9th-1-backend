@@ -3,6 +3,7 @@ package com.backend.goal.domain;
 
 import com.backend.global.common.code.ErrorCode;
 import com.backend.global.exception.BusinessException;
+import com.backend.goal.domain.enums.GoalStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;

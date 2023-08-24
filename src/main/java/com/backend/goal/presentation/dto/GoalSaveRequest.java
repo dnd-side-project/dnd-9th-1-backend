@@ -1,15 +1,12 @@
 package com.backend.goal.presentation.dto;
 
 import com.backend.goal.domain.Goal;
-import com.backend.goal.domain.GoalStatus;
+import com.backend.goal.domain.enums.GoalStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 

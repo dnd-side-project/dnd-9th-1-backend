@@ -49,7 +49,8 @@ public class Retrospect extends BaseEntity {
         for(Map.Entry<Guide, String> entry : contents.entrySet()){
             Guide guide = entry.getKey();
             String content = entry.getValue();
-            retrospectContents.add(new RetrospectContent(guide, content));
+
+            retrospectContents.add(new RetrospectContent(guide, content, this));
         }
         this.contents = retrospectContents;
     }

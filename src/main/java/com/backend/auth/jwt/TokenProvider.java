@@ -92,13 +92,10 @@ public class TokenProvider {
             throw new JwtExpiredException(ErrorCode.TOKEN_EXPIRED);
         } catch (SecurityException e) {
             log.info("잘못된 토큰 시그니처입니다.");
-            throw new InvalidJwtException(ErrorCode.INVALID_TOKEN);
         } catch (UnsupportedJwtException e) {
             log.info("지원하지 않는 형식의 토큰입니다.");
-            throw new InvalidJwtException(ErrorCode.INVALID_TOKEN);
         } catch (MalformedJwtException | IllegalArgumentException e) {
             log.info("유효하지 않은 토큰입니다. ");
-            throw new InvalidJwtException(ErrorCode.INVALID_TOKEN);
         }
     }
 
@@ -120,11 +117,6 @@ public class TokenProvider {
 
     public Authentication getAuthentication(String accessToken) {
         Claims claims = getClaims(accessToken);
-
-        // 토큰 검증
-        if(claims.get(AUTHORITIES_KEY) == null){
-            throw new InvalidJwtException(ErrorCode.INVALID_TOKEN);
-        }
 
         // 권한 정보 추출
         Collection<? extends GrantedAuthority> authorities =

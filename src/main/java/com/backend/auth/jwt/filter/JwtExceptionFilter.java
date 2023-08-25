@@ -21,8 +21,6 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             filterChain.doFilter(request, response);
-        } catch (InvalidJwtException e){
-            setErrorResponse(response, e.getErrorCode());
         } catch (JwtExpiredException e){
             setErrorResponse(response, e.getErrorCode());
         } catch (NullJwtException e){
@@ -32,7 +30,6 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
         }
     }
 
-    // 공통 로직
     private void setErrorResponse(HttpServletResponse response, ErrorCode errorCode) throws IOException {
         response.setStatus(errorCode.getStatus());
         response.setContentType("application/json; charset=UTF-8");

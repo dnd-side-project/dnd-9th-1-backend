@@ -49,7 +49,9 @@ public class SecurityConfig {
                     .frameOptions().disable()
                 .and()
                 .authorizeHttpRequests()
+
                 .requestMatchers( "/detail-goals/**","/goals/**","/auth/**").permitAll()
+
                 .and()
 
                 .sessionManagement()

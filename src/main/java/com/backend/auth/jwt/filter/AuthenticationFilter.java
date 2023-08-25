@@ -26,15 +26,23 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String accessToken = tokenProvider.getToken(request.getHeader(AUTHORIZATION_HEADER));
 
-        // 토큰의 유효성을 검증
-        tokenProvider.validateToken(accessToken);
-        blackListService.checkBlackList(accessToken);
+        try {
+            String accessToken = tokenProvider.getToken(request.getHeader(AUTHORIZATION_HEADER));
 
-        // 인증 정보를 Security Context에 설정 후 다음 단계를 진행
-        Authentication authentication = tokenProvider.getAuthentication(accessToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+            // 토큰의 유효성을 검증
+            tokenProvider.validateToken(accessToken);
+            blackListService.checkBlackList(accessToken);
+
+            // 인증 정보를 Security Context에 설정 후 다음 단계를 진행
+            Authentication authentication = tokenProvider.getAuthentication(accessToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        }
+        catch (Exception e)
+        {
+            System.out.println("에러 처리");
+        }
+
         filterChain.doFilter(request, response);
     }
 }

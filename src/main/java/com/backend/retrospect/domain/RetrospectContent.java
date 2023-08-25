@@ -24,8 +24,9 @@ public class RetrospectContent {
     @JoinColumn(name = "retrospect_id")
     private Retrospect retrospect;
 
-    public RetrospectContent(Guide guide, String content){
+    public RetrospectContent(Guide guide, String content, Retrospect retrospect){
         this.guide = guide;
         this.content = content;
+        this.retrospect = retrospect;
     }
 }

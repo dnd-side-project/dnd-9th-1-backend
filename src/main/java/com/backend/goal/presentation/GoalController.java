@@ -80,9 +80,9 @@ public class GoalController {
     @Operation(summary = "상위 목표 수정", description = "상위 목표를 수정하는 API 입니다.")
     @ApiResponse(responseCode = "200", description = "code : 200, message : UPDATE_SUCCESS")
     @PatchMapping("/{id}")
-    public ResponseEntity<CustomResponse<GoalResponse>> updateGoal(@RequestBody @Valid GoalUpdateRequest goalSaveRequest)
+    public ResponseEntity<CustomResponse<GoalResponse>> updateGoal(@Parameter(description = "상위 목표 ID") @PathVariable Long id, @RequestBody @Valid GoalUpdateRequest goalSaveRequest)
     {
-        return CustomResponse.success(UPDATE_SUCCESS, goalService.updateGoal(goalSaveRequest));
+        return CustomResponse.success(UPDATE_SUCCESS, goalService.updateGoal(id, goalSaveRequest));
     }
 
     @Operation(summary = "상위 목표 생성", description = "상위 목표를 생성하는 API 입니다.")

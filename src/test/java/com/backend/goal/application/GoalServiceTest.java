@@ -146,9 +146,9 @@ public class GoalServiceTest {
         Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 1), true, GoalStatus.PROCESS);
         Goal savedGoal = goalRepository.save(goal);
 
-        GoalUpdateRequest goalUpdateRequest = new GoalUpdateRequest(savedGoal.getId(), "수정된 제목", LocalDate.now(), LocalDate.now(), false);
+        GoalUpdateRequest goalUpdateRequest = new GoalUpdateRequest("수정된 제목", LocalDate.now(), LocalDate.now(), false);
         // when
-        goalService.updateGoal(goalUpdateRequest);
+        goalService.updateGoal(savedGoal.getId(), goalUpdateRequest);
 
         // then
         Goal updatedGoal = goalRepository.getById(savedGoal.getId());

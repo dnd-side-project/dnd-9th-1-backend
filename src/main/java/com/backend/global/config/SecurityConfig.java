@@ -50,7 +50,9 @@ public class SecurityConfig {
                 .and()
 
                 .authorizeHttpRequests()
+
                 .requestMatchers( "/detail-goals/**","/goals/**","/auth/**").permitAll()
+
                 .and()
 
                 .sessionManagement()

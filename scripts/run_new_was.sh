@@ -25,7 +25,7 @@ fi
 #  sudo kill ${TARGET_PID}
 # fi
 
-echo "> Kill was running at ${TARGET_PORT}."
+echo "> Kill WAS running at ${TARGET_PORT}."
 sudo kill $(sudo lsof -t -i:${TARGET_PORT})
 
 # run jar file in background

@@ -23,10 +23,9 @@ public class Retrospect extends BaseEntity {
     private Long goalId;
 
     @Column(name = "has_guide")
-    private boolean hasGuide;
+    private Boolean hasGuide;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @JoinColumn(name = "retrospect_id")
+    @OneToMany(mappedBy = "retrospect", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<RetrospectContent> contents;
 
     @Enumerated(EnumType.STRING)
@@ -50,7 +49,8 @@ public class Retrospect extends BaseEntity {
         for(Map.Entry<Guide, String> entry : contents.entrySet()){
             Guide guide = entry.getKey();
             String content = entry.getValue();
-            retrospectContents.add(new RetrospectContent(guide, content));
+
+            retrospectContents.add(new RetrospectContent(guide, content, this));
         }
         this.contents = retrospectContents;
     }

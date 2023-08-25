@@ -20,8 +20,13 @@ public class RetrospectContent {
     @Column(name = "content", length = 1000)
     private String content;
 
-    public RetrospectContent(Guide guide, String content){
+    @ManyToOne
+    @JoinColumn(name = "retrospect_id")
+    private Retrospect retrospect;
+
+    public RetrospectContent(Guide guide, String content, Retrospect retrospect){
         this.guide = guide;
         this.content = content;
+        this.retrospect = retrospect;
     }
 }

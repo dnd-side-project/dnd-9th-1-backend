@@ -30,7 +30,7 @@ public class RetrospectService {
     public RetrospectResponse getRetrospect(Long goalId) {
         Retrospect retrospect = retrospectRepository.findByGoalId(goalId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.RETROSPECT_IS_NOT_WRITTEN));
-        return RetrospectResponse.from(retrospect.getContents(), retrospect.getSuccessLevel());
+        return RetrospectResponse.from(retrospect.getHasGuide(), retrospect.getContents(), retrospect.getSuccessLevel());
     }
 
     private void findGoalAndCheckRetrospect(Long goalId) {

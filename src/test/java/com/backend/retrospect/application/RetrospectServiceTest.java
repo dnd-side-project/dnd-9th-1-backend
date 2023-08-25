@@ -68,6 +68,8 @@ public class RetrospectServiceTest {
     @Test
     void getRetrospect() {
         // given
+        Boolean hasGuide = true;
+
         Goal goal = new Goal(1L, "상위 목표", LocalDate.of(2023, 7, 10), LocalDate.of(2023, 8, 15), true, GoalStatus.COMPLETE);
         Long goalId = goalRepository.save(goal).getId();
 
@@ -79,7 +81,7 @@ public class RetrospectServiceTest {
 
         retrospectService.saveRetrospect(1L, true, contents, SuccessLevel.LEVEL5);
 
-        RetrospectResponse expectedResponse = new RetrospectResponse(contents, SuccessLevel.LEVEL5);
+        RetrospectResponse expectedResponse = new RetrospectResponse(hasGuide, contents, SuccessLevel.LEVEL5);
 
         // when
         RetrospectResponse retrospect = retrospectService.getRetrospect(goalId);

@@ -24,6 +24,7 @@ import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Objects;
 
 @Slf4j
 @Component
@@ -100,7 +101,7 @@ public class TokenProvider {
     }
 
     public String getToken(String bearerToken) {
-        if(bearerToken.isEmpty()){
+        if(Objects.isNull(bearerToken) || bearerToken.isEmpty()){
             throw new NullJwtException(ErrorCode.NO_TOKEN_PROVIDED);
         } else if (!bearerToken.startsWith(TOKEN_HEADER_PREFIX)){
             throw new InvalidJwtException(ErrorCode.INVALID_TOKEN);

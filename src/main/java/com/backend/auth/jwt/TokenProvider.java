@@ -1,13 +1,16 @@
 package com.backend.auth.jwt;
 
 import com.backend.auth.application.RefreshTokenService;
+import com.backend.auth.jwt.exception.InvalidJwtException;
+import com.backend.auth.jwt.exception.JwtExpiredException;
+import com.backend.auth.jwt.exception.NullJwtException;
 import com.backend.global.common.code.ErrorCode;
-import com.backend.global.exception.BusinessException;
 import com.backend.member.domain.Member;
 import com.backend.member.domain.MemberRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,6 +25,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 
+@Slf4j
 @Component
 public class TokenProvider {
     // private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 2; // 2시간
@@ -66,12 +70,7 @@ public class TokenProvider {
     }
 
     public String getPayload(String token){
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+        return getClaims(token).getSubject();
     }
 
     public Claims getClaims(String token){
@@ -89,15 +88,22 @@ public class TokenProvider {
                     .build()
                     .parseClaimsJws(token);
         } catch (ExpiredJwtException e){
-            throw new BusinessException(ErrorCode.TOKEN_EXPIRED);
-        } catch (UnsupportedJwtException | MalformedJwtException | IllegalArgumentException e){
-            throw new BusinessException(ErrorCode.INVALID_TOKEN);
+            log.info("토큰의 기한이 만료되었습니다.");
+            throw new JwtExpiredException(ErrorCode.TOKEN_EXPIRED);
+        } catch (SecurityException e) {
+            log.info("잘못된 토큰 시그니처입니다.");
+        } catch (UnsupportedJwtException e) {
+            log.info("지원하지 않는 형식의 토큰입니다.");
+        } catch (MalformedJwtException | IllegalArgumentException e) {
+            log.info("유효하지 않은 토큰입니다. ");
         }
     }
 
     public String getToken(String bearerToken) {
-        if(bearerToken == null || !bearerToken.startsWith(TOKEN_HEADER_PREFIX)){
-            throw new BusinessException(ErrorCode.INVALID_TOKEN);
+        if(bearerToken.isEmpty()){
+            throw new NullJwtException(ErrorCode.NO_TOKEN_PROVIDED);
+        } else if (!bearerToken.startsWith(TOKEN_HEADER_PREFIX)){
+            throw new InvalidJwtException(ErrorCode.INVALID_TOKEN);
         }
         return bearerToken.substring(TOKEN_HEADER_PREFIX.length());
     }
@@ -112,15 +118,13 @@ public class TokenProvider {
     public Authentication getAuthentication(String accessToken) {
         Claims claims = getClaims(accessToken);
 
-//        if(claims.get(AUTHORITIES_KEY) == null){
-//            throw new BusinessException(ErrorCode.INVALID_TOKEN);
-//        }
-
+        // 권한 정보 추출
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                         .map(SimpleGrantedAuthority::new)
                         .toList();
 
+        // UserDetails 객체에서 Authentication 반환
         UserDetails principal = new User(claims.getSubject(), "", authorities);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }

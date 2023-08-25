@@ -1,9 +1,10 @@
 package com.backend.auth.config;
 
 import com.backend.auth.application.BlackListService;
-import com.backend.auth.jwt.JwtAccessDeniedHandler;
-import com.backend.auth.jwt.JwtAuthenticationEntryPoint;
-import com.backend.auth.jwt.JwtFilter;
+import com.backend.auth.jwt.filter.JwtExceptionFilter;
+import com.backend.auth.jwt.handler.JwtAccessDeniedHandler;
+import com.backend.auth.jwt.handler.JwtAuthenticationEntryPoint;
+import com.backend.auth.jwt.filter.AuthenticationFilter;
 import com.backend.auth.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -57,7 +58,8 @@ public class SecurityConfig {
                 .and()
 
                 .formLogin().disable()
-                .addFilterBefore(new JwtFilter(tokenProvider, blackListService), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new AuthenticationFilter(tokenProvider, blackListService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtExceptionFilter(), AuthenticationFilter.class); // AuthenticationFilter에서 발생한 예외가 JwtExceptionFilter에서 처리된다.
         return httpSecurity.build();
     }
 }

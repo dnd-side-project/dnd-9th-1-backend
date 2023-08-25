@@ -1,4 +1,4 @@
-package com.backend.auth.jwt;
+package com.backend.auth.jwt.handler;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

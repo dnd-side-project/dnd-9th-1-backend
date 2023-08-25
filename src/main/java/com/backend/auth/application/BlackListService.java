@@ -2,6 +2,8 @@ package com.backend.auth.application;
 
 import com.backend.auth.domain.BlackList;
 import com.backend.auth.domain.BlackListRepository;
+import com.backend.auth.jwt.exception.BlackListJwtException;
+import com.backend.auth.jwt.exception.InvalidJwtException;
 import com.backend.global.common.code.ErrorCode;
 import com.backend.global.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +20,9 @@ public class BlackListService {
         blackListRepository.save(new BlackList(accessToken, expiration));
     }
 
-    public boolean isBlackList (String accessToken){
-        Optional<BlackList>  blackList = blackListRepository.findById(accessToken);
-        return blackList.isPresent();
+    public void checkBlackList(String accessToken){
+        BlackList blackList = blackListRepository.findById(accessToken)
+                .orElseThrow(() -> new BlackListJwtException(ErrorCode.BLACK_LIST_TOKEN));
     }
 
 }

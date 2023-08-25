@@ -1,17 +1,19 @@
 package com.backend.auth.jwt.filter;
 
+import com.backend.auth.jwt.exception.BlackListJwtException;
+import com.backend.auth.jwt.exception.InvalidJwtException;
+import com.backend.auth.jwt.exception.JwtExpiredException;
+import com.backend.auth.jwt.exception.NullJwtException;
 import com.backend.global.common.code.ErrorCode;
-import io.jsonwebtoken.JwtException;
+import com.backend.global.common.response.ErrorResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class JwtExceptionFilter extends OncePerRequestFilter {
 
@@ -19,12 +21,25 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             filterChain.doFilter(request, response);
-        } catch (JwtException e){
-            setErrorResponse(request, response, e);
+        } catch (InvalidJwtException e){
+            setErrorResponse(response, e.getErrorCode());
+        } catch (JwtExpiredException e){
+            setErrorResponse(response, e.getErrorCode());
+        } catch (NullJwtException e){
+            setErrorResponse(response, e.getErrorCode());
+        } catch (BlackListJwtException e){
+            setErrorResponse(response, e.getErrorCode());
         }
     }
 
-    public void setErrorResponse(HttpServletRequest request, HttpServletResponse response, Throwable e) throws IOException {
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
+    // 공통 로직
+    private void setErrorResponse(HttpServletResponse response, ErrorCode errorCode) throws IOException {
+        response.setStatus(errorCode.getStatus());
+        response.setContentType("application/json; charset=UTF-8");
+
+        ErrorResponse errorResponse = ErrorResponse.of(errorCode);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.writeValue(response.getOutputStream(), errorResponse);
     }
 }

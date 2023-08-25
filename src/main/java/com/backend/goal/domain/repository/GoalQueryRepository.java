@@ -1,5 +1,7 @@
-package com.backend.goal.domain;
+package com.backend.goal.domain.repository;
 
+import com.backend.goal.domain.Goal;
+import com.backend.goal.domain.enums.GoalStatus;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -28,7 +30,7 @@ public class GoalQueryRepository {
         List<Goal> goalList = query.select(goal)
                 .from(goal)
                 .where(
-                        goal.isDeleted.isFalse(), // 삭제 되지 않은 것들만 조회
+                        goal.isDeleted.isFalse(), // 삭제되지 않은 상위 목표들만 선택
                         ltGoalId(goalId),
                         goal.goalStatus.eq(goalStatus)
                 )
@@ -52,7 +54,7 @@ public class GoalQueryRepository {
         return query.select(goal.count())
                 .from(goal)
                 .where(
-                        goal.isDeleted.isFalse(), // 삭제 되지 않은 것들만 조회
+                        goal.isDeleted.isFalse(), // 삭제되지 않은 상위 목표들만 선택
                         goal.hasRetrospect.isFalse(), // 아직 회고를 작성하지 않는 것들 조회
                         goal.goalStatus.eq(GoalStatus.COMPLETE) // 완료상태인것들 체크
                 )
@@ -64,7 +66,7 @@ public class GoalQueryRepository {
         return query.select(goal)
                 .from(goal)
                 .where(
-                        goal.isDeleted.isFalse(),
+                        goal.isDeleted.isFalse(), // 삭제되지 않은 상위 목표들만 선택
                         goal.goalStatus.eq(GoalStatus.PROCESS),
                         goal.reminderEnabled.isTrue()
                 )
@@ -76,7 +78,7 @@ public class GoalQueryRepository {
         return query.select(goal)
                 .from(goal)
                 .where(
-                        goal.isDeleted.isFalse(),
+                        goal.isDeleted.isFalse(), // 삭제되지 않은 상위 목표들만 선택
                         goal.goalStatus.eq(GoalStatus.PROCESS),
                         goal.endDate.before(today)
                 )
@@ -86,7 +88,6 @@ public class GoalQueryRepository {
 
     public Map<GoalStatus, Long> getStatusCounts() {
 
-
         List<Tuple> counts = query
                 .select(
                         goal.goalStatus,
@@ -94,9 +95,11 @@ public class GoalQueryRepository {
                 )
                 .from(goal)
                 .groupBy(goal.goalStatus)
+                .having(goal.isDeleted.isFalse()) // 삭제되지 않은 상위 목표들만 선택
                 .fetch();
 
         Map<GoalStatus, Long> statusCounts = new HashMap<>();
+
         for (Tuple tuple : counts) {
 
             statusCounts.put(tuple.get(goal.goalStatus), tuple.get(goal.goalStatus.count()));

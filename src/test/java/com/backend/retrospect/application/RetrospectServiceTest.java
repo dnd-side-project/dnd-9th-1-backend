@@ -1,12 +1,14 @@
 package com.backend.retrospect.application;
 
+import com.backend.global.DatabaseCleaner;
 import com.backend.global.exception.BusinessException;
 import com.backend.goal.domain.Goal;
-import com.backend.goal.domain.GoalRepository;
-import com.backend.goal.domain.GoalStatus;
+import com.backend.goal.domain.repository.GoalRepository;
+import com.backend.goal.domain.enums.GoalStatus;
 import com.backend.retrospect.application.dto.response.RetrospectResponse;
 import com.backend.retrospect.domain.Guide;
 import com.backend.retrospect.domain.SuccessLevel;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,14 @@ public class RetrospectServiceTest {
 
     @Autowired
     private GoalRepository goalRepository;
+
+    @Autowired
+    private DatabaseCleaner databaseCleaner;
+
+    @BeforeEach
+    void setUp() {
+        databaseCleaner.execute();
+    }
 
     @DisplayName("회고 저장에 성공한다.")
     @Test

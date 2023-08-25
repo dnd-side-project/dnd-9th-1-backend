@@ -9,10 +9,16 @@ import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Collections;
+
 @Configuration
 public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI() {
+
+        Server testServer = new Server();
+        testServer.setUrl("http://192.168.1.190:8080");
+
         return new OpenAPI()
                 .addServersItem(new Server().url("/"))
                 .info(
@@ -22,6 +28,7 @@ public class SwaggerConfig {
                                 .version("v0.0.1")
                 )
                 .addSecurityItem(new SecurityRequirement().addList("Authorization"))
+                .addServersItem(testServer)
                 .components(
                         new Components()
                                 .addSecuritySchemes(

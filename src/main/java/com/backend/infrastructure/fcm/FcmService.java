@@ -17,37 +17,39 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class FcmService {
 
-//    private final FcmTokenService fcmTokenService;
-//
-//    private final FirebaseMessaging firebaseMessaging;
-//
-//    public void sendMessage(String uid, String detailGoalTitle)
-//    {
-//        String fcmToken = fcmTokenService.findFcmToken(uid);
-//
-//        if(Objects.isNull(fcmToken))
-//        {
-//            return;
-//        }
-//
-//        Notification notification = Notification.builder()
-//                .setTitle(PushWord.PUSH_TITLE)
-//                .setBody(detailGoalTitle + PushWord.PUSH_CONTENT)
-//                .build();
-//
-//        Message message = Message.builder()
-//                .setToken("example")
-//                .setNotification(notification)
-//                .build();
-//
-//        try {
-//
-//            log.info("message send start...");
-//            String send = firebaseMessaging.send(message);
-//            log.info("message send finished, {}", send);
-//
-//        } catch (FirebaseMessagingException e) {
-//            e.printStackTrace();
-//        }
-//    }
+
+    private final FcmTokenService fcmTokenService;
+
+    private final FirebaseMessaging firebaseMessaging;
+
+    public void sendMessage(String uid, String detailGoalTitle)
+    {
+        String fcmToken = fcmTokenService.findFcmToken(uid);
+
+        if(Objects.isNull(fcmToken))
+        {
+            return;
+        }
+
+        Notification notification = Notification.builder()
+                .setTitle(PushWord.PUSH_TITLE)
+                .setBody(detailGoalTitle + PushWord.PUSH_CONTENT)
+                .build();
+
+        Message message = Message.builder()
+                .setToken(fcmToken)
+                .setNotification(notification)
+                .build();
+
+        try {
+
+            log.info("message send start...");
+            String send = firebaseMessaging.send(message);
+            log.info("message send finished, {}", send);
+
+        } catch (FirebaseMessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

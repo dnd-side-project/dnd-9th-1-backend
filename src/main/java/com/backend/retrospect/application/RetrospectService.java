@@ -3,7 +3,7 @@ package com.backend.retrospect.application;
 import com.backend.global.common.code.ErrorCode;
 import com.backend.global.exception.BusinessException;
 import com.backend.goal.domain.Goal;
-import com.backend.goal.domain.GoalRepository;
+import com.backend.goal.domain.repository.GoalRepository;
 import com.backend.retrospect.application.dto.response.RetrospectResponse;
 import com.backend.retrospect.domain.*;
 import lombok.RequiredArgsConstructor;

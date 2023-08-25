@@ -1,6 +1,6 @@
 package com.backend.detailgoal.application.dto.response;
 
-import com.backend.goal.domain.RewardType;
+import com.backend.goal.domain.enums.RewardType;
 
 public record GoalCompletedResponse(
         Boolean isGoalCompleted,

@@ -1,14 +1,16 @@
 package com.backend.global.scheduler;
 
 import com.backend.detailgoal.application.dto.response.DetailGoalAlarmResponse;
-import com.backend.detailgoal.domain.AlarmEvent;
-import com.backend.detailgoal.domain.DetailGoalQueryRepository;
+
+import com.backend.detailgoal.domain.event.AlarmEvent;
+import com.backend.detailgoal.domain.repository.DetailGoalQueryRepository;
 import com.backend.goal.domain.Goal;
-import com.backend.goal.domain.GoalQueryRepository;
-import com.backend.goal.domain.ReminderEvent;
+import com.backend.goal.domain.repository.GoalQueryRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,8 +19,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+
 
 @Slf4j
 @Service
@@ -51,6 +52,7 @@ public class SchedulerService {
         LocalTime now = LocalTime.of(localTime.getHour(), localTime.getMinute(), 0);
 
         List<DetailGoalAlarmResponse> detailGoalAlarmList = detailGoalQueryRepository.getMemberIdListDetailGoalAlarmTimeArrived(dayOfWeek, now);
+        log.info("{}",detailGoalAlarmList.size());
         detailGoalAlarmList.forEach(alarmDto ->
                 applicationEventPublisher.publishEvent(new AlarmEvent(alarmDto.uid(), alarmDto.detailGoalTitle())));
     }

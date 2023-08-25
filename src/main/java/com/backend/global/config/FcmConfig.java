@@ -20,34 +20,36 @@ import java.util.List;
 @Configuration
 public class FcmConfig {
 
-//    @Value("${fcm.certification}")
-//    private String googleApplicationCredentials;
-//
-//    @Bean
-//    public FirebaseMessaging firebaseMessaging() throws IOException {
-//
-//        ClassPathResource resource = new ClassPathResource(googleApplicationCredentials);
-//
-//        InputStream in = resource.getInputStream();
-//
-//        FirebaseApp firebaseApp = null;
-//        List<FirebaseApp> firebaseAppList = FirebaseApp.getApps();
-//
-//        if(firebaseAppList != null && !firebaseAppList.isEmpty())
-//        {
-//            for (FirebaseApp app : firebaseAppList) {
-//                if(app.getName().equals(FirebaseApp.DEFAULT_APP_NAME))
-//                {
-//                    firebaseApp = app;
-//                }
-//            }
-//        }else {
-//            FirebaseOptions options = FirebaseOptions.builder().setCredentials(GoogleCredentials.fromStream(in)).build();
-//
-//            firebaseApp = FirebaseApp.initializeApp(options);
-//        }
-//
-//        return FirebaseMessaging.getInstance(firebaseApp);
-//    }
+
+    @Value("${fcm.certification}")
+    private String googleApplicationCredentials;
+
+    @Bean
+    public FirebaseMessaging firebaseMessaging() throws IOException {
+
+        ClassPathResource resource = new ClassPathResource(googleApplicationCredentials);
+
+        InputStream in = resource.getInputStream();
+
+        FirebaseApp firebaseApp = null;
+        List<FirebaseApp> firebaseAppList = FirebaseApp.getApps();
+
+        if(firebaseAppList != null && !firebaseAppList.isEmpty())
+        {
+            for (FirebaseApp app : firebaseAppList) {
+                if(app.getName().equals(FirebaseApp.DEFAULT_APP_NAME))
+                {
+                    firebaseApp = app;
+                }
+            }
+        }else {
+            FirebaseOptions options = FirebaseOptions.builder().setCredentials(GoogleCredentials.fromStream(in)).build();
+
+            firebaseApp = FirebaseApp.initializeApp(options);
+        }
+
+        return FirebaseMessaging.getInstance(firebaseApp);
+    }
+
 
 }

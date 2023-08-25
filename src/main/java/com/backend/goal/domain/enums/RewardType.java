@@ -1,4 +1,4 @@
-package com.backend.goal.domain;
+package com.backend.goal.domain.enums;
 
 public enum RewardType {
     BLUE_JEWEL_1,

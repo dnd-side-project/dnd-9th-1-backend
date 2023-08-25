@@ -1,15 +1,13 @@
-package com.backend.auth.jwt;
+package com.backend.auth.jwt.filter;
 
 import com.backend.auth.application.BlackListService;
-import com.backend.global.common.code.ErrorCode;
-import com.backend.global.exception.BusinessException;
+import com.backend.auth.jwt.TokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -18,7 +16,7 @@ import java.io.IOException;
 
 @Slf4j
 @RequiredArgsConstructor
-public class JwtFilter extends OncePerRequestFilter {
+public class AuthenticationFilter extends OncePerRequestFilter {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
 
@@ -28,21 +26,13 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        final String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
-        log.info("authorization : {}", authorization);
+        String accessToken = tokenProvider.getToken(request.getHeader(AUTHORIZATION_HEADER));
 
-        if(authorization == null || !authorization.startsWith("Bearer ")){
-            log.error("authorization is wrong");
-            filterChain.doFilter(request, response);
-            return;
-        }
+        // 토큰의 유효성을 검증
+        tokenProvider.validateToken(accessToken);
+        blackListService.checkBlackList(accessToken);
 
-        String accessToken = authorization.split(" ")[1];
-        if(blackListService.isBlackList(accessToken)){
-            filterChain.doFilter(request, response);
-            return;
-        }
-
+        // 인증 정보를 Security Context에 설정 후 다음 단계를 진행
         Authentication authentication = tokenProvider.getAuthentication(accessToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         filterChain.doFilter(request, response);

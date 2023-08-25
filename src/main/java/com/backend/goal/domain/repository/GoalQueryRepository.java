@@ -96,7 +96,6 @@ public class GoalQueryRepository {
                 .from(goal)
                 .where(goal.isDeleted.isFalse())
                 .groupBy(goal.goalStatus)
-//                .having(goal.isDeleted.isFalse()) // 삭제되지 않은 상위 목표들만 선택
                 .fetch();
 
         Map<GoalStatus, Long> statusCounts = new HashMap<>();

@@ -115,7 +115,7 @@ public class GoalQueryRepository {
 
 private BooleanExpression ltGoalId(Long goalId) {
 
-        if (goalId == null) {
+        if (goalId == -1) {
             return null;
         }
 

@@ -64,6 +64,7 @@ public class DetailGoal extends BaseEntity {
     public void update(String title, Boolean alarmEnabled, LocalTime alarmTime, List<String> alarmDays)
     {
          validateTitleLength(title);
+         this.title = title;
          this.alarmEnabled = alarmEnabled;
          this.alarmTime = alarmTime;
          updateAlarmDays(alarmDays);

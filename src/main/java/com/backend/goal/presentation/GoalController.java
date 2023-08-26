@@ -41,6 +41,7 @@ public class GoalController {
         return CustomResponse.success(SELECT_SUCCESS,goalService.getGoalList(lastId,pageable,goalStatus));
     }
 
+    
     @Operation(summary = "상위 목표 상태별 개수 조회", description = "상위 목표 상태별 개수를 조회하는 API 입니다.")
     @ApiResponse(responseCode = "200", description = "code : 200, message : SELECT_SUCCESS")
     @GetMapping("/count")

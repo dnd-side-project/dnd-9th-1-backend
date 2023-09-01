@@ -7,6 +7,7 @@ import com.backend.goal.application.dto.response.RetrospectEnabledGoalCountRespo
 import com.backend.goal.domain.*;
 import com.backend.goal.application.dto.response.GoalResponse;
 import com.backend.goal.domain.enums.GoalStatus;
+import com.backend.goal.domain.enums.RewardType;
 import com.backend.goal.domain.event.RemoveRelatedDetailGoalEvent;
 import com.backend.goal.domain.repository.GoalListResponseDto;
 import com.backend.goal.domain.repository.GoalQueryRepository;
@@ -22,15 +23,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Random;
+import java.util.stream.Collectors;
 
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class GoalService {
+
+    private static final int RANDOM_GOAL_COUNT = 3;
 
     private final GoalRepository goalRepository;
 
@@ -91,5 +96,28 @@ public class GoalService {
     {
         Goal goal = goalRepository.getByIdAndIsDeletedFalse(goalId);
         goal.recover(goalRecoverRequest.startDate(), goalRecoverRequest.endDate(), goalRecoverRequest.reminderEnabled());
+    }
+
+    public List<GoalListResponseDto> getStoredGoalList() {
+
+        List<Goal> storedGoalList = goalRepository.getGoalsByGoalStatusAndIsDeletedFalse(GoalStatus.STORE);
+
+        Random random = new Random();
+
+        List<Goal> randomStoredGoalList = new ArrayList<>();
+
+        int goalCount = Math.min(storedGoalList.size(), RANDOM_GOAL_COUNT);
+
+        while (randomStoredGoalList.size() < goalCount) {
+
+            int index = random.nextInt(storedGoalList.size());
+            Goal goal = storedGoalList.get(index);
+
+            if (!randomStoredGoalList.contains(goal)) {
+                randomStoredGoalList.add(goal);
+            }
+        }
+
+        return randomStoredGoalList.stream().map(GoalListResponseDto::from).collect(Collectors.toList());
     }
 }

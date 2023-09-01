@@ -6,6 +6,7 @@ import com.backend.goal.application.dto.response.GoalCountResponse;
 import com.backend.goal.application.dto.response.GoalListResponse;
 import com.backend.goal.application.dto.response.GoalResponse;
 import com.backend.goal.application.dto.response.RetrospectEnabledGoalCountResponse;
+import com.backend.goal.domain.repository.GoalListResponseDto;
 import com.backend.goal.presentation.dto.GoalRecoverRequest;
 import com.backend.goal.presentation.dto.GoalSaveRequest;
 import com.backend.goal.presentation.dto.GoalUpdateRequest;
@@ -19,6 +20,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.backend.global.common.code.SuccessCode.*;
 
@@ -41,7 +44,7 @@ public class GoalController {
         return CustomResponse.success(SELECT_SUCCESS,goalService.getGoalList(lastId,pageable,goalStatus));
     }
 
-    
+
     @Operation(summary = "상위 목표 상태별 개수 조회", description = "상위 목표 상태별 개수를 조회하는 API 입니다.")
     @ApiResponse(responseCode = "200", description = "code : 200, message : SELECT_SUCCESS")
     @GetMapping("/count")
@@ -56,6 +59,14 @@ public class GoalController {
     public ResponseEntity<CustomResponse<RetrospectEnabledGoalCountResponse>> getRetrospectEnabledGoalCount()
     {
         return CustomResponse.success(SELECT_SUCCESS,goalService.getGoalCountRetrospectEnabled());
+    }
+
+    @Operation(summary = "회고 완료 후 보관함 내 목표 추천", description = "보관함에 들어있는 목표들 중 랜덤하게 3개를 추천해줍니다")
+    @ApiResponse(responseCode = "200", description = "code : 200, message : SELECT_SUCCESS")
+    @GetMapping("/stored-goals")
+    public ResponseEntity<CustomResponse<List<GoalListResponseDto>>> getStoredGoalList()
+    {
+        return CustomResponse.success(SELECT_SUCCESS,goalService.getStoredGoalList());
     }
 
 

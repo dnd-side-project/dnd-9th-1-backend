@@ -27,6 +27,8 @@ public record GoalListResponseDto(
 
         Boolean hasRetrospect,
 
+        Boolean reminderEnabled,
+
         RewardType reward
 ) {
 
@@ -40,6 +42,7 @@ public record GoalListResponseDto(
                 goal.getCompletedDetailGoalCnt(),
                 goal.calculateDday(LocalDate.now()),
                 goal.getHasRetrospect(),
+                goal.getReminderEnabled(),
                 goal.getReward()
         )
                 ;

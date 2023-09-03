@@ -204,7 +204,7 @@ public class Goal extends BaseEntity {
     {
         if(now.isAfter(endDate))
         {
-            throw new IllegalArgumentException("현재 일자가 종료 일자보다 뒤라면 d-day를 구할 수 없습니다.");
+            return 0L;
         }
 
         return ChronoUnit.DAYS.between(now, endDate);

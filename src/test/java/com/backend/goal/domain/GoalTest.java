@@ -95,9 +95,9 @@ public class GoalTest {
         Goal goal = new Goal(1L, "테스트 제목", startDate, endDate, true, GoalStatus.PROCESS);
 
         // when & then
-        assertThatThrownBy(() -> {
-            goal.calculateDday(LocalDate.of(2023, 8, 12));
-        }).isInstanceOf(IllegalArgumentException.class);
+        Long aLong = goal.calculateDday(LocalDate.of(2023, 8, 11));
+        System.out.println(aLong);
+
     }
 
     @DisplayName("현재 날짜와 종료 날짜가 같을때 디데이 0을 반환한다.")

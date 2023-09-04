@@ -204,7 +204,7 @@ public class Goal extends BaseEntity {
     {
         if(now.isAfter(endDate))
         {
-            return 0L;
+            ChronoUnit.DAYS.between(endDate, now);
         }
 
         return ChronoUnit.DAYS.between(now, endDate);

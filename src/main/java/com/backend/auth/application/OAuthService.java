@@ -5,7 +5,7 @@ import com.backend.auth.presentation.dto.response.TokenResponse;
 import com.backend.member.application.MemberService;
 import com.backend.member.domain.Provider;
 import lombok.RequiredArgsConstructor;
-gimport org.springframework.stereotype.Service;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor

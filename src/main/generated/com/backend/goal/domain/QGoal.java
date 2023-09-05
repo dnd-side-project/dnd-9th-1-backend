@@ -30,7 +30,7 @@ public class QGoal extends EntityPathBase<Goal> {
 
     public final NumberPath<Integer> entireDetailGoalCnt = createNumber("entireDetailGoalCnt", Integer.class);
 
-    public final EnumPath<GoalStatus> goalStatus = createEnum("goalStatus", GoalStatus.class);
+    public final EnumPath<com.backend.goal.domain.enums.GoalStatus> goalStatus = createEnum("goalStatus", com.backend.goal.domain.enums.GoalStatus.class);
 
     public final BooleanPath hasRetrospect = createBoolean("hasRetrospect");
 
@@ -44,7 +44,7 @@ public class QGoal extends EntityPathBase<Goal> {
 
     public final BooleanPath reminderEnabled = createBoolean("reminderEnabled");
 
-    public final EnumPath<RewardType> reward = createEnum("reward", RewardType.class);
+    public final EnumPath<com.backend.goal.domain.enums.RewardType> reward = createEnum("reward", com.backend.goal.domain.enums.RewardType.class);
 
     public final DatePath<java.time.LocalDate> startDate = createDate("startDate", java.time.LocalDate.class);
 

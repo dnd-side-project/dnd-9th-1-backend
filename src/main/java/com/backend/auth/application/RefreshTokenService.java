@@ -26,4 +26,5 @@ public class RefreshTokenService {
         refreshTokenRepository.findById(uid).orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
         refreshTokenRepository.deleteById(uid);
     }
+
 }

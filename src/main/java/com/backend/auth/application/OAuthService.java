@@ -41,6 +41,9 @@ public class OAuthService {
         String renewAccessToken = tokenProvider.generateAccessToken(uid);
         String renewRefreshToken = tokenProvider.generateRefreshToken(uid);
 
+        refreshTokenService.deleteByUid(uid);
+        refreshTokenService.saveRefreshToken(uid, renewRefreshToken);
+
         return new TokenResponse(renewAccessToken, renewRefreshToken);
     }
 

@@ -40,11 +40,10 @@ public class SecurityConfig {
                 .csrf().disable()
                 .cors().disable()
 
-                .exceptionHandling()
-                    .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                    .accessDeniedHandler(jwtAccessDeniedHandler)
-                .and()
-
+//                .exceptionHandling()
+//                    .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+//                    .accessDeniedHandler(jwtAccessDeniedHandler)
+//                .and()
                 .headers()
                     .frameOptions().disable()
                 .and()

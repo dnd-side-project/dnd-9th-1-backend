@@ -16,9 +16,10 @@ public class RefreshTokenService {
     public  void saveRefreshToken(String uid, String refreshToken){
         refreshTokenRepository.save(new RefreshToken(uid, refreshToken));
     }
+
     public String findUidByRefreshToken(String refreshToken){
-        RefreshToken result = refreshTokenRepository.findByRefreshToken(refreshToken)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ERROR));
+        RefreshToken result = refreshTokenRepository.findByTokenValue(refreshToken)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
         return result.getUid();
     }
 

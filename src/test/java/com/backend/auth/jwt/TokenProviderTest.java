@@ -37,6 +37,17 @@ class TokenProviderTest {
     }
 
     @Test
+    void getTokenTest(){
+        // given
+        String expectedToken = "expectedToken";
+        String bearerToken = "Bearer " + expectedToken;
+        // when
+        String token = tokenProvider.getToken(bearerToken);
+        // then
+        Assertions.assertThat(token).isEqualTo(expectedToken);
+    }
+
+    @Test
     void generateAccessToken() {
         // given
         Member member = Member.from(Provider.APPLE, uid);

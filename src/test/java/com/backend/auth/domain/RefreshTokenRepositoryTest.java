@@ -21,8 +21,8 @@ class RefreshTokenRepositoryTest {
         RefreshToken refreshToken = new RefreshToken("uid", "refresh token");
 
         // when
-        refreshTokenRepository.save(refreshToken);
-        RefreshToken extractedRefreshToken = refreshTokenRepository.findByRefreshToken(refreshToken.getRefreshToken()).get();
+        refreshTokenRepository.save(refreshToken); // (refreshToken:"uid", refreshToken:tokenValue:"refresh token")
+        RefreshToken extractedRefreshToken = refreshTokenRepository.findByTokenValue(refreshToken.getTokenValue()).get();
 
         // then
         assertThat(extractedRefreshToken.getUid()).isEqualTo(refreshToken.getUid());

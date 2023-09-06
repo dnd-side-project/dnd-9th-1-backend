@@ -5,8 +5,10 @@ import com.backend.auth.presentation.dto.response.TokenResponse;
 import com.backend.member.application.MemberService;
 import com.backend.member.domain.Provider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OAuthService {
@@ -36,6 +38,7 @@ public class OAuthService {
     public TokenResponse reissue(String bearerRefreshToken) throws Exception {
         String refreshToken = tokenProvider.getToken(bearerRefreshToken);
 
+        log.info("refresh token : " + refreshToken);
         String uid = refreshTokenService.findUidByRefreshToken(refreshToken);
 
         String renewAccessToken = tokenProvider.generateAccessToken(uid);

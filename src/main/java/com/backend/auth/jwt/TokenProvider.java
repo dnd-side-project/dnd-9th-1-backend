@@ -106,7 +106,7 @@ public class TokenProvider {
         } else if (!bearerToken.startsWith(TOKEN_HEADER_PREFIX)){
             throw new InvalidJwtException(ErrorCode.INVALID_TOKEN);
         }
-        return bearerToken.substring(TOKEN_HEADER_PREFIX.length());
+        return bearerToken.split(" ")[1].trim();
     }
 
     public Long getExpiration(String accessToken) {

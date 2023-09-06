@@ -21,8 +21,10 @@ public class BlackListService {
     }
 
     public void checkBlackList(String accessToken){
-        BlackList blackList = blackListRepository.findById(accessToken)
-                .orElseThrow(() -> new BlackListJwtException(ErrorCode.BLACK_LIST_TOKEN));
+        Optional<BlackList> blackList = blackListRepository.findByAccessToken(accessToken);
+        if(blackList.isPresent()){
+            throw new BlackListJwtException(ErrorCode.BLACK_LIST_TOKEN);
+        }
     }
 
 }

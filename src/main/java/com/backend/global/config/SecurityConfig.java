@@ -29,7 +29,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
         return web -> web.ignoring()
-                .requestMatchers("/swagger-ui/**", "/api-docs/**", "/health");
+                .requestMatchers("/swagger-ui/**", "/api-docs/**", "/health", "/error");
     }
 
     @Bean
@@ -39,16 +39,17 @@ public class SecurityConfig {
                 .csrf().disable()
                 .cors().disable()
 
-//                .exceptionHandling()
-//                    .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-//                    .accessDeniedHandler(jwtAccessDeniedHandler)
-//                .and()
+                .exceptionHandling()
+                    .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                    .accessDeniedHandler(jwtAccessDeniedHandler)
+                .and()
                 .headers()
                     .frameOptions().disable()
                 .and()
                 .authorizeHttpRequests()
 
                 .requestMatchers( "/detail-goals/**","/goals/**","/auth/**").permitAll()
+                .anyRequest().authenticated()
 
                 .and()
 

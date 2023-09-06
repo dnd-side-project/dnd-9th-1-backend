@@ -20,7 +20,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final TokenProvider tokenProvider;
-
     private final BlackListService blackListService;
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -30,7 +29,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
         return web -> web.ignoring()
-                .requestMatchers("/swagger-ui/**", "/api-docs/**", "/health", "/auth/**");
+                .requestMatchers("/swagger-ui/**", "/api-docs/**", "/health");
     }
 
     @Bean

@@ -29,7 +29,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
         return web -> web.ignoring()
-                .requestMatchers("/swagger-ui/**", "/api-docs/**", "/health", "/error");
+                .requestMatchers("/swagger-ui/**", "/api-docs/**", "/health");
     }
 
     @Bean
@@ -48,7 +48,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests()
 
-                .requestMatchers( "/detail-goals/**","/goals/**","/auth/**").permitAll()
+                .requestMatchers( "/auth/**").permitAll()
                 .anyRequest().authenticated()
 
                 .and()

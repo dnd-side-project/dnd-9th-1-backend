@@ -16,9 +16,12 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public Member findMemberOrRegister(Provider provider, String uid) {
+    public Boolean findMemberOrRegister(Provider provider, String uid) {
         Optional<Member> member =  memberRepository.findByUid(uid);
-        return member.orElseGet(() -> memberRepository.save(Member.from(provider, uid)));
+        if(member.isPresent()) // 기등록된 회원인 경우, 다시 저장하지 않는다.
+            return false;
+        memberRepository.save(Member.from(provider, uid));
+        return true;
     }
 
     public void withdraw(String uid) {

@@ -1,8 +1,9 @@
 package com.backend.auth.presentation;
 
 import com.backend.auth.application.OAuthService;
-import com.backend.auth.presentation.dto.LoginRequestDto;
-import com.backend.auth.presentation.dto.response.TokenResponse;
+import com.backend.auth.presentation.dto.request.LoginRequestDto;
+import com.backend.auth.presentation.dto.response.LoginResponse;
+import com.backend.auth.presentation.dto.response.ReissueResponse;
 import com.backend.global.common.response.CustomResponse;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -27,7 +28,7 @@ public class OAuthController {
     @Operation(summary = "소셜 로그인",
                 description = "카카오, 애플 서버에서 로그인한 사용자의 userId를 통해 access token과 refresh token을 반환합니다.")
     @PostMapping("/{provider}")
-    public ResponseEntity<CustomResponse<TokenResponse>> login (
+    public ResponseEntity<CustomResponse<LoginResponse>> login (
             @Parameter(description = "kakao, apple 중 현재 로그인하는 소셜 타입", in = ParameterIn.PATH) @PathVariable String provider,
             @RequestBody LoginRequestDto loginRequestDto) {
         return CustomResponse.success(LOGIN_SUCCESS, oauthService.login(provider, loginRequestDto.userId(), loginRequestDto.fcmToken()));
@@ -37,7 +38,7 @@ public class OAuthController {
                 description = "access token 만료 시 refresh token을 통해 access token을 재발급합니다.")
     @PostMapping("/reissue")
     @ExceptionHandler({UnsupportedJwtException.class, MalformedJwtException.class, IllegalArgumentException.class})
-    public ResponseEntity<CustomResponse<TokenResponse>> reissue(@RequestHeader(value = "Authorization") String bearerRefreshToken) throws Exception {
+    public ResponseEntity<CustomResponse<ReissueResponse>> reissue(@RequestHeader(value = "Authorization") String bearerRefreshToken) throws Exception {
         return CustomResponse.success(LOGIN_SUCCESS, oauthService.reissue(bearerRefreshToken));
     }
 
@@ -54,4 +55,5 @@ public class OAuthController {
         oauthService.withdraw(bearerAccessToken);
         return CustomResponse.success(DELETE_SUCCESS);
     }
+
 }

@@ -30,11 +30,6 @@ public class OAuthService {
         String accessToken = tokenProvider.generateAccessToken(uid);
         String refreshToken = tokenProvider.generateRefreshToken(uid);
 
-        if(!isFirstLogin) { // 재로그인 시, 기존에 저장된 정보를 삭제한다.
-            refreshTokenService.deleteByUid(uid);
-            fcmTokenService.deleteByUid(uid);
-        }
-
         refreshTokenService.saveRefreshToken(uid, refreshToken);
         fcmTokenService.saveFcmToken(uid, fcmToken);
 

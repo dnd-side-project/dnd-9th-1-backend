@@ -28,4 +28,5 @@ public class MemberService {
         Member member = memberRepository.getByUid(uid);
         member.withdraw();
     }
+
 }

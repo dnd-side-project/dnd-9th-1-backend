@@ -1,6 +1,8 @@
 package com.backend.goal.application;
 
 
+import com.backend.global.common.code.ErrorCode;
+import com.backend.global.exception.BusinessException;
 import com.backend.goal.application.dto.response.GoalCountResponse;
 import com.backend.goal.application.dto.response.GoalListResponse;
 import com.backend.goal.application.dto.response.RetrospectEnabledGoalCountResponse;
@@ -15,6 +17,8 @@ import com.backend.goal.domain.repository.GoalRepository;
 import com.backend.goal.presentation.dto.GoalRecoverRequest;
 import com.backend.goal.presentation.dto.GoalSaveRequest;
 import com.backend.goal.presentation.dto.GoalUpdateRequest;
+import com.backend.member.domain.Member;
+import com.backend.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
@@ -39,14 +43,19 @@ public class GoalService {
 
     private final GoalRepository goalRepository;
 
+    private final MemberRepository memberRepository;
+
     private final GoalQueryRepository goalQueryRepository;
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
 
-    public GoalListResponse getGoalList(Long goalId, Pageable pageable, String goalStatus)
+    public GoalListResponse getGoalList(final String uid, final Long goalId, final Pageable pageable, final String goalStatus)
     {
-        Slice<Goal> goalList = goalQueryRepository.getGoalList(goalId, pageable, GoalStatus.from(goalStatus));
+        Member member = memberRepository.findByUid(uid).orElseThrow(() -> {
+            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
+        });
+        Slice<Goal> goalList = goalQueryRepository.getGoalList(member.getId(), goalId, pageable, GoalStatus.from(goalStatus));
         Slice<GoalListResponseDto> result = goalList.map(GoalListResponseDto::from);
         List<GoalListResponseDto> contents = result.getContent();
 
@@ -54,23 +63,35 @@ public class GoalService {
         return new GoalListResponse(contents, next);
     }
 
-    public GoalCountResponse getGoalCounts()
+    public GoalCountResponse getGoalCounts(final String uid)
     {
-        Map<GoalStatus, Long> statusCounts = goalQueryRepository.getStatusCounts();
+        Member member = memberRepository.findByUid(uid).orElseThrow(() -> {
+            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
+        });
+
+        Map<GoalStatus, Long> statusCounts = goalQueryRepository.getStatusCounts(member.getId());
         return new GoalCountResponse(statusCounts);
     }
 
-    public RetrospectEnabledGoalCountResponse getGoalCountRetrospectEnabled()
+    public RetrospectEnabledGoalCountResponse getGoalCountRetrospectEnabled(final String uid)
     {
-        Long count = goalQueryRepository.getGoalCountRetrospectEnabled();
+        Member member = memberRepository.findByUid(uid).orElseThrow(() -> {
+            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
+        });
+
+        Long count = goalQueryRepository.getGoalCountRetrospectEnabled(member.getId());
         return new RetrospectEnabledGoalCountResponse(count);
     }
 
 
     @Transactional
-    public Long saveGoal(final Long memberId, final GoalSaveRequest goalSaveRequest)
+    public Long saveGoal(final String uid, final GoalSaveRequest goalSaveRequest)
     {
-        Goal goal = goalSaveRequest.toEntity(memberId);
+        Member member = memberRepository.findByUid(uid).orElseThrow(() -> {
+            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
+        });
+
+        Goal goal = goalSaveRequest.toEntity(member.getId());
         return goalRepository.save(goal).getId();
     }
 
@@ -83,7 +104,7 @@ public class GoalService {
     }
 
     @Transactional
-    public void removeGoal(Long goalId)
+    public void removeGoal(final Long goalId)
     {
         Goal goal = goalRepository.getByIdAndIsDeletedFalse(goalId);
         goal.remove();
@@ -92,15 +113,19 @@ public class GoalService {
     }
 
     @Transactional
-    public void recoverGoal(Long goalId, GoalRecoverRequest goalRecoverRequest)
+    public void recoverGoal(final Long goalId, final GoalRecoverRequest goalRecoverRequest)
     {
         Goal goal = goalRepository.getByIdAndIsDeletedFalse(goalId);
         goal.recover(goalRecoverRequest.startDate(), goalRecoverRequest.endDate(), goalRecoverRequest.reminderEnabled());
     }
 
-    public List<GoalListResponseDto> getStoredGoalList() {
+    public List<GoalListResponseDto> getStoredGoalList(final String uid) {
 
-        List<Goal> storedGoalList = goalRepository.getGoalsByGoalStatusAndIsDeletedFalse(GoalStatus.STORE);
+        Member member = memberRepository.findByUid(uid).orElseThrow(() -> {
+            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
+        });
+
+        List<Goal> storedGoalList = goalRepository.getGoalsByGoalStatusAndMemberIdAndIsDeletedFalse(GoalStatus.STORE, member.getId());
 
         Random random = new Random();
 

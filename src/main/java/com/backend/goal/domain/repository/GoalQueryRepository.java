@@ -25,11 +25,12 @@ public class GoalQueryRepository {
 
     private final JPAQueryFactory query;
 
-    public Slice<Goal> getGoalList(Long goalId, Pageable pageable, GoalStatus goalStatus)
+    public Slice<Goal> getGoalList(Long memberId, Long goalId, Pageable pageable, GoalStatus goalStatus)
     {
         List<Goal> goalList = query.select(goal)
                 .from(goal)
                 .where(
+                        goal.memberId.eq(memberId),
                         goal.isDeleted.isFalse(), // 삭제되지 않은 상위 목표들만 선택
                         ltGoalId(goalId),
                         goal.goalStatus.eq(goalStatus)
@@ -49,14 +50,15 @@ public class GoalQueryRepository {
         return new SliceImpl<>(goalList, pageable, hasNext);
     }
 
-    public Long getGoalCountRetrospectEnabled()
+    public Long getGoalCountRetrospectEnabled(Long memberId)
     {
         return query.select(goal.count())
                 .from(goal)
                 .where(
                         goal.isDeleted.isFalse(), // 삭제되지 않은 상위 목표들만 선택
                         goal.hasRetrospect.isFalse(), // 아직 회고를 작성하지 않는 것들 조회
-                        goal.goalStatus.eq(GoalStatus.COMPLETE) // 완료상태인것들 체크
+                        goal.goalStatus.eq(GoalStatus.COMPLETE), // 완료상태인것들 체크
+                        goal.memberId.eq(memberId)
                 )
                 .fetchOne();
     }
@@ -86,7 +88,7 @@ public class GoalQueryRepository {
     }
 
 
-    public Map<GoalStatus, Long> getStatusCounts() {
+    public Map<GoalStatus, Long> getStatusCounts(Long memberId) {
 
         List<Tuple> counts = query
                 .select(
@@ -94,7 +96,10 @@ public class GoalQueryRepository {
                         goal.goalStatus.count()
                 )
                 .from(goal)
-                .where(goal.isDeleted.isFalse())
+                .where(
+                        goal.isDeleted.isFalse(),
+                        goal.memberId.eq(memberId)
+                        )
                 .groupBy(goal.goalStatus)
                 .fetch();
 

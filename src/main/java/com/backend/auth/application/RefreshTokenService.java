@@ -19,7 +19,7 @@ public class RefreshTokenService {
 
     public String findUidByRefreshToken(String refreshToken){
         RefreshToken result = refreshTokenRepository.findByTokenValue(refreshToken)
-                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(ErrorCode.TOKEN_NOT_FOUND));
         return result.getUid();
     }
 

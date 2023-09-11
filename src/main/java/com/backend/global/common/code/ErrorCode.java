@@ -80,6 +80,8 @@ public enum ErrorCode {
 
     BLACK_LIST_TOKEN(UNAUTHORIZED.value(), "AUTH-005", "로그아웃하거나 회원탈퇴한 사용자입니다."),
 
+    TOKEN_NOT_FOUND(UNAUTHORIZED.value(), "AUTH-006", "인증되지 않은 토큰의 입력입니다."),
+
     /* Retrospect */
     RETROSPECT_IS_NOT_WRITTEN(NOT_FOUND.value(), "RETROSPECT-001", "회고가 작성되지 않은 상위 목표입니다."),
 

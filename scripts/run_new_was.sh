@@ -29,6 +29,6 @@ echo "> Kill WAS running at ${TARGET_PORT}."
 sudo kill $(sudo lsof -t -i:${TARGET_PORT})
 
 # run jar file in background
-nohup sudo java -jar -Dspring.profiles.active=dev -Dserver.port=${TARGET_PORT} /home/ubuntu/app/build/libs/backend-0.0.1-SNAPSHOT.jar > /home/ubuntu/nohup.out 2>&1 &
+nohup sudo java -jar -Duser.timezone="Asia/Seoul" -Dspring.profiles.active=dev -Dserver.port=${TARGET_PORT} /home/ubuntu/app/build/libs/backend-0.0.1-SNAPSHOT.jar > /home/ubuntu/nohup.out 2>&1 &
 echo "> Now new WAS runs at ${TARGET_PORT}."
 exit 0

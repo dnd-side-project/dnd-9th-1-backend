@@ -7,12 +7,14 @@ import com.backend.goal.domain.repository.GoalRepository;
 import com.backend.retrospect.application.dto.response.RetrospectResponse;
 import com.backend.retrospect.domain.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @Transactional
 public class RetrospectService {
@@ -28,13 +30,15 @@ public class RetrospectService {
     }
 
     public RetrospectResponse getRetrospect(Long goalId) {
-        Retrospect retrospect = retrospectRepository.findByGoalId(goalId)
+            Retrospect retrospect = retrospectRepository.findByGoalId(goalId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.RETROSPECT_IS_NOT_WRITTEN));
         return RetrospectResponse.from(retrospect.getHasGuide(), retrospect.getContents(), retrospect.getSuccessLevel());
     }
 
     private void findGoalAndCheckRetrospect(Long goalId) {
         Goal goal = goalRepository.getByIdAndIsDeletedFalse(goalId);
+
+        // 이미 회고를 작성한 상위 목표인 경우 회고를 작성할 수 없다.
         if(goal.getHasRetrospect()){
             throw new BusinessException(ErrorCode.ALREADY_HAS_RETROSPECT);
         }

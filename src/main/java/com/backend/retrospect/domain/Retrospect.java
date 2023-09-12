@@ -19,7 +19,7 @@ public class Retrospect extends BaseEntity {
     @Column(name = "retrospect_id")
     private Long id;
 
-    @Column(name = "goal_id")
+    @Column(name = "goal_id", unique = true)
     private Long goalId;
 
     @Column(name = "has_guide")

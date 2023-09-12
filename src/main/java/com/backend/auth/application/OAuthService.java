@@ -30,7 +30,12 @@ public class OAuthService {
         String accessToken = tokenProvider.generateAccessToken(uid);
         String refreshToken = tokenProvider.generateRefreshToken(uid);
 
+        log.info("save refresh token to redis : uid = {}, refresh token = {}", uid, refreshToken);
         refreshTokenService.saveRefreshToken(uid, refreshToken);
+
+        boolean checkRefreshTokenSaved = refreshTokenService.checkRefreshTokenSaved(uid, refreshToken);
+        log.info("check uid and refresh token saved : {}" , checkRefreshTokenSaved);
+
         fcmTokenService.saveFcmToken(uid, fcmToken);
 
         return new LoginResponse(isFirstLogin, accessToken, refreshToken);
@@ -42,6 +47,7 @@ public class OAuthService {
         log.info("refresh token : " + refreshToken);
         String uid = refreshTokenService.findUidByRefreshToken(refreshToken);
 
+        log.info("uid : " + uid);
         String renewAccessToken = tokenProvider.generateAccessToken(uid);
         String renewRefreshToken = tokenProvider.generateRefreshToken(uid);
 

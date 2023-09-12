@@ -7,6 +7,8 @@ import com.backend.global.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class RefreshTokenService {
@@ -21,6 +23,12 @@ public class RefreshTokenService {
         RefreshToken result = refreshTokenRepository.findByTokenValue(refreshToken)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TOKEN_NOT_FOUND));
         return result.getUid();
+    }
+
+    public boolean checkRefreshTokenSaved(String uid, String refreshToken){
+        Optional<RefreshToken> result = refreshTokenRepository.findByUidAndTokenValue(uid, refreshToken);
+        if(result.isPresent()) return true;
+        return false;
     }
 
     public void deleteByUid(String uid) {

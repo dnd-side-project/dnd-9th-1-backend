@@ -49,7 +49,7 @@ public class GoalServiceTest {
     {
         // given
         GoalSaveRequest placeSaveRequest = new GoalSaveRequest("제목", LocalDate.now(), LocalDate.now(), true);
-        Long goalId = goalService.saveGoal(1L, placeSaveRequest);
+        Long goalId = goalService.saveGoal("userId", placeSaveRequest);
 
 
         // then
@@ -65,11 +65,11 @@ public class GoalServiceTest {
         for(int i =0; i < 10; i++)
         {
             GoalSaveRequest placeSaveRequest = new GoalSaveRequest("제목 "+i, LocalDate.now(), LocalDate.now(), true);
-            goalService.saveGoal(1L, placeSaveRequest);
+            goalService.saveGoal("userId", placeSaveRequest);
         }
 
         // when
-        GoalListResponse goalList = goalService.getGoalList(null, Pageable.ofSize(5), "process");
+        GoalListResponse goalList = goalService.getGoalList("userId", 10L, Pageable.ofSize(5), "process");
 
         // then
         Assertions.assertThat(goalList.contents()).hasSize(5);
@@ -85,11 +85,11 @@ public class GoalServiceTest {
         for(int i =0; i < 10; i++)
         {
             GoalSaveRequest placeSaveRequest = new GoalSaveRequest("제목 "+i, LocalDate.now(), LocalDate.now(), true);
-            goalService.saveGoal(1L, placeSaveRequest);
+            goalService.saveGoal("userId", placeSaveRequest);
         }
 
         // when
-        GoalListResponse goalList = goalService.getGoalList(7L, Pageable.ofSize(5), "process");
+        GoalListResponse goalList = goalService.getGoalList("userId", 7L, Pageable.ofSize(5), "process");
 
         // then
         Assertions.assertThat(goalList.contents()).hasSize(5);
@@ -105,11 +105,11 @@ public class GoalServiceTest {
         for(int i =0; i < 10; i++)
         {
             GoalSaveRequest placeSaveRequest = new GoalSaveRequest("제목 "+i, LocalDate.now(), LocalDate.now(), true);
-            goalService.saveGoal(1L, placeSaveRequest);
+            goalService.saveGoal("userId", placeSaveRequest);
         }
 
         // when
-        GoalListResponse goalList = goalService.getGoalList(3L, Pageable.ofSize(5), "process");
+        GoalListResponse goalList = goalService.getGoalList("userId", 3L, Pageable.ofSize(5), "process");
 
         // then
         Assertions.assertThat(goalList.contents()).hasSize(2);
@@ -125,11 +125,11 @@ public class GoalServiceTest {
         for(int i =0; i < 10; i++)
         {
             GoalSaveRequest placeSaveRequest = new GoalSaveRequest("제목 "+i, LocalDate.now(), LocalDate.now(), true);
-            goalService.saveGoal(1L, placeSaveRequest);
+            goalService.saveGoal("userId", placeSaveRequest);
         }
 
         // when
-        GoalListResponse goalList = goalService.getGoalList(6L, Pageable.ofSize(5), "process");
+        GoalListResponse goalList = goalService.getGoalList("userId", 6L, Pageable.ofSize(5), "process");
 
         // then
         Assertions.assertThat(goalList.contents()).hasSize(5);
@@ -180,7 +180,7 @@ public class GoalServiceTest {
         goalRepository.save(goal);
 
         // when
-        GoalCountResponse goalCounts = goalService.getGoalCounts();
+        GoalCountResponse goalCounts = goalService.getGoalCounts("uid");
 
         // then
         Assertions.assertThat(goalCounts.counts().keySet()).hasSize(3);
@@ -217,7 +217,7 @@ public class GoalServiceTest {
         }
 
         // when
-        RetrospectEnabledGoalCountResponse count = goalService.getGoalCountRetrospectEnabled();
+        RetrospectEnabledGoalCountResponse count = goalService.getGoalCountRetrospectEnabled("userId");
 
         // then
         Assertions.assertThat(count.count()).isEqualTo(10);

@@ -8,9 +8,9 @@ import org.springframework.data.redis.core.index.Indexed;
 
 @Getter
 @AllArgsConstructor
-@RedisHash(value = "refreshToken", timeToLive = 60)
+@RedisHash(value = "refreshToken", timeToLive = 1000 * 60 * 60 * 24 * 14)
 public class RefreshToken {
-    @Id @Indexed
+    @Id
     private String uid;
 
     @Indexed

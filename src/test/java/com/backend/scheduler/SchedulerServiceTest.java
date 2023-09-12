@@ -67,7 +67,7 @@ public class SchedulerServiceTest {
         schedulerService.storeOutDateGoal();
 
         // then
-        List<Goal> goalList = goalRepository.getGoalsByGoalStatusAndIsDeletedFalse(GoalStatus.STORE);
+        List<Goal> goalList = goalRepository.getGoalsByGoalStatusAndMemberIdAndIsDeletedFalse(GoalStatus.STORE, 1L);
         assertThat(goalList).hasSize(3);
     }
 

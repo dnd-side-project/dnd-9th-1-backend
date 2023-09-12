@@ -15,7 +15,7 @@ public class RefreshTokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
 
-    public  void saveRefreshToken(String uid, String refreshToken){
+    public void saveRefreshToken(String uid, String refreshToken){
         refreshTokenRepository.save(new RefreshToken(uid, refreshToken));
     }
 

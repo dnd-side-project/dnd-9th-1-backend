@@ -44,7 +44,7 @@ public class SchedulerService {
         goalList.forEach(Goal::store);
     }
 
-    @Scheduled(cron = "0 */1 * * * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 */30 * * * *", zone = "Asia/Seoul")
     public void sendAlarm()
     {
         DayOfWeek dayOfWeek = LocalDate.now().getDayOfWeek();

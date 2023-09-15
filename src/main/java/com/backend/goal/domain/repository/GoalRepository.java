@@ -17,7 +17,7 @@ public interface GoalRepository extends JpaRepository<Goal, Long> {
         });
     }
 
-    int countByGoalStatusAndIsDeletedFalse(GoalStatus goalStatus);
+    int countByGoalStatusAndMemberIdAndIsDeletedFalse(GoalStatus goalStatus, Long memberId);
 
     List<Goal> getGoalsByGoalStatusAndMemberIdAndIsDeletedFalse(GoalStatus goalStatus, Long memberId);
 

@@ -76,7 +76,7 @@ public class DetailGoalService {
             goal.achieveReward(reward);
             goal.complete();
 
-            int count = goalRepository.countByGoalStatusAndIsDeletedFalse(GoalStatus.COMPLETE);
+            int count = goalRepository.countByGoalStatusAndMemberIdAndIsDeletedFalse(GoalStatus.COMPLETE, goal.getMemberId());
             return new GoalCompletedResponse(isCompleted, goal.getReward(), count);
         }
 
@@ -111,7 +111,7 @@ public class DetailGoalService {
             goal.achieveReward(reward);
             goal.complete();
 
-            int count = goalRepository.countByGoalStatusAndIsDeletedFalse(GoalStatus.COMPLETE);
+            int count = goalRepository.countByGoalStatusAndMemberIdAndIsDeletedFalse(GoalStatus.COMPLETE, goal.getMemberId());
             return new GoalCompletedResponse(isCompleted, goal.getReward(), count);
         }
 

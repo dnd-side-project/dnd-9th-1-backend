@@ -1,7 +1,7 @@
 package com.backend.auth.presentation;
 
 import com.backend.auth.application.OAuthService;
-import com.backend.auth.application.RefreshTokenService;
+import com.backend.auth.jwt.TokenProvider;
 import com.backend.auth.presentation.dto.request.LoginRequestDto;
 import com.backend.auth.presentation.dto.response.LoginResponse;
 import com.backend.auth.presentation.dto.response.ReissueResponse;
@@ -25,8 +25,6 @@ import static com.backend.global.common.code.SuccessCode.*;
 public class OAuthController {
 
     private final OAuthService oauthService;
-
-    private final RefreshTokenService refreshTokenService;
 
     @Operation(summary = "소셜 로그인",
                 description = "카카오, 애플 서버에서 로그인한 사용자의 userId를 통해 access token과 refresh token을 반환합니다.")

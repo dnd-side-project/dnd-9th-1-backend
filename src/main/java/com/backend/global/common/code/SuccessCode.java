@@ -1,0 +1,22 @@
+package com.backend.global.common.code;
+
+import lombok.Getter;
+
+@Getter
+public enum SuccessCode {
+
+    SELECT_SUCCESS(200, "SELECT SUCCESS"),
+    INSERT_SUCCESS(201, "INSERT SUCCESS"),
+    DELETE_SUCCESS(200, "DELETE SUCCESS"),
+    UPDATE_SUCCESS(200, "UPDATE SUCCESS"),
+    LOGIN_SUCCESS(200, "LOGIN SUCCESS"),
+    LOGOUT_SUCCESS(200, "LOGOUT SUCCESS");
+
+    private final int status;
+    private final String message;
+
+    SuccessCode(final int status, final String message) {
+        this.status = status;
+        this.message = message;
+    }
+}

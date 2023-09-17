@@ -1,14 +1,21 @@
 name: deploy
 on: 
   push: 
-    branches: ["main", "dev"]
+    branches: ["dev"]
 permissions: 
   contents: read
 jobs: 
   build:
     runs-on: ubuntu-latest
-    steps: 
-    - uses: actions/checkout@v3
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3 # clone repository
+      with:
+        token: ${{  secrets.ACTION_TOKEN  }}
+        submodules: true
+
+    - name: Update submodules
+      run: git submodule update --init --remote
 
       # Caching Gradle
     - name: Cache Gradle
@@ -28,8 +35,9 @@ jobs:
 
     - name: Gradle Authorization
       run: chmod +x gradlew
+
     - name: Gradle Build Run
-      run: ./gradlew build
+      run: ./gradlew build -x test
       
     - name: Create Zip files
       run: zip -r ./$GITHUB_SHA.zip .

@@ -29,13 +29,9 @@ import java.util.Objects;
 @Slf4j
 @Component
 public class TokenProvider {
-     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 2; // 2시간
+    private Long accessTokenExpireTime = Long.valueOf(1000 * 60 * 60 * 2);
 
-//    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 30; // 30초
-
-     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 14; // 2주
-
-//    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60; // 1분
+    private Long refreshTokenExpireTime = Long.valueOf(1000 * 60 * 60 * 24 * 14);
 
     private static final String TOKEN_HEADER_PREFIX = "Bearer ";
 
@@ -45,18 +41,18 @@ public class TokenProvider {
 
     private final MemberRepository memberRepository;
 
-    public TokenProvider(@Value("${jwt.secret}") String secretKey, RefreshTokenService refreshTokenService, MemberRepository memberRepository){
+    public TokenProvider(@Value("${jwt.secret}") String secretKey, MemberRepository memberRepository){
         this.memberRepository = memberRepository;
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
     public String generateAccessToken(String uid){
-        return generateToken(uid, ACCESS_TOKEN_EXPIRE_TIME);
+        return generateToken(uid, accessTokenExpireTime);
     }
 
     public String generateRefreshToken(String uid){
-        return generateToken(uid, REFRESH_TOKEN_EXPIRE_TIME);
+        return generateToken(uid, refreshTokenExpireTime);
     }
 
     public String generateToken(String uid, Long expireTime){
@@ -130,4 +126,21 @@ public class TokenProvider {
         UserDetails principal = new User(claims.getSubject(), "", authorities);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
+
+    public void updateAccessTokenExpireTime(Long expireTime){
+        accessTokenExpireTime = expireTime;
+    }
+
+    public void updateRefreshTokenExpireTime(Long expireTime){
+        refreshTokenExpireTime = expireTime;
+    }
+
+    public Long getAccessTokenExpireTime(){
+        return accessTokenExpireTime;
+    }
+
+    public Long getRefreshTokenExpireTime() {
+        return refreshTokenExpireTime;
+    }
+
 }

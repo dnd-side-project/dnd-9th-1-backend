@@ -29,7 +29,6 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         try {
             String accessToken = tokenProvider.getToken(request.getHeader(AUTHORIZATION_HEADER));
 
-
             // 토큰의 유효성을 검증
             tokenProvider.validateToken(accessToken);
             blackListService.checkBlackList(accessToken);

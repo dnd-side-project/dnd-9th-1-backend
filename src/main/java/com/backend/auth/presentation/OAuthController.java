@@ -26,8 +26,6 @@ public class OAuthController {
 
     private final OAuthService oauthService;
 
-    private final TokenProvider tokenProvider;
-
     @Operation(summary = "소셜 로그인",
                 description = "카카오, 애플 서버에서 로그인한 사용자의 userId를 통해 access token과 refresh token을 반환합니다.")
     @PostMapping("/{provider}")

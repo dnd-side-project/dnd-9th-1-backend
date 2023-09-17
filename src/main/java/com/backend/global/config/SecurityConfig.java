@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final TokenProvider tokenProvider;
-    
+
     private final BlackListService blackListService;
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;

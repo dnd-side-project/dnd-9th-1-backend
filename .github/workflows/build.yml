@@ -22,6 +22,9 @@ jobs: # defining jobs, executed in this workflows
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3 # clone repository
+      with:
+        token: ${{  secrets.ACTION_TOKEN  }}
+        submodules: true
 
       # Caching Gradle
     - name: Cache Gradle
@@ -43,13 +46,13 @@ jobs: # defining jobs, executed in this workflows
     - name: Gradle Authorization
       run: chmod +x gradlew
 
-#    # Gradle run
-#    - name: Gradle Build Run
-#      run: ./gradlew -Dspring.profiles.active=test build
+    # Gradle run
+    - name: Gradle Build Run
+      run: ./gradlew -Dspring.profiles.active=test build
 
       # Gradle test
-    - name: Test with Gradle
-      run: ./gradlew -Dspring.profiles.active=test --info test
+#    - name: Test with Gradle
+#      run: ./gradlew -Dspring.profiles.active=test --info test
       # Publish Unit Test Results
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action@v1

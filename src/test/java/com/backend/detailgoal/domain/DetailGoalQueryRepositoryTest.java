@@ -45,16 +45,20 @@ public class DetailGoalQueryRepositoryTest {
         databaseCleaner.execute();
     }
 
-    @DisplayName("하위 목표 설정시 선택한 요일과 시간에 해당하는 하위 목표 리스트를 조회한다")
+    @DisplayName("하위 목표 설정시 선택한 요일과 시간에 등록된 채움함 내 하위목표 리스트를 조회한다")
     @Test
     void 하위목표_설정시_선택한_요일과_시간에_해당하는_하위목표_리스트를_조회한다()
     {
         // given
-        Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 1), true, GoalStatus.STORE);
-        Goal savedGoal = goalRepository.save(goal);
+        Goal goal_process = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 1), true, GoalStatus.PROCESS);
+        Goal goal_store = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 1), true, GoalStatus.STORE);
+        Goal goal_complete = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 1), true, GoalStatus.COMPLETE);
+        List<Goal> goalList = goalRepository.saveAll(List.of(goal_process, goal_store, goal_complete));
 
-        DetailGoal detailGoal = new DetailGoal(savedGoal.getId(), "테스트 제목", false, true, List.of(DayOfWeek.MONDAY, DayOfWeek.TUESDAY), LocalTime.of(10, 0, 0));
-        detailGoalRepository.save(detailGoal);
+        DetailGoal detailGoal1 = new DetailGoal(goalList.get(0).getId(), "테스트 제목", false, true, List.of(DayOfWeek.MONDAY, DayOfWeek.TUESDAY), LocalTime.of(10, 0, 0));
+        DetailGoal detailGoal2 = new DetailGoal(goalList.get(1).getId(), "테스트 제목", false, true, List.of(DayOfWeek.MONDAY, DayOfWeek.TUESDAY), LocalTime.of(10, 0, 0));
+        DetailGoal detailGoal3 = new DetailGoal(goalList.get(2).getId(), "테스트 제목", false, true, List.of(DayOfWeek.MONDAY, DayOfWeek.TUESDAY), LocalTime.of(10, 0, 0));
+        detailGoalRepository.saveAll(List.of(detailGoal1,detailGoal2,detailGoal3));
 
         // when
         List<DetailGoalAlarmResponse> results = detailGoalQueryRepository.getMemberIdListDetailGoalAlarmTimeArrived(DayOfWeek.MONDAY, LocalTime.of(10, 0, 0));

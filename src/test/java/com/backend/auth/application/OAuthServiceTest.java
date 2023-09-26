@@ -29,7 +29,7 @@ public class OAuthServiceTest {
     private static String BEARER_TOKEN_PREFIX = "Bearer ";
 
     private static String FCM_TOKEN = "fcm_token";
-    
+
     @DisplayName("Access Token을 이용해 OAuth 인증 후 JWT를 발급한다.")
     @Test
     public void loginSuccess() {

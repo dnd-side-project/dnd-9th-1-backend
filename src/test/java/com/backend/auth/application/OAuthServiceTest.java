@@ -29,9 +29,7 @@ public class OAuthServiceTest {
     private static String BEARER_TOKEN_PREFIX = "Bearer ";
 
     private static String FCM_TOKEN = "fcm_token";
-
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 30; // 30초
-
+    
     @DisplayName("Access Token을 이용해 OAuth 인증 후 JWT를 발급한다.")
     @Test
     public void loginSuccess() {
@@ -57,21 +55,20 @@ public class OAuthServiceTest {
                 () -> oAuthService.login(provider, UID , FCM_TOKEN));
     }
 
-//    @DisplayName("access token이 만료되어 refresh token을 통해 재발급한다.")
-//    @Test
-//    @Transactional
-//    public void reissueRefreshToken() throws Exception {
-//        // given
-//        LoginResponse loginResponse = oAuthService.login("kakao", UID, FCM_TOKEN);
-//        sleep(ACCESS_TOKEN_EXPIRE_TIME);
-//
-//        // when
-//        ReissueResponse reissueResponse = oAuthService.reissue(BEARER_TOKEN_PREFIX + loginResponse.refreshToken());
-//
-//        // then
-//        assertThat(reissueResponse.accessToken()).isNotNull();
-//        assertThat(loginResponse.refreshToken()).isNotNull();
-//    }
+    @DisplayName("access token이 만료되어 refresh token을 통해 재발급한다.")
+    @Test
+    @Transactional
+    public void reissueRefreshToken() throws Exception {
+        // given
+        LoginResponse loginResponse = oAuthService.login("kakao", UID, FCM_TOKEN);
+
+        // when
+        ReissueResponse reissueResponse = oAuthService.reissue(BEARER_TOKEN_PREFIX + loginResponse.refreshToken());
+
+        // then
+        assertThat(reissueResponse.accessToken()).isNotNull();
+        assertThat(loginResponse.refreshToken()).isNotNull();
+    }
 
     @DisplayName("저장되어 있지 않은 refresh token이 입력되면 예외가 발생한다. ")
     @Test

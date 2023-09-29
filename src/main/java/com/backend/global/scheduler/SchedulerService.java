@@ -33,9 +33,6 @@ public class SchedulerService {
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    private static final int RAND_COUNT = 2;
-
-    private static final int REMIND_INTERVAL = 14;
 
     @Scheduled(cron = "0 0 * * * *", zone = "Asia/Seoul")
     public void storeOutDateGoal() {

@@ -4,6 +4,7 @@ import com.backend.detailgoal.application.DetailGoalService;
 import com.backend.detailgoal.application.dto.response.DetailGoalListResponse;
 import com.backend.detailgoal.application.dto.response.DetailGoalResponse;
 import com.backend.detailgoal.application.dto.response.GoalCompletedResponse;
+import com.backend.detailgoal.domain.DetailGoal;
 import com.backend.detailgoal.presentation.dto.request.DetailGoalSaveRequest;
 import com.backend.detailgoal.presentation.dto.request.DetailGoalUpdateRequest;
 import com.backend.global.common.response.CustomResponse;
@@ -46,10 +47,10 @@ public class DetailGoalController {
     @Operation(summary = "하위 목표 생성", description = "하위 목표를 생성하는 API 입니다.")
     @ApiResponse(responseCode = "201", description = "code : 201, message : INSERT_SUCCESS")
     @PostMapping("/goals/{id}/detail-goals")
-    public ResponseEntity<CustomResponse<Void>> saveDetailGoal(@Parameter(description = "상위 목표 ID") @PathVariable Long id, @RequestBody @Valid DetailGoalSaveRequest detailGoalSaveRequest)
+    public ResponseEntity<CustomResponse<Long>> saveDetailGoal(@Parameter(description = "상위 목표 ID") @PathVariable Long id, @RequestBody @Valid DetailGoalSaveRequest detailGoalSaveRequest)
     {
-        detailGoalService.saveDetailGoal(id, detailGoalSaveRequest);
-        return CustomResponse.success(INSERT_SUCCESS);
+        DetailGoal detailGoal = detailGoalService.saveDetailGoal(id, detailGoalSaveRequest);
+        return CustomResponse.success(INSERT_SUCCESS, detailGoal.getId());
     }
 
     @Operation(summary = "하위 목표 수정", description = "하위 목표를 수정하는 API 입니다.")

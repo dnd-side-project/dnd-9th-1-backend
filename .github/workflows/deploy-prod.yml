@@ -1,7 +1,7 @@
-name: deploy
+name: deploy-prod
 on: 
   push: 
-    branches: ["dev"]
+    branches: ["main"]
 permissions: 
   contents: read
 jobs: 
@@ -60,6 +60,6 @@ jobs:
         aws deploy create-deployment \
         --application-name dnd-9th-1-codedeploy \
         --deployment-config-name CodeDeployDefault.AllAtOnce \
-        --deployment-group-name dnd-9th-1-deployment-group \
+        --deployment-group-name milestone-prod-deployment-group \
         --s3-location bucket=dnd-9th-1-s3,bundleType=zip,key=$GITHUB_SHA.zip
 

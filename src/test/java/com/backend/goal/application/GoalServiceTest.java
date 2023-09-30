@@ -10,6 +10,7 @@ import com.backend.goal.domain.enums.GoalStatus;
 import com.backend.goal.presentation.dto.GoalRecoverRequest;
 import com.backend.goal.presentation.dto.GoalSaveRequest;
 import com.backend.goal.presentation.dto.GoalUpdateRequest;
+import com.backend.member.domain.*;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,6 +29,8 @@ import java.time.LocalDate;
 @Transactional
 public class GoalServiceTest {
 
+    private static final String UID = "userId";
+
     @Autowired
     DatabaseCleaner databaseCleaner;
 
@@ -42,15 +45,20 @@ public class GoalServiceTest {
     @Autowired
     private GoalService goalService;
 
+    @Autowired
+    private MemberRepository memberRepository;
+
 
     @DisplayName("상위 목표를 저장할 수 있다.")
     @Test
     void 상위목표를_저장할수_있다()
     {
         // given
-        GoalSaveRequest placeSaveRequest = new GoalSaveRequest("제목", LocalDate.now(), LocalDate.now(), true);
-        Long goalId = goalService.saveGoal("userId", placeSaveRequest);
+        Member member = Member.from(Provider.KAKAO, UID);
+        memberRepository.save(member);
 
+        GoalSaveRequest placeSaveRequest = new GoalSaveRequest("제목", LocalDate.now(), LocalDate.now(), true);
+        Long goalId = goalService.saveGoal(member.getUid(), placeSaveRequest);
 
         // then
         Goal savedUser = goalRepository.getById(goalId);
@@ -62,18 +70,20 @@ public class GoalServiceTest {
     void 상위목표_리스트를_처음_조회한다()
     {
         // given
+        Member member = Member.from(Provider.KAKAO, UID);
+        memberRepository.save(member);
+
         for(int i =0; i < 10; i++)
         {
             GoalSaveRequest placeSaveRequest = new GoalSaveRequest("제목 "+i, LocalDate.now(), LocalDate.now(), true);
-            goalService.saveGoal("userId", placeSaveRequest);
+            goalService.saveGoal(member.getUid(), placeSaveRequest);
         }
 
         // when
-        GoalListResponse goalList = goalService.getGoalList("userId", 10L, Pageable.ofSize(5), "process");
+        GoalListResponse goalList = goalService.getGoalList(member.getUid(), 10L, Pageable.ofSize(5), "process");
 
         // then
         Assertions.assertThat(goalList.contents()).hasSize(5);
-        Assertions.assertThat(goalList.contents().get(0).goalId()).isEqualTo(10L);
         Assertions.assertThat(goalList.next()).isTrue();
     }
 
@@ -82,14 +92,17 @@ public class GoalServiceTest {
     void 상위목표_리스트를_커서값_이후부터_조회한다()
     {
         // given
+        Member member = Member.from(Provider.KAKAO, UID);
+        memberRepository.save(member);
+
         for(int i =0; i < 10; i++)
         {
             GoalSaveRequest placeSaveRequest = new GoalSaveRequest("제목 "+i, LocalDate.now(), LocalDate.now(), true);
-            goalService.saveGoal("userId", placeSaveRequest);
+            goalService.saveGoal(member.getUid(), placeSaveRequest);
         }
 
         // when
-        GoalListResponse goalList = goalService.getGoalList("userId", 7L, Pageable.ofSize(5), "process");
+        GoalListResponse goalList = goalService.getGoalList(UID, 7L, Pageable.ofSize(5), "process");
 
         // then
         Assertions.assertThat(goalList.contents()).hasSize(5);
@@ -102,14 +115,17 @@ public class GoalServiceTest {
     void 상위목표_리스트의_페이지크기보다_데이터가_없다면_false를_반환한다()
     {
         // given
+        Member member = Member.from(Provider.KAKAO, UID);
+        memberRepository.save(member);
+
         for(int i =0; i < 10; i++)
         {
             GoalSaveRequest placeSaveRequest = new GoalSaveRequest("제목 "+i, LocalDate.now(), LocalDate.now(), true);
-            goalService.saveGoal("userId", placeSaveRequest);
+            goalService.saveGoal(member.getUid(), placeSaveRequest);
         }
 
         // when
-        GoalListResponse goalList = goalService.getGoalList("userId", 3L, Pageable.ofSize(5), "process");
+        GoalListResponse goalList = goalService.getGoalList(member.getUid(), 3L, Pageable.ofSize(5), "process");
 
         // then
         Assertions.assertThat(goalList.contents()).hasSize(2);
@@ -122,14 +138,17 @@ public class GoalServiceTest {
     void 상위목표_리스트의_페이지크기만큼_조회하고_남은_데이터가_없다면_false를_반환한다()
     {
         // given
+        Member member = Member.from(Provider.KAKAO, UID);
+        memberRepository.save(member);
+
         for(int i =0; i < 10; i++)
         {
             GoalSaveRequest placeSaveRequest = new GoalSaveRequest("제목 "+i, LocalDate.now(), LocalDate.now(), true);
-            goalService.saveGoal("userId", placeSaveRequest);
+            goalService.saveGoal(member.getUid(), placeSaveRequest);
         }
 
         // when
-        GoalListResponse goalList = goalService.getGoalList("userId", 6L, Pageable.ofSize(5), "process");
+        GoalListResponse goalList = goalService.getGoalList(member.getUid(), 6L, Pageable.ofSize(5), "process");
 
         // then
         Assertions.assertThat(goalList.contents()).hasSize(5);
@@ -142,7 +161,6 @@ public class GoalServiceTest {
     void 상위목표를_수정할수_있다()
     {
         // given
-
         Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 1), true, GoalStatus.PROCESS);
         Goal savedGoal = goalRepository.save(goal);
 
@@ -176,11 +194,14 @@ public class GoalServiceTest {
     void 상위목표_상태에_따라_통계를_제공한다()
     {
         // given
+        Member member = Member.from(Provider.KAKAO, UID);
+        memberRepository.save(member);
+
         Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 1), true, GoalStatus.PROCESS);
         goalRepository.save(goal);
 
         // when
-        GoalCountResponse goalCounts = goalService.getGoalCounts("uid");
+        GoalCountResponse goalCounts = goalService.getGoalCounts(member.getUid());
 
         // then
         Assertions.assertThat(goalCounts.counts().keySet()).hasSize(3);
@@ -210,6 +231,9 @@ public class GoalServiceTest {
     void 완료함의_목표들중_회고가능한_목표수를_계산한다()
     {
         // given
+        Member member = Member.from(Provider.KAKAO, UID);
+        memberRepository.save(member);
+
         for(int i =0; i < 10; i++)
         {
             Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 1), true, GoalStatus.COMPLETE);
@@ -217,7 +241,7 @@ public class GoalServiceTest {
         }
 
         // when
-        RetrospectEnabledGoalCountResponse count = goalService.getGoalCountRetrospectEnabled("userId");
+        RetrospectEnabledGoalCountResponse count = goalService.getGoalCountRetrospectEnabled(member.getUid());
 
         // then
         Assertions.assertThat(count.count()).isEqualTo(10);

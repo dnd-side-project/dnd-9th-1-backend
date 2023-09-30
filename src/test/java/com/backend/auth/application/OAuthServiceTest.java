@@ -30,8 +30,6 @@ public class OAuthServiceTest {
 
     private static String FCM_TOKEN = "fcm_token";
 
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 30; // 30초
-
     @DisplayName("Access Token을 이용해 OAuth 인증 후 JWT를 발급한다.")
     @Test
     public void loginSuccess() {
@@ -63,7 +61,6 @@ public class OAuthServiceTest {
     public void reissueRefreshToken() throws Exception {
         // given
         LoginResponse loginResponse = oAuthService.login("kakao", UID, FCM_TOKEN);
-        sleep(ACCESS_TOKEN_EXPIRE_TIME);
 
         // when
         ReissueResponse reissueResponse = oAuthService.reissue(BEARER_TOKEN_PREFIX + loginResponse.refreshToken());

@@ -14,7 +14,10 @@ import com.backend.goal.domain.enums.RewardType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.DayOfWeek;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,11 +50,11 @@ public class DetailGoalService {
     {
         DetailGoal detailGoal = detailGoalSaveRequest.toEntity();
         detailGoal.setGoalId(goalId);
-        detailGoalRepository.save(detailGoal);
+        DetailGoal savedDetailGoal = detailGoalRepository.save(detailGoal);
 
         Goal goal = goalRepository.getByIdAndIsDeletedFalse(goalId);
         goal.increaseEntireDetailGoalCnt(); // 전체 하위 목표 개수 증가
-        return detailGoal;
+        return savedDetailGoal;
     }
 
     @Transactional
@@ -84,14 +87,14 @@ public class DetailGoalService {
     }
 
     @Transactional
-    public DetailGoal updateDetailGoal(Long detailGoalId, DetailGoalUpdateRequest detailGoalUpdateRequest)
+    public Set<DayOfWeek> updateDetailGoal(Long detailGoalId, DetailGoalUpdateRequest detailGoalUpdateRequest)
     {
         DetailGoal detailGoal = detailGoalRepository.getByIdAndIsDeletedFalse(detailGoalId);
-        detailGoal.update(detailGoalUpdateRequest.title(),
-                          detailGoalUpdateRequest.alarmEnabled(),
-                          detailGoalUpdateRequest.alarmTime(),
-                          detailGoalUpdateRequest.alarmDays());
-        return detailGoal;
+        return detailGoal.update(detailGoalUpdateRequest.title(),
+                detailGoalUpdateRequest.alarmEnabled(),
+                detailGoalUpdateRequest.alarmTime(),
+                detailGoalUpdateRequest.alarmDays());
+
     }
 
     @Transactional

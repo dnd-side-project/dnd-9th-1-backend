@@ -45,7 +45,7 @@ public class DetailGoal extends BaseEntity {
     @CollectionTable(name = "detail_goals_alarm_days", joinColumns = @JoinColumn(name = "detail_goal_id"))
     @Column(name = "alarm_days")
     @Enumerated(EnumType.STRING)
-    private List<DayOfWeek> alarmDays;
+    private Set<DayOfWeek> alarmDays;
 
     @Column(name = "alarm_time")
     private LocalTime alarmTime;
@@ -61,13 +61,13 @@ public class DetailGoal extends BaseEntity {
     }
 
 
-    public void update(String title, Boolean alarmEnabled, LocalTime alarmTime, List<String> alarmDays)
+    public Set<DayOfWeek> update(String title, Boolean alarmEnabled, LocalTime alarmTime, List<String> alarmDays)
     {
          validateTitleLength(title);
          this.title = title;
          this.alarmEnabled = alarmEnabled;
          this.alarmTime = alarmTime;
-         updateAlarmDays(alarmDays);
+         return updateAlarmDays(alarmDays);
     }
 
     private void validateTitleLength(final String title) {
@@ -84,7 +84,7 @@ public class DetailGoal extends BaseEntity {
         this.title = title;
         this.isCompleted = isCompleted;
         this.alarmEnabled = alarmEnabled;
-        this.alarmDays = alarmDays;
+        this.alarmDays = new HashSet<>(alarmDays);
         this.alarmTime = alarmTime;
     }
 
@@ -105,8 +105,12 @@ public class DetailGoal extends BaseEntity {
         this.isCompleted = Boolean.FALSE;
     }
 
-    private void updateAlarmDays(List<String> alarmDays)
+    private Set<DayOfWeek> updateAlarmDays(List<String> alarmDays)
     {
-        this.alarmDays = alarmDays.stream().map(DayOfWeek::valueOf).collect(Collectors.toList());
+        Set<DayOfWeek> copy = new HashSet<>(this.alarmDays);
+        Set<DayOfWeek> collect = alarmDays.stream().map(DayOfWeek::valueOf).collect(Collectors.toSet());
+        this.alarmDays = collect;
+        copy.removeAll(collect);
+        return copy;
     }
 }

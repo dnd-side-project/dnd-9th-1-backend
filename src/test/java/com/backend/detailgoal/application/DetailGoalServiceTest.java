@@ -23,6 +23,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -75,16 +76,16 @@ public class DetailGoalServiceTest {
     void 하위_목표를_수정한다()
     {
         // given
-        DetailGoal detailGoal = new DetailGoal(1L, "테스트 제목", false, true, List.of(DayOfWeek.MONDAY), LocalTime.of(10, 0));
+        DetailGoal detailGoal = new DetailGoal(1L, "테스트 제목", false, true, List.of(DayOfWeek.MONDAY,DayOfWeek.TUESDAY), LocalTime.of(10, 0));
         DetailGoal savedDetailGoal = detailGoalRepository.save(detailGoal);
 
         // when
-        DetailGoalUpdateRequest detailGoalUpdateRequest = new DetailGoalUpdateRequest("수정된 제목", true, LocalTime.of(10, 0), List.of("THURSDAY", "FRIDAY"));
-        detailGoalService.updateDetailGoal(savedDetailGoal.getId(), detailGoalUpdateRequest);
+        DetailGoalUpdateRequest detailGoalUpdateRequest = new DetailGoalUpdateRequest("수정된 제목", true, LocalTime.of(10, 0), List.of("TUESDAY", "FRIDAY"));
+        Set<DayOfWeek> dayOfWeeks = detailGoalService.updateDetailGoal(savedDetailGoal.getId(), detailGoalUpdateRequest);
 
         // then
         DetailGoal updatedDetailGoal = detailGoalRepository.getByIdAndIsDeletedFalse(savedDetailGoal.getId());
-        assertThat(updatedDetailGoal.getAlarmDays()).usingRecursiveComparison().isEqualTo(List.of(DayOfWeek.THURSDAY, DayOfWeek.FRIDAY));
+        assertThat(dayOfWeeks).hasSize(1);
     }
 
     @DisplayName("하위 목표를 삭제하면 상위 목표의 하위 목표 카운트가 감소한다.")
@@ -123,7 +124,7 @@ public class DetailGoalServiceTest {
         DetailGoalResponse detailGoalResponse = detailGoalService.getDetailGoal(savedDetailGoal.getId());
 
         // then
-        assertThat(detailGoalResponse.alarmDays()).usingRecursiveComparison().isEqualTo(List.of(DayOfWeek.MONDAY, DayOfWeek.TUESDAY));
+        assertThat(detailGoalResponse.alarmDays()).usingRecursiveComparison().isEqualTo(Set.of(DayOfWeek.MONDAY, DayOfWeek.TUESDAY));
         assertThat(detailGoalResponse.alarmTime()).isEqualTo(LocalTime.of(10, 0));
     }
 

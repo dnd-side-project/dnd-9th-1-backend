@@ -20,6 +20,7 @@ public class SwaggerConfig {
         testServer.setUrl("http://192.168.1.190:8080");
 
         return new OpenAPI()
+                .addServersItem(new Server().url("https://milestone-staging.site"))
                 .addServersItem(new Server().url("/"))
                 .info(
                         new Info()

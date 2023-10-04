@@ -1,4 +1,4 @@
-package com.backend.auth.config;
+package com.backend.global.config;
 
 import com.backend.auth.application.BlackListService;
 import com.backend.auth.jwt.filter.JwtExceptionFilter;

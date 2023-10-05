@@ -27,6 +27,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
+            log.info("OAuth Login Access Occur in AuthenticationFilter");
             String accessToken = tokenProvider.getToken(request.getHeader(AUTHORIZATION_HEADER));
 
             // 토큰의 유효성을 검증

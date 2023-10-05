@@ -21,7 +21,7 @@ public record ExpireTimeRequest(
         if(days!= 0) expireTime *= (days * 24 * 60 * 60);
         if(hours != 0) expireTime *= (hours * 60 * 60);
         if(minutes != 0) expireTime *= (minutes * 60);
-        if(seconds != 0) expireTime *= (seconds * 60);
+        if(seconds != 0) expireTime *= seconds;
         return expireTime;
     }
 }

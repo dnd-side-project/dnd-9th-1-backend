@@ -48,7 +48,7 @@ public class SecurityConfig {
                     .frameOptions().disable()
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/swagger-ui/**", "/api-docs/**", "/health", "/auth/**").permitAll()
+                .requestMatchers("/swagger-ui/**", "/api-docs/**", "/health", "/auth/**", "/token/**").permitAll()
                 .anyRequest().authenticated()
 
                 .and()

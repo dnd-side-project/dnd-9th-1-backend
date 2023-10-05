@@ -5,15 +5,16 @@ import com.backend.auth.presentation.dto.request.ExpireTimeRequest;
 import com.backend.auth.presentation.dto.response.ExpireTimeResponse;
 import com.backend.global.common.response.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static com.backend.global.common.code.SuccessCode.SELECT_SUCCESS;
 import static com.backend.global.common.code.SuccessCode.UPDATE_SUCCESS;
 
+@Slf4j
 @Tag(name = "token", description = "토큰 관리 API입니다.")
 @RequiredArgsConstructor
 @RequestMapping("/token")
@@ -30,7 +31,7 @@ public class TokenController {
 
     @Operation(summary = "리프레시 토큰 유효 시간 수정", description = "리프레시 토큰의 유효 시간을 수정한다.")
     @PutMapping("/refresh/expire")
-    public ResponseEntity<CustomResponse<Void>> updateRefreshTokenExpireTime(@RequestBody ExpireTimeRequest expireTimeRequest){
+    public ResponseEntity<CustomResponse<Void>> updateRefreshTokenExpireTime(@RequestBody ExpireTimeRequest expireTimeRequest) {
         tokenProvider.updateRefreshTokenExpireTime(expireTimeRequest.toLong());
         return CustomResponse.success(UPDATE_SUCCESS);
     }

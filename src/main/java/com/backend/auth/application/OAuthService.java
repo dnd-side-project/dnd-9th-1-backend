@@ -30,11 +30,8 @@ public class OAuthService {
         String accessToken = tokenProvider.generateAccessToken(uid);
         String refreshToken = tokenProvider.generateRefreshToken(uid);
 
-        log.info("save refresh token to redis : uid = {}, refresh token = {}", uid, refreshToken);
-        refreshTokenService.saveRefreshToken(uid, refreshToken);
-
-        boolean checkRefreshTokenSaved = refreshTokenService.checkRefreshTokenSaved(uid, refreshToken);
-        log.info("check uid and refresh token saved : {}" , checkRefreshTokenSaved);
+        Long refreshTokenExpiration = tokenProvider.getRefreshTokenExpireTime();
+        refreshTokenService.saveRefreshToken(uid, refreshToken, refreshTokenExpiration);
 
         fcmTokenService.saveFcmToken(uid, fcmToken);
 
@@ -44,15 +41,15 @@ public class OAuthService {
     public ReissueResponse reissue(String bearerRefreshToken) throws Exception {
         String refreshToken = tokenProvider.getToken(bearerRefreshToken);
 
-        log.info("refresh token : " + refreshToken);
         String uid = refreshTokenService.findUidByRefreshToken(refreshToken);
 
-        log.info("uid : " + uid);
         String renewAccessToken = tokenProvider.generateAccessToken(uid);
         String renewRefreshToken = tokenProvider.generateRefreshToken(uid);
 
         refreshTokenService.deleteByUid(uid);
-        refreshTokenService.saveRefreshToken(uid, renewRefreshToken);
+
+        Long refreshTokenExpiration = tokenProvider.getRefreshTokenExpireTime();
+        refreshTokenService.saveRefreshToken(uid, renewRefreshToken, refreshTokenExpiration);
 
         return new ReissueResponse(renewAccessToken, renewRefreshToken);
     }

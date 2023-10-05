@@ -27,11 +27,11 @@ public class SecurityConfig {
 
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer(){
-        return web -> web.ignoring()
-                .requestMatchers("/swagger-ui/**", "/api-docs/**", "/health", "/auth/**");
-    }
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer(){
+//        return web -> web.ignoring()
+//                .requestMatchers();
+//    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -48,7 +48,7 @@ public class SecurityConfig {
                     .frameOptions().disable()
                 .and()
                 .authorizeHttpRequests()
-
+                .requestMatchers("/swagger-ui/**", "/api-docs/**", "/health", "/auth/**").permitAll()
                 .anyRequest().authenticated()
 
                 .and()

@@ -20,10 +20,10 @@ class RefreshTokenServiceTest {
     @DisplayName("사용자의 refresh token으로 UID를 반환한다.")
     void findUidByRefreshTokenTest(){
         // given
-        RefreshToken refreshToken = new RefreshToken("uid", "token value");
+        RefreshToken refreshToken = new RefreshToken("uid", "token value", 10000L);
 
         // when
-        refreshTokenService.saveRefreshToken(refreshToken.getUid(), refreshToken.getTokenValue());
+        refreshTokenService.saveRefreshToken(refreshToken.getUid(), refreshToken.getTokenValue(), refreshToken.getExpiration());
         String extractedUID = refreshTokenService.findUidByRefreshToken(refreshToken.getTokenValue());
 
         // then

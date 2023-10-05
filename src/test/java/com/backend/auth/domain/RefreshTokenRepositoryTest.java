@@ -18,7 +18,7 @@ class RefreshTokenRepositoryTest {
     @Test
     void insertAndGetTest() {
         // given
-        RefreshToken refreshToken = new RefreshToken("uid", "refresh token");
+        RefreshToken refreshToken = new RefreshToken("uid", "refresh token", 10000L );
 
         // when
         refreshTokenRepository.save(refreshToken); // (refreshToken:"uid", refreshToken:tokenValue:"refresh token")

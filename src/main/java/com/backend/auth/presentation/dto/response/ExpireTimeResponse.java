@@ -1,7 +1,9 @@
 package com.backend.auth.presentation.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public record ExpireTimeResponse(
         @Schema(description = "만료 기한의 일수", example = "14")
         Long days,
@@ -27,7 +29,7 @@ public record ExpireTimeResponse(
         Long minutes = expireTime / 60;
         if(minutes != 0) expireTime %= minutes;
 
-        Long seconds = expireTime / 60;
+        Long seconds = expireTime;
         return new ExpireTimeResponse(days, hours, minutes, seconds);
     }
 }

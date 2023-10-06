@@ -30,8 +30,12 @@ public class OAuthService {
         String accessToken = tokenProvider.generateAccessToken(uid);
         String refreshToken = tokenProvider.generateRefreshToken(uid);
 
+        if(refreshTokenService.existsRefreshToken(uid)){ // 재로그인 시 기존 리프레시 토큰 제거
+            refreshTokenService.deleteByUid(uid);
+        }
+
         Long refreshTokenExpiration = tokenProvider.getRefreshTokenExpireTime();
-        refreshTokenService.saveRefreshToken(uid, refreshToken, refreshTokenExpiration);
+        refreshTokenService.saveRefreshToken(uid, refreshToken, refreshTokenExpiration / 1000);
 
         fcmTokenService.saveFcmToken(uid, fcmToken);
 
@@ -49,7 +53,7 @@ public class OAuthService {
         refreshTokenService.deleteByUid(uid);
 
         Long refreshTokenExpiration = tokenProvider.getRefreshTokenExpireTime();
-        refreshTokenService.saveRefreshToken(uid, renewRefreshToken, refreshTokenExpiration);
+        refreshTokenService.saveRefreshToken(uid, renewRefreshToken, refreshTokenExpiration / 1000);
 
         return new ReissueResponse(renewAccessToken, renewRefreshToken);
     }
@@ -62,7 +66,7 @@ public class OAuthService {
         fcmTokenService.deleteByUid(uid);
 
         Long expiration = tokenProvider.getExpiration(accessToken);
-        blackListService.saveBlackList(accessToken, expiration);
+        blackListService.saveBlackList(accessToken, expiration / 1000);
     }
 
     public void withdraw(String bearerAccessToken)  {
@@ -74,7 +78,7 @@ public class OAuthService {
         fcmTokenService.deleteByUid(uid);
 
         Long expiration = tokenProvider.getExpiration(accessToken);
-        blackListService.saveBlackList(accessToken, expiration);
+        blackListService.saveBlackList(accessToken, expiration / 1000);
     }
 
 }

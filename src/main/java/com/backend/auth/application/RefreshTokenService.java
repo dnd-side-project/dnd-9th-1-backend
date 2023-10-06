@@ -25,6 +25,11 @@ public class RefreshTokenService {
         return result.getUid();
     }
 
+    public boolean existsRefreshToken(String uid){
+        Optional<RefreshToken> result = refreshTokenRepository.findByUid(uid);
+        return !result.isEmpty();
+    }
+
     public void deleteByUid(String uid) {
         refreshTokenRepository.findById(uid).orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
         refreshTokenRepository.deleteById(uid);

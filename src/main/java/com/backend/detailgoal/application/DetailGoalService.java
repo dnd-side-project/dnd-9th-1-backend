@@ -87,14 +87,11 @@ public class DetailGoalService {
     }
 
     @Transactional
-    public Set<DayOfWeek> updateDetailGoal(Long detailGoalId, DetailGoalUpdateRequest detailGoalUpdateRequest)
+    public Long updateDetailGoal(Long detailGoalId, DetailGoalUpdateRequest detailGoalUpdateRequest)
     {
         DetailGoal detailGoal = detailGoalRepository.getByIdAndIsDeletedFalse(detailGoalId);
-        return detailGoal.update(detailGoalUpdateRequest.title(),
-                detailGoalUpdateRequest.alarmEnabled(),
-                detailGoalUpdateRequest.alarmTime(),
-                detailGoalUpdateRequest.alarmDays());
-
+        detailGoal.update(detailGoalUpdateRequest.title(), detailGoalUpdateRequest.alarmEnabled(), detailGoalUpdateRequest.alarmTime(), detailGoalUpdateRequest.alarmDays());
+        return detailGoal.getId();
     }
 
     @Transactional

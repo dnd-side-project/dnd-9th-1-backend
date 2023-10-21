@@ -58,10 +58,10 @@ public class DetailGoalController {
     @Operation(summary = "하위 목표 수정", description = "하위 목표를 수정하는 API 입니다.")
     @ApiResponse(responseCode = "200", description = "code : 200, message : UPDATE_SUCCESS")
     @PatchMapping("/detail-goals/{id}")
-    public ResponseEntity<CustomResponse<Set<DayOfWeek>>> updateDetailGoal(@Parameter(description = "하위 목표 ID") @PathVariable Long id, @RequestBody @Valid DetailGoalUpdateRequest detailGoalUpdateRequest)
+    public ResponseEntity<CustomResponse<Long>> updateDetailGoal(@Parameter(description = "하위 목표 ID") @PathVariable Long id, @RequestBody @Valid DetailGoalUpdateRequest detailGoalUpdateRequest)
     {
-        Set<DayOfWeek> dayOfWeeks = detailGoalService.updateDetailGoal(id, detailGoalUpdateRequest);
-        return CustomResponse.success(UPDATE_SUCCESS, dayOfWeeks);
+        Long detailGoalId = detailGoalService.updateDetailGoal(id, detailGoalUpdateRequest);
+        return CustomResponse.success(UPDATE_SUCCESS, detailGoalId);
     }
 
     @Operation(summary = "하위 목표 삭제", description = "하위 목표를 삭제하는 API 입니다.")

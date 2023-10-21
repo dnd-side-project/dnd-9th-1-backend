@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public record DetailGoalUpdateRequest(
         @Schema(description = "알람 받을 시각", example = "오후 11:30")
         LocalTime alarmTime,
 
-        @Schema(description = "요일 정보", example = "[\"MONDAY\", \"TUSEDAY\", \"FRIDAY\"]")
+        @Schema(description = "요일 정보", example = "[\"MONDAY\", \"TUESDAY\", \"FRIDAY\"]")
         List<String> alarmDays
 ) {
 }

@@ -81,11 +81,11 @@ public class DetailGoalServiceTest {
 
         // when
         DetailGoalUpdateRequest detailGoalUpdateRequest = new DetailGoalUpdateRequest("수정된 제목", true, LocalTime.of(10, 0), List.of("TUESDAY", "FRIDAY"));
-        Set<DayOfWeek> dayOfWeeks = detailGoalService.updateDetailGoal(savedDetailGoal.getId(), detailGoalUpdateRequest);
+        detailGoalService.updateDetailGoal(savedDetailGoal.getId(), detailGoalUpdateRequest);
 
         // then
         DetailGoal updatedDetailGoal = detailGoalRepository.getByIdAndIsDeletedFalse(savedDetailGoal.getId());
-        assertThat(dayOfWeeks).hasSize(1);
+        assertThat(updatedDetailGoal.getAlarmDays()).containsExactlyInAnyOrder(DayOfWeek.TUESDAY, DayOfWeek.FRIDAY);
     }
 
     @DisplayName("하위 목표를 삭제하면 상위 목표의 하위 목표 카운트가 감소한다.")

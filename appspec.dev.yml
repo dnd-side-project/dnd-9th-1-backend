@@ -4,7 +4,7 @@ os: linux
 
 files:
   - source: /
-    destination: /home/ubuntu/app
+    destination: /home/ubuntu/app/dev
     overwrite: yes
 file_exists_behavior: OVERWRITE
 
@@ -16,12 +16,12 @@ permissions:
 
 hooks:
   ApplicationStart:
-    - location: scripts/run_new_was.sh
+    - location: scripts/dev/run_new_was.sh
       timeout: 180
       runas: ubuntu
-    - location: scripts/health_check.sh
+    - location: scripts/dev/health_check.sh
       timeout: 180
       runas: ubuntu
-    - location: scripts/switch.sh
+    - location: scripts/dev/switch.sh
       timeout: 180
       runas: ubuntu

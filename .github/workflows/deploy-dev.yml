@@ -39,6 +39,9 @@ jobs:
       - name: Gradle Build Run
         run: ./gradlew build -x test
 
+      - name: Create appspec.yml file
+        run: cat appspec.dev.yml > appspec.yml
+
       - name: Create Zip files
         run: zip -r ./$GITHUB_SHA.zip .
 

@@ -1,0 +1,27 @@
+version: 0.0
+
+os: linux
+
+files:
+  - source: /
+    destination: /home/ubuntu/app/prod
+    overwrite: yes
+file_exists_behavior: OVERWRITE
+
+permissions:
+  - object: /
+    pattern: "**"
+    owner: ubuntu
+    group: ubuntu
+
+hooks:
+  ApplicationStart:
+    - location: scripts/prod/run_new_was.sh
+      timeout: 180
+      runas: ubuntu
+    - location: scripts/prod/health_check.sh
+      timeout: 180
+      runas: ubuntu
+    - location: scripts/prod/switch.sh
+      timeout: 180
+      runas: ubuntu

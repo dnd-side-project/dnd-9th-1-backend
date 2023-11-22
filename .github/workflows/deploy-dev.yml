@@ -63,6 +63,5 @@ jobs:
           aws deploy create-deployment \
           --application-name dnd-9th-1-codedeploy \
           --deployment-config-name CodeDeployDefault.AllAtOnce \
-          --deployment-group-name milestone-dev-deployment-group \
+          --deployment-group-name milestone-prod-deployment-group \
           --s3-location bucket=dnd-9th-1-s3,bundleType=zip,key=$GITHUB_SHA.zip
-

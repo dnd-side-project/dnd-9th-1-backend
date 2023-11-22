@@ -17,7 +17,7 @@ else
 fi
 
 # Change proxying port into target port
-echo "set \dev_url http://127.0.0.1:${TARGET_PORT};" | tee /home/ubuntu/dev_url.inc
+echo "set \$dev_url http://127.0.0.1:${TARGET_PORT};" | tee /home/ubuntu/dev_url.inc
 
 echo "> Now nginx proxies to ${TARGET_PORT}."
 

@@ -17,8 +17,9 @@ public class SwaggerConfig {
          Server testServer = new Server();
 
         return new OpenAPI()
+                .addServersItem(new Server().url("/"))
                 .addServersItem(new Server().url("https://milestone-staging.site"))
-                .addServersItem(new Server().url("https://dev.milestone-staging.stie"))
+                .addServersItem(new Server().url("https://dev.milestone-staging.site"))
                 .info(
                         new Info()
                                 .title("DND-9th-1 'Milestone' API Document")

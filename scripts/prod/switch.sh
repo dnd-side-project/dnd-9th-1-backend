@@ -17,7 +17,7 @@ else
 fi
 
 # Change proxying port into target port
-echo "set \$service_url_prod http://127.0.0.1:${TARGET_PORT};" | tee /home/ubuntu/prod_url.inc
+echo "set \prod_url http://127.0.0.1:${TARGET_PORT};" | tee /home/ubuntu/prod_url.inc
 
 echo "> Now nginx proxies to ${TARGET_PORT}."
 

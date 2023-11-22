@@ -16,12 +16,11 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI() {
 
-        Server testServer = new Server();
-        testServer.setUrl("http://192.168.1.190:8080");
+        // Server testServer = new Server();
 
         return new OpenAPI()
-                .addServersItem(new Server().url("https://milestone-staging.site"))
-                .addServersItem(new Server().url("/"))
+//                .addServersItem(new Server().url("https://milestone-staging.site"))
+//                .addServersItem(new Server().url("https://dev.milestone-staging.stie"))
                 .info(
                         new Info()
                                 .title("DND-9th-1 'Milestone' API Document")
@@ -29,7 +28,7 @@ public class SwaggerConfig {
                                 .version("v0.0.1")
                 )
                 .addSecurityItem(new SecurityRequirement().addList("Authorization"))
-                .addServersItem(testServer)
+                // .addServersItem(testServer)
                 .components(
                         new Components()
                                 .addSecuritySchemes(

@@ -36,7 +36,7 @@ public class DetailGoalQueryRepository {
                         detailGoal.isCompleted.isFalse(), // 아직 완료되지 않은 것들 조회
                         detailGoal.alarmEnabled.isTrue(), // 알람을 허용한 하위 댓글 조회
                         detailGoal.alarmDays.contains(dayOfWeek), // 해당 요일에 알림을 주기로 되있는 댓글 조회
-                        detailGoal.alarmTime.between(alarmTime.minusMinutes(1),alarmTime.plusMinutes(1))
+                        detailGoal.alarmTime.between(alarmTime.minusMinutes(2),alarmTime.plusMinutes(2))
                 )
                 .fetch();
     }

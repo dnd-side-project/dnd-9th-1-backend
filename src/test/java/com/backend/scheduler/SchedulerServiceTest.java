@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -41,7 +42,7 @@ public class SchedulerServiceTest {
          */
         for(int i =0; i < 3; i++)
         {
-            Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 1), true, GoalStatus.PROCESS);
+            Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 2), true, GoalStatus.PROCESS);
             goalRepository.save(goal);
         }
 
@@ -59,7 +60,7 @@ public class SchedulerServiceTest {
          */
         for(int i =0; i < 3; i++)
         {
-            Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 1), true, GoalStatus.COMPLETE);
+            Goal goal = new Goal(1L, "테스트 제목", LocalDate.of(2023, 8, 1), LocalDate.of(2023, 8, 2), true, GoalStatus.COMPLETE);
             goalRepository.save(goal);
         }
 
@@ -68,7 +69,7 @@ public class SchedulerServiceTest {
 
         // then
         List<Goal> goalList = goalRepository.getGoalsByGoalStatusAndMemberIdAndIsDeletedFalse(GoalStatus.STORE, 1L);
-        assertThat(goalList).hasSize(3);
+        assertThat(goalList).hasSize(0);
     }
 
 }

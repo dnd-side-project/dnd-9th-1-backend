@@ -58,6 +58,11 @@ dependencies {
 	// FCM
 	implementation 'com.google.firebase:firebase-admin:9.1.1'
 
+	// ShedLock
+	implementation 'net.javacrumbs.shedlock:shedlock-spring:5.1.0'
+	implementation 'net.javacrumbs.shedlock:shedlock-provider-redis-spring:5.1.0'
+	implementation 'net.javacrumbs.shedlock:shedlock-provider-jdbc-template:5.1.0'
+
 	// Test
 	testImplementation 'com.h2database:h2'
 }

@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 
 @Slf4j
 @Service
@@ -34,6 +35,7 @@ public class SchedulerService {
     private final ApplicationEventPublisher applicationEventPublisher;
 
 
+    @SchedulerLock(name = "outdate_goal_lock", lockAtMostFor = "10s", lockAtLeastFor = "10s")
     @Scheduled(cron = "0 0 * * * *", zone = "Asia/Seoul")
     public void storeOutDateGoal() {
 
@@ -41,6 +43,7 @@ public class SchedulerService {
         goalList.forEach(Goal::store);
     }
 
+    @SchedulerLock(name = "send_alarm_lock", lockAtMostFor = "10s", lockAtLeastFor = "10s")
     @Scheduled(cron = "0 */30 * * * *", zone = "Asia/Seoul")
     public void sendAlarm()
     {
@@ -53,31 +56,4 @@ public class SchedulerService {
         detailGoalAlarmList.forEach(alarmDto ->
                 applicationEventPublisher.publishEvent(new AlarmEvent(alarmDto.uid(), alarmDto.detailGoalTitle())));
     }
-
-//    @Scheduled(cron = "0 19 * * 0 *", zone = "Asia/Seoul")
-//    public void sendReminder()
-//    {
-//        List<Goal> goalListReminderEnabled = goalQueryRepository.findGoalListReminderEnabled();
-//
-//        Random random = new Random();
-//
-//        // 랜덤하게 2개 선택
-//        for (int i = 0; i < RAND_COUNT; i++) {
-//
-//            int randomIndex = random.nextInt(goalListReminderEnabled.size());
-//            Goal goal = goalListReminderEnabled.get(randomIndex);
-//
-//            if(Objects.nonNull(goal.getLastRemindDate()) && isIntervalDateExpired(goal))
-//            {
-//                goal.updateLastRemindDate(LocalDate.now());
-//                applicationEventPublisher.publishEvent(new ReminderEvent(goal.getMemberId(), goal.getTitle()));
-//            }
-//        }
-//    }
-//
-//    private boolean isIntervalDateExpired(Goal goal) {
-//        return goal.getLastRemindDate().isBefore(LocalDate.now().minusDays(REMIND_INTERVAL));
-//    }
-
-
 }

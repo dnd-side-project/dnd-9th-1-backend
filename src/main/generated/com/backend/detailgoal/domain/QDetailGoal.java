@@ -22,7 +22,7 @@ public class QDetailGoal extends EntityPathBase<DetailGoal> {
 
     public final com.backend.global.entity.QBaseEntity _super = new com.backend.global.entity.QBaseEntity(this);
 
-    public final SetPath<java.time.DayOfWeek, EnumPath<java.time.DayOfWeek>> alarmDays = this.<java.time.DayOfWeek, EnumPath<java.time.DayOfWeek>>createSet("alarmDays", java.time.DayOfWeek.class, EnumPath.class, PathInits.DIRECT2);
+    public final ListPath<java.time.DayOfWeek, EnumPath<java.time.DayOfWeek>> alarmDays = this.<java.time.DayOfWeek, EnumPath<java.time.DayOfWeek>>createList("alarmDays", java.time.DayOfWeek.class, EnumPath.class, PathInits.DIRECT2);
 
     public final BooleanPath alarmEnabled = createBoolean("alarmEnabled");
 
